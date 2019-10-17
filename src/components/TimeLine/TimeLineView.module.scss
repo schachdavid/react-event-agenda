@@ -1,0 +1,16 @@
+.container {
+  flex: 0 0 69px;
+  width: 69px;
+  height: 1000px;
+  border-right: 1px solid var(--neutralTertiary);
+}
+
+.segment {
+  height: 119px;
+  border-bottom: 1px solid var(--neutralQuaternary);
+  color: var(--neutralDark);
+  font-size: 14px;
+  font-weight: 300;
+  display: flex;
+  justify-content: center;
+}

@@ -1,0 +1,16 @@
+.container {
+  height: 1000px;
+  background-color: var(--neutralLighter);
+  border-right: 1px solid var(--neutralTertiary);
+  flex-grow: 1;
+  max-width: 380px;
+  min-width: 190px;
+  position: relative; /* anchor for agenda items*/
+}
+
+.segment {
+  height: 119px;
+  border-bottom: 1px dashed var(--neutralQuaternary);
+}
+
+

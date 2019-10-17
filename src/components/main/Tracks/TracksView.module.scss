@@ -1,0 +1,35 @@
+.container {
+    width: 100%;
+    height: calc(100% - 44px); /* for main command bar*/
+}
+
+.tracksContainer {
+    width: 100%;
+    display: flex;
+    height: calc(100% - 44px); /* for track bar*/
+    overflow-y:scroll;    
+}
+
+.flex {
+    width: 100%;
+    display: flex;
+}
+
+.barPlaceHolderFront {
+    flex: 0 0 69px;    
+    border-right: 1px solid var(--neutralTertiary);
+}
+
+.borderBottom {
+        border-bottom: 1px solid var(--neutralTertiary);
+}
+
+.borderTop {
+    border-top: 1px solid var(--neutralTertiary);
+}
+
+.barPlaceHolderEnd {
+    flex: 1;   
+}
+
+
