@@ -1,20 +1,20 @@
-import React, { ReactChild } from 'react';
-import { IProps as IViewProps } from './TrackBarView';
+import React from 'react';
+import TrackBarView from './TrackBarView';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
 
 
 
 interface IProps {
-    children: (viewProps: IViewProps) => ReactChild
+    
 }
 
 
-const TrackBarController: React.FC<IProps> = ({ children }: IProps) => {
+
+const TrackBarController: React.FC<IProps> = ({ }: IProps) => {
     // const viewModel = useViewModelContext();
 
-    return children({
-    }) as React.ReactElement<any>;
+    return <TrackBarView></TrackBarView>
 }
 
-export default observer(TrackBarController);
+export const TrackBar = observer(TrackBarController);

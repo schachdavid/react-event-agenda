@@ -1,21 +1,23 @@
-import React, { ReactChild } from 'react';
-import { IProps as IViewProps } from './DayBarView';
+import React from 'react';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
+import DayBarView from './DayBarView';
+import { Day } from '../../../types/types';
 
 
 
 interface IProps {
-    children: (viewProps: IViewProps) => ReactChild
+    day: Day
 }
 
 
-const DayBarController: React.FC<IProps> = ({ children }: IProps) => {
+
+const DayBarController: React.FC<IProps> = ({ day }: IProps) => {
     // const viewModel = useViewModelContext();
 
+    const dayName: string = day.date.format("ddd, MMM D");;
 
-    return children({ 
-    }) as React.ReactElement<any>;
+    return <DayBarView dayName={dayName}></DayBarView>
 }
 
-export default observer(DayBarController);
+export const DayBar = observer(DayBarController);

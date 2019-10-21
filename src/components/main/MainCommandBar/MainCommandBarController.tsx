@@ -1,20 +1,19 @@
-import React, { ReactChild } from 'react';
-import { IProps as IViewProps } from './MainCommandBarView';
-// import { useViewModelContext } from '../../ViewModelContext';
+import React from 'react';
+import MainCommandBarView from './MainCommandBarView';
+import { useViewModelContext } from '../../../ViewModelContext';
 import { observer } from "mobx-react";
 
 
 
 interface IProps {
-    children: (viewProps: IViewProps) => ReactChild
+    
 }
 
 
-const MainCommandBarController: React.FC<IProps> = ({ children }: IProps) => {
-    // const viewModel = useViewModelContext();
+const MainCommandBarController: React.FC<IProps> = ({  }: IProps) => {
+    const viewModel = useViewModelContext();
 
-    return children({
-    }) as React.ReactElement<any>;
+    return <MainCommandBarView undo={() => viewModel.undo()} redo={() => viewModel.redo()}></MainCommandBarView>
 }
 
-export default observer(MainCommandBarController);
+export const MainCommandBar = observer(MainCommandBarController);

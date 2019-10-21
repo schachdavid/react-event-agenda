@@ -1,79 +1,72 @@
-import DataModel from './models/DataModel';
+import ItemsModel from './models/AgendaModel';
 import UIModel from './models/UIModel';
-import ListItem from './types/dataTypes';
-import { action } from 'mobx';
+import AgendaViewModelInterface from './AgendaViewModelInterface';
+// import ListItem from './types/dataTypes';
+// import { action } from 'mobx';
 
 
 
-class AgendaViewModel {
-    dataStore: DataModel;
+class AgendaViewModel implements AgendaViewModelInterface {
+    itemsStore: ItemsModel;
     uiStore: UIModel;
     
     constructor() {
-        this.dataStore = new DataModel();
+        this.itemsStore = new ItemsModel();
         this.uiStore = new UIModel();
     }
 
-    getListStore() {
-        return this.dataStore;
+    getStore() {
+        return this.itemsStore;
     }
 
-    getListItems() {
-        return this.dataStore.getListItems();
+    getStartTime() {
+        return this.itemsStore.getStartTime();
+
     }
 
-    addListItem(listItem: string) {
-        this.dataStore.addListItem(listItem);
+    getEndTime() {
+        return this.itemsStore.getEndTime();
+    }
+
+    getIntervalPxHeight() {
+        return this.itemsStore.getIntervalPxHeight();
+    }
+
+    getIntervalInMin() {
+        return this.itemsStore.getIntervalInMin();
+    }
+
+    getSegmentFactor() {
+        return this.itemsStore.getSegmentFactor();
+    }
+
+    getDays() {
+        return this.itemsStore.getDays();
+    }
+
+    deleteItem(itemId: string) {
+        this.itemsStore.deleteItem(itemId);
+    }
+
+    addItem() {
+        // this.itemsStore.addItem(listItem);
     }
 
     undo() {
-        this.dataStore.undo();
+        this.itemsStore.undo();
     }
 
     redo() {
-        this.dataStore.redo();
-    }
-
-    getHiddenKeys() {
-        this.uiStore.getHiddenItemKeys();
+        this.itemsStore.redo();
     }
 
 
-    @action hideItem(item: ListItem) {
-        let itemToHide: ListItem = this.dataStore.findItem(item);
-        if (itemToHide) {
-            if (!itemToHide.ui) {
-                itemToHide.ui = {};
-            } 
-            itemToHide.ui.hidden = true;
-        }
-    }
 
 
-    @action revealItem(item: ListItem) {
-        let itemToReveal: ListItem = this.dataStore.findItem(item);
-        if (itemToReveal) {
-            if (!itemToReveal.ui) {
-                itemToReveal.ui = {};
-            } 
-            delete itemToReveal.ui["hidden"];
-        }
-    }
 
-    // hideItem(item: ListItem) {
-    //     // this.uiStore.addHiddenItemKey(item.id);
-    //     this.dataStore.hideItem(item);
-    // }
 
-    // revealItem(item: ListItem) {
-    //     // this.uiStore.removeHiddenItemKey(item.id);
-    //     this.dataStore.revealItem(item);
-    // }
 
-    isHidden(item: ListItem) {
-        // return this.uiStore.hiddenItemContainsKey(item.id);
-        return this.dataStore.isHidden(item);
-    }
+
 }
 
 export default AgendaViewModel;

@@ -1,12 +1,10 @@
 .container {
-  flex: 0 0 69px;
-  width: 69px;
-  height: 1000px;
-  border-right: 1px solid var(--neutralTertiary);
+  flex: 0 0 70px;
+  width: 70px;
 }
 
 .segment {
-  height: 119px;
+  border-right: 1px solid var(--neutralTertiary);
   border-bottom: 1px solid var(--neutralQuaternary);
   color: var(--neutralDark);
   font-size: 14px;

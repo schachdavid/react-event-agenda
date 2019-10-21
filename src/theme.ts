@@ -1,6 +1,34 @@
 import hexRgb from 'hex-rgb';
+import { createTheme } from 'office-ui-fabric-react';
 
 
+
+// export const getPalette = () => {
+//   return {
+//     themePrimary: '#29b59a',
+//     themeLighterAlt: '#020706',
+//     themeLighter: '#061d19',
+//     themeLight: '#0c362e',
+//     themeTertiary: '#186c5d',
+//     themeSecondary: '#249f88',
+//     themeDarkAlt: '#39bca3',
+//     themeDark: '#51c7b0',
+//     themeDarker: '#79d5c4',
+//     neutralLighterAlt: '#082a35',
+//     neutralLighter: '#0c313d',
+//     neutralLight: '#123c4b',
+//     neutralQuaternaryAlt: '#174453',
+//     neutralQuaternary: '#1c4a5a',
+//     neutralTertiaryAlt: '#326476',
+//     neutralTertiary: '#c8c8c8',
+//     neutralSecondary: '#d0d0d0',
+//     neutralPrimaryAlt: '#dadada',
+//     neutralPrimary: '#ffffff',
+//     neutralDark: '#f4f4f4',
+//     black: '#f8f8f8',
+//     white: '#05222c',
+//   }
+// };
 
 export const getPalette = () => {
   return {
@@ -37,3 +65,36 @@ export const getRGBPalette = () => {
   });
   return palette;
 }
+
+export const getInvertedTheme = () => {
+  let palette = getPalette();
+
+  const whiteTmp = palette.white;
+
+  //background color
+  palette.white = palette.themePrimary;
+
+  //icon color
+  palette.themePrimary = whiteTmp;
+
+  //hover background color
+  palette.neutralLighter = palette.themeDark;
+
+  // font color
+  palette.neutralPrimary = whiteTmp;
+
+  //hover icon color
+  palette.themeDarkAlt = whiteTmp;
+
+  // hover font color
+  palette.neutralDark = whiteTmp;
+
+  const theme = createTheme({
+    palette: palette
+  });
+
+  return theme;
+
+}
+
+

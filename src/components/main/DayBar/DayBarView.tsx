@@ -7,15 +7,17 @@ import classNames from 'classnames';
 
 
 export interface IProps {
-    fullWidth?: boolean
+    fullWidth?: boolean,
+    dayName: string
+
 }
 
-const DayBarView: React.FC<IProps> = ({ fullWidth }: IProps) => {
+const DayBarView: React.FC<IProps> = ({ dayName, fullWidth }: IProps) => {
     return (
         <div className={classNames(styles.container, {
             [styles.fullWidth]: fullWidth
         })} >
-            <div>Thu - Oct 25</div>
+            <div>{dayName}</div>
         </div>
     );
 }

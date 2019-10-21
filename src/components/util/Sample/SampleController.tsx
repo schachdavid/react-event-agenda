@@ -1,20 +1,18 @@
-import React, { ReactChild } from 'react';
-import { IProps as IViewProps } from './SampleView';
+import React from 'react';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
+import SampleView from './SampleView';
 
 
 
 interface IProps {
-    children: (viewProps: IViewProps) => ReactChild
 }
 
 
-const SampleController: React.FC<IProps> = ({ children }: IProps) => {
+const SampleController: React.FC<IProps> = ({  }: IProps) => {
     // const viewModel = useViewModelContext();
 
-    return children({
-    }) as React.ReactElement<any>;
+    return <SampleView></SampleView>
 }
 
-export default observer(SampleController);
+export const Sample = observer(SampleController);

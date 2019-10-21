@@ -3,15 +3,15 @@ import React from 'react';
 import AgendaViewModel from '../../../AgendaViewModel';
 import ViewModelContext from '../../../ViewModelContext';
 // import ListView from './components/List/ListView';
-import MainCommandBarController from '../MainCommandBar/MainCommandBarController';
-import MainCommandBarView from '../MainCommandBar/MainCommandBarView';
-import TracksController from '../Tracks/TracksController';
-import TracksView from '../Tracks/TracksView';
+import { MainCommandBar } from '../MainCommandBar/MainCommandBarController';
+import { Tracks } from '../Tracks/TracksController';
 import { CssProvider } from '../../util/CssProvider/CssProvider';
 import { getRGBPalette } from '../../../theme';
 import globalStyles from '../../../globalStyles.scss';
 import styles from './Agenda.module.scss';
 import classNames from 'classnames';
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 
 
@@ -27,15 +27,10 @@ const Agenda: React.FC<IProps> = ({ agendaViewModel }: IProps) => {
             theme={getRGBPalette()}
             className={classNames(styles.fullWH, globalStyles.globalStyles)}>
             <ViewModelContext.Provider value={agendaViewModel}>
-                <MainCommandBarController>
-                    {() => <MainCommandBarView />}
-                </MainCommandBarController>
-                <TracksController>
-                    {({ tracks, handleWidthChange, singleTrack }) => <TracksView
-                        tracks={tracks}
-                        handleWidthChange={handleWidthChange}
-                        singleTrack={singleTrack} />}
-                </TracksController>
+                <DndProvider backend={HTML5Backend}>
+                    <MainCommandBar></MainCommandBar>
+                    <Tracks></Tracks>
+                </DndProvider>
             </ViewModelContext.Provider>
         </CssProvider>
     )

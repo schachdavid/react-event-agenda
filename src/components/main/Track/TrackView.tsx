@@ -1,44 +1,30 @@
 import React from 'react';
 import { observer } from "mobx-react";
 import styles from './TrackView.module.scss';
-import AgendaItemController from '../AgendaItem/AgendaItemController';
-import AgendaItemView from '../AgendaItem/AgendaItemView';
+import { AgendaItem } from '../AgendaItem/AgendaItemController';
+import { Item } from '../../../types/types';
 
 
 
 export interface IProps {
+    items: Array<Item>,
+    numberOfSegments: number,
+    segmentHeight: number,
 }
 
-const TrackView: React.FC<IProps> = ({ }: IProps) => {
-    const agendaItems = <AgendaItemController>
-        {({ topPx, height, editing, hovering, onMouseEnter, onMouseLeave, onDragStart, onDragEnd, dragging, setEditing }) =>
-            <AgendaItemView
-                topPx={topPx}
-                height={height}
-                editing={editing}
-                hovering={hovering}
-                dragging={dragging}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                setEditing={setEditing}
-            />}
-    </AgendaItemController>
+const TrackView: React.FC<IProps> = ({ items, numberOfSegments, segmentHeight }: IProps) => {
+    const agendaItems = items.map((item: Item) => <AgendaItem item={item}></AgendaItem>)
 
+    let segments: Array<any> = [];
+    
+    for(let i: number = 0; i<numberOfSegments; i++){
+        segments.push(<div className={styles.segment} style={{height: segmentHeight + 'px'}}></div>)
+    }
+   
     return (
         <div className={styles.container}>
-                <div className={styles.segment}></div>
-                <div className={styles.segment}></div>
-                <div className={styles.segment}></div>
-                <div className={styles.segment}></div>
-                <div className={styles.segment}></div>
-                <div className={styles.segment}></div>
-                {agendaItems}
-
-
-            {/* <div className={styles.trackBar}>
-            </div> */}
+            {segments}
+            {agendaItems}
         </div>
     );
 }

@@ -1,32 +1,33 @@
-import React, { ReactChild } from 'react';
-import { IProps as IViewProps } from './TracksView';
-// import { useViewModelContext } from '../../ViewModelContext';
+import React from 'react';
+import TracksView from './TracksView';
+import { useViewModelContext } from '../../../ViewModelContext';
 import { observer } from "mobx-react";
+import AgendaViewModel from '../../../AgendaViewModel';
+import { Day } from '../../../types/types';
 
 
 
 interface IProps {
-    children: (viewProps: IViewProps) => ReactChild
 }
 
 
-const TracksController: React.FC<IProps> = ({ children }: IProps) => {
-    // const viewModel = useViewModelContext();
+const TracksController: React.FC<IProps> = ({ }: IProps) => {
+    const viewModel: AgendaViewModel = useViewModelContext();
 
-    const tracks = ["track 1","track 1","track 1"];
+    const days: Array<Day> = viewModel.getDays();
+
 
     const handleWidthChange = (newWidth: number) => {
-        console.log(newWidth)
+        console.log('newWidth: ', newWidth);
     }
 
+    const singleTracks: boolean = true;
 
-    const singleTrack = true;
-
-
-
-    return children({
-        tracks, handleWidthChange, singleTrack
-    }) as React.ReactElement<any>;
+    return <TracksView
+        handleWidthChange={handleWidthChange}
+        days={days}
+        singleTracks={singleTracks}
+    />
 }
 
-export default observer(TracksController);
+export const Tracks = observer(TracksController);

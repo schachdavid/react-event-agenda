@@ -1,25 +1,23 @@
 import React, { useCallback, useState } from 'react';
 import { observer } from "mobx-react";
 import styles from './TracksView.module.scss';
-import TrackController from '../Track/TrackController';
-import TrackView from '../Track/TrackView';
-import TrackBarController from '../TrackBar/TrackBarController';
-import TrackBarView from '../TrackBar/TrackBarView';
-import DayBarController from '../DayBar/DayBarController';
-import DayBarView from '../DayBar/DayBarView';
-import TimeLineView from '../../TimeLine/TimeLineView';
+import { Track } from '../Track/TrackController';
 import classNames from 'classnames';
+import { DayBar } from '../DayBar/DayBarController';
+import { TrackBar } from '../TrackBar/TrackBarController';
+import { Day } from '../../../types/types';
+import { Track as TrackData } from '../../../types/types';
+import { TimeLine } from '../TimeLine/TimeLineController';
 
 
 
 export interface IProps {
-    tracks: Array<string>;
     handleWidthChange: (newWidth: number) => void;
-    singleTrack?: boolean;
-    days?: Array<string>;
+    days: Array<Day>;
+    singleTracks: boolean;
 }
 
-const TracksView: React.FC<IProps> = ({ tracks, handleWidthChange, singleTrack }: IProps) => {
+const TracksView: React.FC<IProps> = ({ days, handleWidthChange, singleTracks }: IProps) => {
 
     const [width, setWidth] = useState(0);
 
@@ -42,40 +40,31 @@ const TracksView: React.FC<IProps> = ({ tracks, handleWidthChange, singleTrack }
     }, []);
 
 
+    let trackViews;
+    let dayBarViews;
+    let trackBarViews;
 
-
-
-    const trackViews =
-        tracks.map(() => {
-            return <TrackController>
-                {() => <TrackView />}
-            </TrackController>
+    if (singleTracks) {
+        const tracks: Array<TrackData> = days.map((day: Day) => { return day.tracks[0] })
+        dayBarViews = days.map((day) => {
+            return <DayBar day={day}> </DayBar>
         });
 
-
-
-    const dayBarViews =
-        tracks.map(() => {
-            return <DayBarController >
-                {() => <DayBarView />}
-            </DayBarController>
-
+        trackViews = tracks.map((track: TrackData) => {
+            return <Track track={track}></Track>
         });
-
-
-    const trackBarViews =
-        tracks.map(() => {
-            return <TrackBarController>
-                {() => <TrackBarView />}
-            </TrackBarController>
-
+    } else {
+        const tracks: Array<TrackData> = days[0].tracks;
+        trackBarViews = tracks.map(() => {
+            return <TrackBar></TrackBar>
         });
+    }
 
 
 
     return (
         <div className={styles.container}>
-            {singleTrack ?
+            {dayBarViews ?
                 <div className={styles.flex}>
                     <div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}></div>
                     <div className={classNames(styles.flex, styles.borderBottom)} style={{ width: width }}>
@@ -86,15 +75,13 @@ const TracksView: React.FC<IProps> = ({ tracks, handleWidthChange, singleTrack }
                 : null}
 
             <div className={styles.tracksContainer} >
-                <TimeLineView></TimeLineView>
+                <TimeLine />
                 <div className={styles.flex} ref={refTracksContainer}>
                     {trackViews}
-
                 </div>
             </div>
 
-
-            {!singleTrack ?
+            {trackBarViews ?
                 <div className={styles.flex}>
                     <div className={classNames(styles.barPlaceHolderFront, styles.borderTop)}></div>
                     <div className={styles.flex} style={{ width: width }}>
@@ -106,5 +93,6 @@ const TracksView: React.FC<IProps> = ({ tracks, handleWidthChange, singleTrack }
         </div >
     );
 }
+
 
 export default observer(TracksView);

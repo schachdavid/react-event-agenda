@@ -3,17 +3,16 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { CommandBar } from 'office-ui-fabric-react/lib/components/CommandBar';
 import { Customizer } from 'office-ui-fabric-react';
-import { createTheme } from 'office-ui-fabric-react';
-import { getPalette } from '../../../theme';
-
 import styles from './MainCommandBarView.module.scss';
+import { getInvertedTheme } from '../../../theme';
 
 
 export interface IProps {
+    undo: () => any;
+    redo: () => any
 }
 
-const MainCommandBarView: React.FC<IProps> = ({ }: IProps) => {
-    let palette = getPalette();
+const MainCommandBarView: React.FC<IProps> = ({undo, redo}: IProps) => {
     const items = [
         {
             key: 'undo',
@@ -23,7 +22,7 @@ const MainCommandBarView: React.FC<IProps> = ({ }: IProps) => {
                 iconName: 'Undo'
             },
             iconOnly: true,
-            onClick: () => console.log('Share')
+            onClick: undo
         },
         {
             key: 'redo',
@@ -32,51 +31,26 @@ const MainCommandBarView: React.FC<IProps> = ({ }: IProps) => {
                 iconName: 'redo'
             },
             iconOnly: true,
-            onClick: () => console.log('Share')
+            onClick: redo
         }
     ]
 
     const farItems = [
         {
-            key: 'sort',
-            ariaLabel: 'Sort',
+            key: 'settings',
+            ariaLabel: 'settings',
             iconProps: {
                 iconName: 'Settings'
             },
             iconOnly: true,
-            onClick: () => console.log('Sort')
+            onClick: () => console.log('settings')
         }
     ]
 
-    //background color
-    palette.white = palette.themePrimary;
-
-    //icon color
-    palette.themePrimary = "#ffffff";
-
-    //hover background color
-    palette.neutralLighter = palette.themeDark;
-
-    // font color
-    palette.neutralPrimary = "#ffffff";
-
-    //hover icon color
-    palette.themeDarkAlt = "#ffffff";
-
-    // hover font color
-    palette.neutralDark = "#ffffff";
-
-
-
-
-
-
-    const commandBarTheme = createTheme({
-        palette: palette
-    });
+    
     return (
             <div className={styles.container}>
-                <Customizer settings={{theme: commandBarTheme}}>
+                <Customizer settings={{theme: getInvertedTheme()}}>
                     <CommandBar items={items} farItems={farItems} />
                 </Customizer>
             </div>

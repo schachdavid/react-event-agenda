@@ -1,7 +1,4 @@
 .container {
-  height: 1000px;
-  background-color: var(--neutralLighter);
-  border-right: 1px solid var(--neutralTertiary);
   flex-grow: 1;
   max-width: 380px;
   min-width: 190px;
@@ -9,8 +6,7 @@
 }
 
 .segment {
-  height: 119px;
+  border-right: 1px solid var(--neutralTertiary);
+  background-color: var(--neutralLighter);
   border-bottom: 1px dashed var(--neutralQuaternary);
 }
-
-
