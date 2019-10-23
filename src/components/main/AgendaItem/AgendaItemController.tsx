@@ -82,6 +82,11 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
 
     const small = height == intervalPxHeight ? true : false;
 
+    console.log('topPx: ' + topPx);
+    console.log('topPx: ' + topPx);
+
+    
+
 
     return editing ?
         <AgendaItemEditView

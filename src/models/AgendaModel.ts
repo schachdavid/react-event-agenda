@@ -5,11 +5,11 @@ import moment from 'moment';
 
 class AgendaModel {
     @observable agenda: Agenda = {
-        startTime: moment('2013-02-08 7:00 '),
-        endTime: moment('2013-02-08 18:00 '),
+        startTime: moment('2013-02-08 7:00', 'YYYY-MM-DD H:mm'),
+        endTime: moment('2013-02-08 18:00', 'YYYY-MM-DD H:mm'),
         days: [
             {
-                date: moment('2013-02-08 8:00 '),
+                date: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
                 dayId: "1",
                 tracks: [
                     {
@@ -18,23 +18,23 @@ class AgendaModel {
                         items: [
                             {
                                 itemId: "1",
-                                start: moment('2013-02-08 8:00 '),
-                                end: moment('2013-02-08 8:15'),
+                                start: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-08 8:15', 'YYYY-MM-DD H:mm'),
                                 title: "Introduction",
                                 speaker: "Team Lead",
                             },
                             {
                                 itemId: "2",
-                                start: moment('2013-02-08 8:15 '),
-                                end: moment('2013-02-08 9:00'),
+                                start: moment('2013-02-08 8:15', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-08 9:00', 'YYYY-MM-DD H:mm'),
                                 title: "Review Q1 - Team A",
                                 speaker: "Team A Lead"
 
                             },
                             {
                                 itemId: "3",
-                                start: moment('2013-02-08 9:00 '),
-                                end: moment('2013-02-08 9:30'),
+                                start: moment('2013-02-08 9:00', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-08 9:30', 'YYYY-MM-DD H:mm'),
                                 title: "Review Q1 - Team B",
                                 speaker: "Team B Lead"
                             }
@@ -52,21 +52,21 @@ class AgendaModel {
                         items: [
                             {
                                 itemId: "10",
-                                start: moment('2013-02-08 8:00 '),
-                                end: moment('2013-02-08 8:45'),
+                                start: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-08 8:45', 'YYYY-MM-DD H:mm'),
                                 title: "Breakfast"
                             },
                             {
                                 itemId: "11",
-                                start: moment('2013-02-08 8:45 '),
-                                end: moment('2013-02-08 9:30'),
+                                start: moment('2013-02-08 8:45', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-08 9:30', 'YYYY-MM-DD H:mm'),
                                 title: "Presentation \"Design Thinking in 2018\"",
                                 speaker: "Dr. Germione Hanger"
                             },
                             {
                                 itemId: "12",
-                                start: moment('2013-02-08 9:30 '),
-                                end: moment('2013-02-08 9:45'),
+                                start: moment('2013-02-08 9:30', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-08 9:45', 'YYYY-MM-DD H:mm'),
                                 title: "Coffee Break",
                             }
                         ]
