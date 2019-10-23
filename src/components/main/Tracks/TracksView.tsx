@@ -5,8 +5,8 @@ import { Track } from '../Track/TrackController';
 import classNames from 'classnames';
 import { DayBar } from '../DayBar/DayBarController';
 import { TrackBar } from '../TrackBar/TrackBarController';
-import { Day } from '../../../types/types';
-import { Track as TrackData } from '../../../types/types';
+import { Day } from '../../../interfaces/modelnterfaces';
+import { Track as TrackData } from '../../../interfaces/modelnterfaces';
 import { TimeLine } from '../TimeLine/TimeLineController';
 
 
@@ -47,16 +47,16 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, singleTracks }:
     if (singleTracks) {
         const tracks: Array<TrackData> = days.map((day: Day) => { return day.tracks[0] })
         dayBarViews = days.map((day) => {
-            return <DayBar day={day}> </DayBar>
+            return <DayBar key={day.dayId} day={day}> </DayBar>
         });
 
         trackViews = tracks.map((track: TrackData) => {
-            return <Track track={track}></Track>
+            return <Track key={track.trackId} track={track}></Track>
         });
     } else {
         const tracks: Array<TrackData> = days[0].tracks;
-        trackBarViews = tracks.map(() => {
-            return <TrackBar></TrackBar>
+        trackBarViews = tracks.map((track: TrackData) => {
+            return <TrackBar key={track.trackId}></TrackBar>
         });
     }
 

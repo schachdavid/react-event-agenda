@@ -17,13 +17,19 @@ export default interface AgendaViewModelI {
      */
     deleteItem(itemId: string): void;
 
+
+     /**
+     * Tries to move the item to the given start time on the given track.
+     */
+    moveItem(trackId: string, itemId: string, newStart: Moment):void;
+
     /**
      * Undo the last thing that happened on agenda item data level.
      */
     undo():void;
 
     /**
-     * Undo the last thing that happened on agenda item data level.
+     * Redo the last thing that happened on agenda item data level.
      */
     redo():void;
 
@@ -36,5 +42,10 @@ export default interface AgendaViewModelI {
      * Gets the agenda's end time.
      */
     getEndTime(): Moment;
+
+    /**
+     * Push current agenda data to the history stack for the undo/redo functionality.
+     */
+    pushToHistory(): void;
 }
 

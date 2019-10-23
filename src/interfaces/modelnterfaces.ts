@@ -14,6 +14,7 @@ export interface ItemUi {
     ui?: {
         editing?: boolean,
         hovering?: boolean,
+        dragging?: boolean,
     }
 }
 

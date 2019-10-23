@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AgendaItemView from './AgendaItemView';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
 import AgendaItemEditView from './AgendaItemEdit/AgendaItemEditView';
-import { Item } from '../../../types/types';
+import { Item } from '../../../interfaces/modelnterfaces';
 import { useViewModelContext } from '../../../ViewModelContext';
 import moment, { Moment } from 'moment';
-import AgendaItemCustomDragLayer from './AgendaItemCustomDragLayer';
+import AgendaItemDragView from './AgendaItemDragView';
+import { useDrag, DragSourceMonitor } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend'
 
 
 
@@ -20,8 +22,42 @@ interface IProps {
 const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const viewModel = useViewModelContext();
     const [hovering, setHovering] = useState(false); // TODO: move into mobx state
-    const [dragging, setDragging] = useState(false); // TODO: move into mobx state
     const [editing, setEditing] = useState(false); // TODO: move into mobx state
+    const [width, setWidth] = useState(0);
+
+
+    const refWidthContainer = useCallback(node => {
+        if (node !== null) {
+            setWidth(node.clientWidth - 1);
+
+            const handleResize = () => {
+                if (node.clientWidth != width) {
+                    setWidth(node.clientWidth);
+                }
+            }
+            window.addEventListener('resize', handleResize);
+            return () => { window.removeEventListener('resize', handleResize) };
+        }
+        return;
+    }, []);
+
+    const [{ isDragging }, drag, preview] = useDrag({
+        item: { type: "item", itemId: item.itemId },
+        isDragging: monitor => monitor.getItem().itemId === item.itemId,
+        collect: (monitor: DragSourceMonitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+        begin: () => {
+            setHovering(false);        },
+        end: () => {
+            viewModel.pushToHistory(); //TODO: only push to history if item actually changed, maybe do this
+        }
+
+    })
+
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true })
+    }, [])
 
     const deleteItem = () => {
         viewModel.deleteItem(item.itemId)
@@ -57,7 +93,17 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
             topPx={topPx}
             cancelEditing={() => setEditing(false)} />
         : <div>
-            <AgendaItemCustomDragLayer height={height}></AgendaItemCustomDragLayer>
+            <AgendaItemDragView
+                itemId={item.itemId}
+                height={height}
+                width={width}
+                start={item.start.format("HH:mm")}
+                end={item.end.format("HH:mm")}
+                title={item.title}
+                speaker={item.speaker}
+                small={small}
+            />
+            <div ref={refWidthContainer} style={{ width: '100%' }}></div>
 
             <AgendaItemView
                 start={item.start.format("HH:mm")}
@@ -68,13 +114,12 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
                 height={height}
                 small={small}
                 hovering={hovering}
-                dragging={dragging}
+                dragging={isDragging}
+                dragRef={drag}
                 editItem={() => editItem()}
                 deleteItem={() => deleteItem()}
                 onMouseEnter={() => { setHovering(true) }}
                 onMouseLeave={() => { setHovering(false) }}
-                onDragStart={(ev: any) => { ev.dataTransfer.setData("text", "sfefs"); setDragging(true); setHovering(false); }}
-                onDragEnd={() => setDragging(false)}
             />
         </div>
 

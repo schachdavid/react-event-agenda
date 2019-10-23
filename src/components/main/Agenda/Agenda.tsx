@@ -21,13 +21,12 @@ interface IProps {
 
 const Agenda: React.FC<IProps> = ({ agendaViewModel }: IProps) => {
 
-
     return (
         <CssProvider
             theme={getRGBPalette()}
             className={classNames(styles.fullWH, globalStyles.globalStyles)}>
             <ViewModelContext.Provider value={agendaViewModel}>
-                <DndProvider backend={HTML5Backend}>
+                <DndProvider backend={HTML5Backend} debugMode={true}>
                     <MainCommandBar></MainCommandBar>
                     <Tracks></Tracks>
                 </DndProvider>

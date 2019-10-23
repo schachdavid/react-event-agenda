@@ -7,13 +7,6 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Customizer } from 'office-ui-fabric-react';
 import { getInvertedTheme } from '../../../theme';
 
-import { useDrag, DragSourceMonitor } from 'react-dnd'
-// import { DragLayer } from 'react-dnd'
-
-
-
-
-
 
 export interface IProps {
     start: string,
@@ -27,7 +20,8 @@ export interface IProps {
     hovering?: boolean,
     selected?: boolean,
     resizing?: boolean,
-    dragging?: boolean,
+    dragging: boolean,
+    dragRef: any,
     hideTitle?: boolean,
     hideSpeaker?: boolean,
     hideLocation?: boolean,
@@ -35,8 +29,6 @@ export interface IProps {
     deleteItem: () => void,
     onMouseEnter?: (e: any) => any,
     onMouseLeave?: (e: any) => any,
-    onDragStart?: (e: any) => any,
-    onDragEnd?: (e: any) => any,
 }
 
 const AgendaItemView: React.FC<IProps> = ({
@@ -50,18 +42,12 @@ const AgendaItemView: React.FC<IProps> = ({
     hovering,
     onMouseEnter,
     onMouseLeave,
-    onDragStart,
-    onDragEnd,
     editItem,
     deleteItem,
-    dragging }: IProps) => {
+    dragging,
+    dragRef }: IProps) => {
 
-    const [{ isDragging }, drag] = useDrag({
-        item: { type: "item" },
-        collect: (monitor: DragSourceMonitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-    })
+
 
 
     const controls = hovering ?
@@ -90,18 +76,15 @@ const AgendaItemView: React.FC<IProps> = ({
 
 
     return (
-        isDragging ?
+        dragging ?
             <div className={styles.container} style={{ top: topPx, height: height }} >
-                <div className={styles.shadow}/>
+                <div className={styles.shadow} />
             </div>
             :
-            <div className={styles.container} style={{ top: topPx, height: height }} >
+            <div ref={dragRef} className={styles.container} style={{ top: topPx, height: height }} >
                 <div
-                    ref={drag}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    onDragStart={onDragStart}
-                    onDragEnd={onDragEnd}
                     className={classNames(styles.main, {
                         [styles.mainHover]: hovering || dragging,
                         [styles.mainDragging]: dragging,
@@ -125,7 +108,7 @@ const AgendaItemView: React.FC<IProps> = ({
                         </div>
                         :
                         <div className={styles.content}>
-                            <div>
+                            <div className={styles.titleSmall}>
                                 {title}
                             </div>
                             {controls}

@@ -1,5 +1,5 @@
 import { observable, action, autorun, toJS } from 'mobx';
-import { Item, Agenda, Day, Track } from '../types/types';
+import { Item, Agenda, Day, Track } from '../interfaces/modelnterfaces';
 import moment from 'moment';
 
 
@@ -21,7 +21,7 @@ class AgendaModel {
                                 start: moment('2013-02-08 8:00 '),
                                 end: moment('2013-02-08 8:15'),
                                 title: "Introduction",
-                                speaker: "Team Lead"
+                                speaker: "Team Lead",
                             },
                             {
                                 itemId: "2",
@@ -29,6 +29,7 @@ class AgendaModel {
                                 end: moment('2013-02-08 9:00'),
                                 title: "Review Q1 - Team A",
                                 speaker: "Team A Lead"
+
                             },
                             {
                                 itemId: "3",
@@ -130,16 +131,38 @@ class AgendaModel {
         return undefined;
     }
 
+    getTrackForItem(itemId: string) {
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const item: Item | undefined = track.items.find((item) => item.itemId === itemId);
+                if (item) { 
+                    return track;
+                }
+            }
+        }
+        return;
+    }
+
+
+    getItem(id: string) {
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const item: Item | undefined = track.items.find((item) => item.itemId === id);
+                if (item) { 
+                    console.log(toJS(item));
+                    return item; 
+                }
+            }
+        }
+        return undefined;
+    }
+
     deleteItem(id: string) {
-        let days = this.agenda.days;
-        for (let indexDays: number = 0; indexDays < days.length; indexDays++) {
-            let tracks: Array<Track> = days[indexDays].tracks;
-            for (let indexTracks: number = 0; indexTracks < tracks.length; indexTracks++) {
-                let foundIndex: number = tracks[indexTracks].items.findIndex((item: Item) => {
-                    return item.itemId == id
-                });
-                if (foundIndex != -1) {
-                    tracks[indexTracks].items.splice(foundIndex, 1);
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const itemsTmp = track.items.filter((item) => item.itemId !== id)
+                if (itemsTmp.length !== track.items.length) {
+                    track.items = itemsTmp;
                     this.pushToHistory();
                     return;
                 }
