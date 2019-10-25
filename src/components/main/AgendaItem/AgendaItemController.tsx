@@ -23,40 +23,41 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const viewModel = useViewModelContext();
     const [hovering, setHovering] = useState(false); // TODO: move into mobx state
     const [editing, setEditing] = useState(false); // TODO: move into mobx state
+    const [resizing, setResizing] = useState(false); // TODO: move into mobx state
+
     const [width, setWidth] = useState(0);
 
 
     const refWidthContainer = useCallback(node => {
         if (node !== null) {
             setWidth(node.clientWidth - 1);
-
-            const handleResize = () => {
+            const handleWidthResize = () => {
                 if (node.clientWidth != width) {
                     setWidth(node.clientWidth);
                 }
             }
-            window.addEventListener('resize', handleResize);
-            return () => { window.removeEventListener('resize', handleResize) };
+            window.addEventListener('resize', handleWidthResize);
+            return () => { window.removeEventListener('resize', handleWidthResize) };
         }
         return;
     }, []);
 
-    const [{ isDragging }, drag, preview] = useDrag({
+    const [{ isDragging }, dragMoveRef, previewMove] = useDrag({
         item: { type: "item", itemId: item.itemId },
         isDragging: monitor => monitor.getItem().itemId === item.itemId,
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         }),
         begin: () => {
-            setHovering(false);        },
+            setHovering(false);
+        },
         end: () => {
-            viewModel.pushToHistory(); //TODO: only push to history if item actually changed, maybe do this
+            viewModel.pushToHistory(); //TODO: does not really work yet, only push to history if item actually changed
         }
-
     })
 
     useEffect(() => {
-        preview(getEmptyImage(), { captureDraggingState: true })
+        previewMove(getEmptyImage(), { captureDraggingState: true });
     }, [])
 
     const deleteItem = () => {
@@ -66,6 +67,22 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const editItem = () => {
         setEditing(true);
     };
+
+    let initialEnd = moment(item.end);
+    const handleResizeEndTime = (diff: number) => {
+        //TODO check if changed
+        const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
+        const newEnd: Moment = moment(initialEnd).add('minutes', minutes);
+        if (!newEnd.isSame(item.end)) item.end = newEnd;
+        setResizing(true);
+    }
+
+    const finishResizeEndTime = () => {
+        initialEnd = item.end;
+        setResizing(false);
+        viewModel.pushToHistory();
+    }
+
 
     const intervalPxHeight = viewModel.getIntervalPxHeight();
     const intervalInMin = viewModel.getIntervalInMin();
@@ -82,10 +99,10 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
 
     const small = height == intervalPxHeight ? true : false;
 
-    console.log('topPx: ' + topPx);
-    console.log('topPx: ' + topPx);
 
-    
+
+
+
 
 
     return editing ?
@@ -120,7 +137,10 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
                 small={small}
                 hovering={hovering}
                 dragging={isDragging}
-                dragRef={drag}
+                resizing={resizing}
+                dragRef={dragMoveRef}
+                handleResizeEndTime={handleResizeEndTime}
+                finishResizeEndTime={finishResizeEndTime}
                 editItem={() => editItem()}
                 deleteItem={() => deleteItem()}
                 onMouseEnter={() => { setHovering(true) }}

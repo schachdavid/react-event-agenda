@@ -13,6 +13,7 @@ export interface IProps {
     title?: string,
     speaker?: string,
     small?: boolean,
+    
 }
 
 const AgendaItemDragView: React.FC<IProps> = ({

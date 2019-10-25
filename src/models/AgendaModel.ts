@@ -144,7 +144,8 @@ class AgendaModel {
     }
 
 
-    getItem(id: string) {
+    get getItem(id: string) {
+        //read only 
         for (const day of this.agenda.days) {
             for (const track of day.tracks) {
                 const item: Item | undefined = track.items.find((item) => item.itemId === id);

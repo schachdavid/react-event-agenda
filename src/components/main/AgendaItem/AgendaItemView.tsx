@@ -22,9 +22,12 @@ export interface IProps {
     resizing?: boolean,
     dragging: boolean,
     dragRef: any,
+    // resizeEndRef: any,
     hideTitle?: boolean,
     hideSpeaker?: boolean,
     hideLocation?: boolean,
+    handleResizeEndTime: (diff: number) => void,
+    finishResizeEndTime: () => void,
     editItem: () => void,
     deleteItem: () => void,
     onMouseEnter?: (e: any) => any,
@@ -42,15 +45,41 @@ const AgendaItemView: React.FC<IProps> = ({
     hovering,
     onMouseEnter,
     onMouseLeave,
+    handleResizeEndTime,
+    finishResizeEndTime,
     editItem,
     deleteItem,
     dragging,
-    dragRef }: IProps) => {
+    dragRef,
+    resizing
+}: IProps) => {
+
+
+    let initialMousePosition: number;
+    const initializeResizing = (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (e) {
+            e.preventDefault();
+            initialMousePosition = e.clientY;
+        }
+        window.addEventListener('mousemove', resizeEnd);
+        window.addEventListener('mouseup', stopResize);
+    }
+
+    const resizeEnd = (e: any) => {
+        let diff: number = e.clientY - initialMousePosition;
+        handleResizeEndTime(diff);
+    }
+
+    const stopResize = () => {
+        finishResizeEndTime();
+        window.removeEventListener('mousemove', resizeEnd);
+        window.removeEventListener('mouseup', stopResize);
+    }
 
 
 
 
-    const controls = hovering ?
+    const controls = hovering && !resizing ?
         <div className={classNames(styles.controls)}>
             <Stack tokens={{ childrenGap: 2 }} horizontal>
                 <Customizer settings={{ theme: getInvertedTheme() }}>
@@ -64,10 +93,16 @@ const AgendaItemView: React.FC<IProps> = ({
 
 
 
-    const resizeDots = hovering ?
-        <div>
-            <div className={classNames(styles.resizeDot, styles.centerAbsolute, styles.topAbsolute)} />
-            <div className={classNames(styles.resizeDot, styles.centerAbsolute, styles.bottomAbsolute)} />
+    const resizeDots = hovering || resizing ?
+        <div onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
+            <div className={styles.resizeDotTopContainer}>
+                <div className={styles.resizeDot} />
+            </div>
+            <div className={styles.resizeDotBottomContainer} onMouseDown={initializeResizing}>
+                <div className={styles.resizeDot} />
+            </div>
         </div>
         : null;
 
@@ -81,12 +116,13 @@ const AgendaItemView: React.FC<IProps> = ({
                 <div className={styles.shadow} />
             </div>
             :
-            <div ref={dragRef} className={styles.container} style={{ top: topPx, height: height }} >
+            <div className={styles.container} style={{ top: topPx, height: height }} >
                 <div
+                    ref={dragRef}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     className={classNames(styles.main, {
-                        [styles.mainHover]: hovering || dragging,
+                        [styles.mainHover]: hovering && !dragging || dragging,
                         [styles.mainDragging]: dragging,
                     })} >
 
@@ -114,8 +150,8 @@ const AgendaItemView: React.FC<IProps> = ({
                             {controls}
                         </div>
                     }
-                    {resizeDots}
                 </div>
+                {resizeDots}
             </div>
 
 

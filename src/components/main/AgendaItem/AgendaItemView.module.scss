@@ -59,21 +59,22 @@
   border: 2px solid var(--themePrimary);
 }
 
-.centerAbsolute {
-  left: 0; 
-  right: 0; 
-  margin-left: auto; 
-  margin-right: auto; 
-}
-
-.topAbsolute {
+.resizeDotTopContainer {
   position: absolute;
   top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.bottomAbsolute {
+.resizeDotBottomContainer {
   position: absolute;
   bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .controls {

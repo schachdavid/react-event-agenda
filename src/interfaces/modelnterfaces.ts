@@ -1,6 +1,10 @@
 import {Moment} from 'moment';
 
 
+export interface Dao {
+    fromJSON: (json: string) => void;
+    toJSON: () => string;
+}
 
 export interface ItemData {
     title?: string,
