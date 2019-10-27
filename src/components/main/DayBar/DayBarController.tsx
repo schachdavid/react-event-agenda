@@ -2,12 +2,12 @@ import React from 'react';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
 import DayBarView from './DayBarView';
-import { Day } from '../../../interfaces/modelnterfaces';
+import { IDay } from '../../../models/MainModel';
 
 
 
 interface IProps {
-    day: Day
+    day: IDay
 }
 
 

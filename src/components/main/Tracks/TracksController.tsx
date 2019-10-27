@@ -3,7 +3,7 @@ import TracksView from './TracksView';
 import { useViewModelContext } from '../../../ViewModelContext';
 import { observer } from "mobx-react";
 import AgendaViewModel from '../../../AgendaViewModel';
-import { Day } from '../../../interfaces/modelnterfaces';
+import { IDay } from '../../../models/MainModel';
 
 
 
@@ -14,7 +14,7 @@ interface IProps {
 const TracksController: React.FC<IProps> = ({ }: IProps) => {
     const viewModel: AgendaViewModel = useViewModelContext();
 
-    const days: Array<Day> = viewModel.getDays();
+    const days: Array<IDay> = viewModel.getDays();
 
 
     const handleWidthChange = (newWidth: number) => {

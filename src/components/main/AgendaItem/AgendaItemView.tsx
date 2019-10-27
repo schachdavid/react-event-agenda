@@ -28,6 +28,8 @@ export interface IProps {
     hideLocation?: boolean,
     handleResizeEndTime: (diff: number) => void,
     finishResizeEndTime: () => void,
+    handleResizeStartTime: (diff: number) => void,
+    finishResizeStartTime: () => void,
     editItem: () => void,
     deleteItem: () => void,
     onMouseEnter?: (e: any) => any,
@@ -47,6 +49,8 @@ const AgendaItemView: React.FC<IProps> = ({
     onMouseLeave,
     handleResizeEndTime,
     finishResizeEndTime,
+    handleResizeStartTime,
+    finishResizeStartTime,
     editItem,
     deleteItem,
     dragging,
@@ -55,25 +59,35 @@ const AgendaItemView: React.FC<IProps> = ({
 }: IProps) => {
 
 
+    enum Direction {
+        Start,
+        End
+    }
+
     let initialMousePosition: number;
-    const initializeResizing = (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    let currentDirection: Direction;
+    const initializeResizing = (direction: Direction, e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        currentDirection = direction;
         if (e) {
             e.preventDefault();
             initialMousePosition = e.clientY;
         }
-        window.addEventListener('mousemove', resizeEnd);
+        window.addEventListener('mousemove', resize);
         window.addEventListener('mouseup', stopResize);
     }
 
-    const resizeEnd = (e: any) => {
+    const resize = (e: any) => {
+        console.log(currentDirection);
         let diff: number = e.clientY - initialMousePosition;
-        handleResizeEndTime(diff);
+        if (Direction.End === currentDirection) handleResizeEndTime(diff);
+        else if (Direction.Start === currentDirection) handleResizeStartTime(diff);
     }
 
     const stopResize = () => {
-        finishResizeEndTime();
-        window.removeEventListener('mousemove', resizeEnd);
+        window.removeEventListener('mousemove', resize);
         window.removeEventListener('mouseup', stopResize);
+        if (Direction.End === currentDirection) finishResizeEndTime();
+        else if (Direction.Start === currentDirection) finishResizeStartTime();
     }
 
 
@@ -97,10 +111,12 @@ const AgendaItemView: React.FC<IProps> = ({
         <div onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            <div className={styles.resizeDotTopContainer}>
+            <div className={styles.resizeDotTopContainer} onMouseDown={
+                (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.Start, e)}>
                 <div className={styles.resizeDot} />
             </div>
-            <div className={styles.resizeDotBottomContainer} onMouseDown={initializeResizing}>
+            <div className={styles.resizeDotBottomContainer} onMouseDown={
+                (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.End, e)}>
                 <div className={styles.resizeDot} />
             </div>
         </div>
@@ -122,8 +138,7 @@ const AgendaItemView: React.FC<IProps> = ({
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     className={classNames(styles.main, {
-                        [styles.mainHover]: hovering && !dragging || dragging,
-                        [styles.mainDragging]: dragging,
+                        [styles.mainHover]: hovering || resizing,
                     })} >
 
                     {!small ?

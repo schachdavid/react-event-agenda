@@ -7,13 +7,13 @@ import styles from './AgendaItemView.module.scss';
 export interface IProps {
     height: number,
     topPx: number,
-    itemId: string,
+    id: string,
 }
 
 const AgendaItemDragShadowView: React.FC<IProps> = ({
     height,
     topPx,
-    itemId,
+    id,
 }) => {
 
     const {
@@ -29,7 +29,7 @@ const AgendaItemDragShadowView: React.FC<IProps> = ({
 
     
 
-    if (!isDragging || !currentOffset || itemId !== dragItem.itemId) {
+    if (!isDragging || !currentOffset || id !== dragItem.id) {
         return null
     }
 

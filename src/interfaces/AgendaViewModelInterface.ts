@@ -1,4 +1,5 @@
 import { Moment } from "moment";
+import { Item } from "../models/ItemModel";
 
 export default interface AgendaViewModelI {
     
@@ -7,21 +8,33 @@ export default interface AgendaViewModelI {
      */
     getDays(): any;
 
-    /**
-     * Undo the last thing that happened on agenda item data level.
-     */
+
     addItem(item: any): void;
+
+    
+    /**
+     * Tries to adjust the item's start time. 
+     *
+     */
+    adjustItemStartTime(itemId: string, newStart: Moment): void;
+
+    
+    /**
+     * Tries to adjust the item's end time. 
+     *
+     */
+    adjustItemEndTime(itemId: string, newStart: Moment): void;
 
     /**
      * Deletes the agenda item with the given id.
      */
-    deleteItem(itemId: string): void;
+    deleteItem(id: string): void;
 
 
      /**
      * Tries to move the item to the given start time on the given track.
      */
-    moveItem(trackId: string, itemId: string, newStart: Moment):void;
+    moveItem(trackId: string, id: string, newStart: Moment):void;
 
     /**
      * Undo the last thing that happened on agenda item data level.

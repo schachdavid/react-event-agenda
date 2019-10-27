@@ -5,15 +5,14 @@ import { Track } from '../Track/TrackController';
 import classNames from 'classnames';
 import { DayBar } from '../DayBar/DayBarController';
 import { TrackBar } from '../TrackBar/TrackBarController';
-import { Day } from '../../../interfaces/modelnterfaces';
-import { Track as TrackData } from '../../../interfaces/modelnterfaces';
+import { ITrack as TrackData, IDay } from '../../../models/MainModel';
 import { TimeLine } from '../TimeLine/TimeLineController';
 
 
 
 export interface IProps {
     handleWidthChange: (newWidth: number) => void;
-    days: Array<Day>;
+    days: Array<IDay>;
     singleTracks: boolean;
 }
 
@@ -45,18 +44,18 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, singleTracks }:
     let trackBarViews;
 
     if (singleTracks) {
-        const tracks: Array<TrackData> = days.map((day: Day) => { return day.tracks[0] })
+        const tracks: Array<TrackData> = days.map((day: IDay) => { return day.tracks[0] })
         dayBarViews = days.map((day) => {
-            return <DayBar key={day.dayId} day={day}> </DayBar>
+            return <DayBar key={day.id} day={day}> </DayBar>
         });
 
         trackViews = tracks.map((track: TrackData) => {
-            return <Track key={track.trackId} track={track}></Track>
+            return <Track key={track.id} track={track}></Track>
         });
     } else {
         const tracks: Array<TrackData> = days[0].tracks;
         trackBarViews = tracks.map((track: TrackData) => {
-            return <TrackBar key={track.trackId}></TrackBar>
+            return <TrackBar key={track.id}></TrackBar>
         });
     }
 

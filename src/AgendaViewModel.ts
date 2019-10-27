@@ -1,83 +1,96 @@
-import ItemsModel from './models/AgendaModel';
-import UIModel from './models/UIModel';
+import MainModel from './models/MainModel';
 import AgendaViewModelInterface from './interfaces/AgendaViewModelInterface';
 import moment, { Moment, Duration } from 'moment';
-// import ListItem from './types/dataTypes';
-// import { action } from 'mobx';
+import { toJS } from 'mobx';
+
 
 
 
 class AgendaViewModel implements AgendaViewModelInterface {
-    itemsStore: ItemsModel;
-    uiStore: UIModel;
+    agendaStore: MainModel;
 
     constructor() {
-        this.itemsStore = new ItemsModel();
-        this.uiStore = new UIModel();
+        this.agendaStore = new MainModel();
     }
 
     getStore() {
-        return this.itemsStore;
+        return this.agendaStore;
     }
 
     getStartTime() {
-        return this.itemsStore.getStartTime();
-
+        return this.agendaStore.getStartTime();
     }
 
     getEndTime() {
-        return this.itemsStore.getEndTime();
+        return this.agendaStore.getEndTime();
     }
 
     getIntervalPxHeight() {
-        return this.itemsStore.getIntervalPxHeight();
+        return this.agendaStore.getIntervalPxHeight();
     }
 
     getIntervalInMin() {
-        return this.itemsStore.getIntervalInMin();
+        return this.agendaStore.getIntervalInMin();
     }
 
     getSegmentFactor() {
-        return this.itemsStore.getSegmentFactor();
+        return this.agendaStore.getSegmentFactor();
     }
 
     getDays() {
-        return this.itemsStore.getDays();
+        console.log("tojson agenda:", toJS(this.agendaStore.getAgenda()));
+        return this.agendaStore.getAgenda().days;
     }
 
-    deleteItem(itemId: string) {
-        this.itemsStore.deleteItem(itemId);
+    deleteItem(id: string) {
+        this.agendaStore.deleteItem(id);
     }
 
     addItem() {
-        // this.itemsStore.addItem(listItem);
     }
 
-    moveItem(trackId: string, itemId: string, newStart: Moment) {
-        const item = this.itemsStore.getItem(itemId);
-        const curTrack = this.itemsStore.getTrackForItem(itemId);
-        if (item &&( curTrack!.trackId !== trackId) || !item!.start.isSame(newStart)) {
+    moveItem(trackId: string, id: string, newStart: Moment) {
+        //TODO: implement checks here
+        const item = this.agendaStore.getItem(id);
+        const curTrack = this.agendaStore.getTrackForItem(id);
+        if (item && (curTrack!.id !== trackId) || !item!.start.isSame(newStart)) {
             const duration: Duration = moment.duration(item!.end.diff(item!.start));
             const newEnd = moment(newStart).add(duration);
             item!.start = newStart;
             item!.end = newEnd;
-            if (item && curTrack!.trackId !== trackId) {
-                this.itemsStore.deleteItem(itemId)
-                this.itemsStore.addItem(item, trackId);
+            if (item && curTrack!.id !== trackId) {
+                this.agendaStore.deleteItem(id)
+                this.agendaStore.addItem(item, trackId);
             }
         }
     }
 
     undo() {
-        this.itemsStore.undo();
+        this.agendaStore.undo();
     }
 
     redo() {
-        this.itemsStore.redo();
+        this.agendaStore.redo();
     }
 
     pushToHistory() {
-        this.itemsStore.pushToHistory()
+        this.agendaStore.pushToHistory()
+    }
+
+    adjustItemStartTime(itemId: string, newStartTime: Moment) {
+        const item = this.agendaStore.getItem(itemId);
+        if (item) {
+            item.start = newStartTime;
+        }
+        //TODO: implement checks here
+    }
+
+    adjustItemEndTime(itemId: string, newEndTime: Moment) {
+        const item = this.agendaStore.getItem(itemId);
+        if (item) {
+            item.end = newEndTime;
+        }
+        //TODO: implement checks here
     }
 
 

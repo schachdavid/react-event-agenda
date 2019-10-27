@@ -3,7 +3,7 @@ import AgendaItemView from './AgendaItemView';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
 import AgendaItemEditView from './AgendaItemEdit/AgendaItemEditView';
-import { Item } from '../../../interfaces/modelnterfaces';
+import { IItem } from '../../../models/ItemModel';
 import { useViewModelContext } from '../../../ViewModelContext';
 import moment, { Moment } from 'moment';
 import AgendaItemDragView from './AgendaItemDragView';
@@ -13,7 +13,7 @@ import { getEmptyImage } from 'react-dnd-html5-backend'
 
 
 interface IProps {
-    item: Item
+    item: IItem
 }
 
 
@@ -43,8 +43,8 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     }, []);
 
     const [{ isDragging }, dragMoveRef, previewMove] = useDrag({
-        item: { type: "item", itemId: item.itemId },
-        isDragging: monitor => monitor.getItem().itemId === item.itemId,
+        item: { type: "item", id: item.id },
+        isDragging: monitor => monitor.getItem().id === item.id,
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         }),
@@ -61,7 +61,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     }, [])
 
     const deleteItem = () => {
-        viewModel.deleteItem(item.itemId)
+        viewModel.deleteItem(item.id)
     };
 
     const editItem = () => {
@@ -70,17 +70,34 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
 
     let initialEnd = moment(item.end);
     const handleResizeEndTime = (diff: number) => {
-        //TODO check if changed
         const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
         const newEnd: Moment = moment(initialEnd).add('minutes', minutes);
-        if (!newEnd.isSame(item.end)) item.end = newEnd;
+        if (!newEnd.isSame(item.end)) viewModel.adjustItemEndTime(item, newEnd);
         setResizing(true);
     }
 
     const finishResizeEndTime = () => {
-        initialEnd = item.end;
         setResizing(false);
-        viewModel.pushToHistory();
+        if (!initialEnd.isSame(item.end)) {
+            initialEnd = item.end;
+            viewModel.pushToHistory();
+        }
+    }
+
+    let initialStart = moment(item.start);
+    const handleResizeStartTime = (diff: number) => {
+        const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
+        const newStart: Moment = moment(initialStart).add('minutes', minutes);
+        if (!newStart.isSame(item.start)) viewModel.adjustItemStartTime(item, newStart);
+        setResizing(true);
+    }
+
+    const finishResizeStartTime = () => {
+        setResizing(false);
+        if (!initialStart.isSame(item.start)) {
+            initialStart = item.start;
+            viewModel.pushToHistory();
+        }
     }
 
 
@@ -116,7 +133,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
             cancelEditing={() => setEditing(false)} />
         : <div>
             <AgendaItemDragView
-                itemId={item.itemId}
+                id={item.id}
                 height={height}
                 width={width}
                 start={item.start.format("HH:mm")}
@@ -141,6 +158,8 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
                 dragRef={dragMoveRef}
                 handleResizeEndTime={handleResizeEndTime}
                 finishResizeEndTime={finishResizeEndTime}
+                handleResizeStartTime={handleResizeStartTime}
+                finishResizeStartTime={finishResizeStartTime}
                 editItem={() => editItem()}
                 deleteItem={() => deleteItem()}
                 onMouseEnter={() => { setHovering(true) }}
