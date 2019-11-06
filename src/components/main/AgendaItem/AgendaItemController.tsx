@@ -72,7 +72,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const handleResizeEndTime = (diff: number) => {
         const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
         const newEnd: Moment = moment(initialEnd).add('minutes', minutes);
-        if (!newEnd.isSame(item.end)) viewModel.adjustItemEndTime(item, newEnd);
+        if (!newEnd.isSame(item.end)) viewModel.adjustItemEndTime(item.id, newEnd);
         setResizing(true);
     }
 
@@ -88,7 +88,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const handleResizeStartTime = (diff: number) => {
         const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
         const newStart: Moment = moment(initialStart).add('minutes', minutes);
-        if (!newStart.isSame(item.start)) viewModel.adjustItemStartTime(item, newStart);
+        if (!newStart.isSame(item.start)) viewModel.adjustItemStartTime(item.id, newStart);
         setResizing(true);
     }
 

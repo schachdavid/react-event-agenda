@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { observer } from "mobx-react";
 import styles from './TrackView.module.scss';
 import { AgendaItem } from '../AgendaItem/AgendaItemController';
@@ -15,8 +15,8 @@ export interface IProps {
     numberOfSegments: number,
     segmentHeight: number,
     handleDropHover: (hoverClientY: number, dragItem: DragItem) => void,
-    // handleInitializeDrawUp: () => void,
-    // handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void
+    handleInitializeDrawUp: (initialMousePosition: number) => void,
+    handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void
 }
 
 const TrackView: React.FC<IProps> = ({
@@ -24,53 +24,56 @@ const TrackView: React.FC<IProps> = ({
     numberOfSegments,
     segmentHeight,
     handleDropHover,
-    // handleInitializeDrawUp,
-    // handleDrawUp 
+    handleInitializeDrawUp,
+    handleDrawUp
 }: IProps) => {
     const agendaItems = items.map((item: IItem) => <AgendaItem key={item.id} item={item}></AgendaItem>)
-    const ref = useRef<HTMLDivElement>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const segmentsRef = useRef<HTMLDivElement>(null)
 
 
-    
+
+
     const [, drop] = useDrop({
         accept: 'item',
         hover(item: DragItem, monitor: DropTargetMonitor) {
-            const hoverBoundingRect = ref.current!.getBoundingClientRect();
+            const hoverBoundingRect = containerRef.current!.getBoundingClientRect();
             const clientOffset = monitor.getSourceClientOffset();
             const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
             handleDropHover(hoverClientY, item);
         },
     })
 
-    drop(ref);
+    drop(containerRef);
 
-    // useEffect(() => {
-    //     if (ref.current) {
-    //         ref.current.addEventListener('mousedown', (evt) => initializeDrawUp(evt));
-    //     };
-    // }, [])
+    useEffect(() => {
+        if (segmentsRef.current) {
+            segmentsRef.current.addEventListener('mousedown', (evt) => initializeDrawUp(evt));
+        };
+    }, [])
 
-    // let initialMousePosition: number;
-    // const initializeDrawUp = (evt?: undefined | MouseEvent) => {
-    //     if (evt) {
-    //         evt.preventDefault();
-    //         initialMousePosition = evt.clientY;
-    //     }
-    //     handleInitializeDrawUp();
-    //     window.addEventListener('mousemove', drawUp);
-    //     window.addEventListener('mouseup', stopDrawUp);
-    // }
+    let initialMousePosition: number;
+    const initializeDrawUp = (evt?: undefined | MouseEvent) => {
+        if (evt && segmentsRef.current) {
+            evt.preventDefault();
+            initialMousePosition = evt.clientY - segmentsRef.current.getBoundingClientRect().top;
+        }
+        handleInitializeDrawUp(initialMousePosition);
+        window.addEventListener('mousemove', drawUp); //TODO: throttle here
+        window.addEventListener('mouseup', stopDrawUp);
+    }
 
-    // console.log(initializeDrawUp);
 
-    // const drawUp = (e: any) => {
-    //     handleDrawUp(initialMousePosition, e.clientY)
-    // }
+    const drawUp = (e: any) => {
+        if (segmentsRef.current) {
+            handleDrawUp(initialMousePosition, e.clientY - segmentsRef.current!.getBoundingClientRect().top)
+        }
+    }
 
-    // const stopDrawUp = () => {
-    //     window.removeEventListener('mousemove', drawUp);
-    //     window.removeEventListener('mouseup', stopDrawUp);
-    // }
+    const stopDrawUp = () => {
+        window.removeEventListener('mousemove', drawUp);
+        window.removeEventListener('mouseup', stopDrawUp);
+    }
 
 
 
@@ -81,8 +84,10 @@ const TrackView: React.FC<IProps> = ({
     }
 
     return (
-        <div className={styles.container} ref={ref}>
-            {segments}
+        <div className={styles.container} ref={containerRef}>
+            <div className={styles.segmentsContainer} ref={segmentsRef}>
+                {segments}
+            </div>
             {agendaItems}
         </div>
     );

@@ -1,5 +1,5 @@
 import { Moment } from "moment";
-import { Item } from "../models/ItemModel";
+import { Item, IItem } from "../models/ItemModel";
 
 export default interface AgendaViewModelI {
     
@@ -9,7 +9,7 @@ export default interface AgendaViewModelI {
     getDays(): any;
 
 
-    addItem(item: any): void;
+    addItem(item: IItem, trackId: string): void;
 
     
     /**

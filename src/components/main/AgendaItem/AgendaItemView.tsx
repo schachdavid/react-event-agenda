@@ -77,14 +77,13 @@ const AgendaItemView: React.FC<IProps> = ({
     }
 
     const resize = (e: any) => {
-        console.log(currentDirection);
         let diff: number = e.clientY - initialMousePosition;
         if (Direction.End === currentDirection) handleResizeEndTime(diff);
         else if (Direction.Start === currentDirection) handleResizeStartTime(diff);
     }
 
     const stopResize = () => {
-        window.removeEventListener('mousemove', resize);
+        window.removeEventListener('mousemove', resize); //TODO: throttle here
         window.removeEventListener('mouseup', stopResize);
         if (Direction.End === currentDirection) finishResizeEndTime();
         else if (Direction.Start === currentDirection) finishResizeStartTime();

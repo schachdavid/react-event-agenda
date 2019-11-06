@@ -1,4 +1,4 @@
-import { observable, action, autorun, toJS } from 'mobx';
+import { observable, action, toJS } from 'mobx';
 import moment from 'moment';
 import {Item} from './ItemModel';
 import {Track} from './TrackModel';
@@ -94,7 +94,7 @@ class MainModel {
 
     constructor() {
         this.pushToHistory();
-        autorun(() => console.log(toJS(this.agenda)));
+        // autorun(() => console.log(toJS(this.agenda)));
     }
 
     @action addItem(item: Item, trackId: string) {

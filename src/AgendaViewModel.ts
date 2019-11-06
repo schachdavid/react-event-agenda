@@ -1,7 +1,6 @@
-import MainModel from './models/MainModel';
+import MainModel, { IItem, Item } from './models/MainModel';
 import AgendaViewModelInterface from './interfaces/AgendaViewModelInterface';
 import moment, { Moment, Duration } from 'moment';
-import { toJS } from 'mobx';
 
 
 
@@ -38,7 +37,6 @@ class AgendaViewModel implements AgendaViewModelInterface {
     }
 
     getDays() {
-        console.log("tojson agenda:", toJS(this.agendaStore.getAgenda()));
         return this.agendaStore.getAgenda().days;
     }
 
@@ -46,8 +44,13 @@ class AgendaViewModel implements AgendaViewModelInterface {
         this.agendaStore.deleteItem(id);
     }
 
-    addItem() {
+    addItem(item: IItem, trackId: string) {
+        const track = this.agendaStore.getTrackById(trackId);
+        if(track) {
+            track.items.push(new Item(item))
+        }
     }
+
 
     moveItem(trackId: string, id: string, newStart: Moment) {
         //TODO: implement checks here

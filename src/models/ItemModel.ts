@@ -19,7 +19,7 @@ export class Item {
 
 
     constructor(obj: IItem) {
-        this._id = obj.id;
+        this._id = obj.id!;
         this._title = obj.title!;
         this._speaker = obj.speaker!;
         this._start = obj.start!;
