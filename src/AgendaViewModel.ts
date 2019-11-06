@@ -40,14 +40,18 @@ class AgendaViewModel implements AgendaViewModelInterface {
         return this.agendaStore.getAgenda().days;
     }
 
-    deleteItem(id: string) {
+    deleteItem(id: string, pushToHistory?: boolean) {
         this.agendaStore.deleteItem(id);
+        if(pushToHistory) this.pushToHistory();
     }
 
-    addItem(item: IItem, trackId: string) {
+    addItem(item: IItem, trackId: string, pushToHistory?: boolean) {
         const track = this.agendaStore.getTrackById(trackId);
         if(track) {
             track.items.push(new Item(item))
+            if(pushToHistory) {
+                this.pushToHistory();
+            }
         }
     }
 
@@ -56,15 +60,17 @@ class AgendaViewModel implements AgendaViewModelInterface {
         //TODO: implement checks here
         const item = this.agendaStore.getItem(id);
         const curTrack = this.agendaStore.getTrackForItem(id);
-        if (item && (curTrack!.id !== trackId) || !item!.start.isSame(newStart)) {
+
+        if (!item!.start.isSame(newStart)) {
             const duration: Duration = moment.duration(item!.end.diff(item!.start));
             const newEnd = moment(newStart).add(duration);
             item!.start = newStart;
             item!.end = newEnd;
-            if (item && curTrack!.id !== trackId) {
-                this.agendaStore.deleteItem(id)
-                this.agendaStore.addItem(item, trackId);
-            }
+        }
+        
+        if (item && (curTrack!.id !== trackId)) {
+            this.agendaStore.deleteItem(id);
+            this.agendaStore.addItem(item, trackId);
         }
     }
 

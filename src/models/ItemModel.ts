@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 
 
 export interface IItem {
@@ -94,7 +94,7 @@ export class Item {
      * Getter end
      * @return {Moment}
      */
-     public get end(): Moment {
+    @computed public get end(): Moment {
         return this._end;
     }
 

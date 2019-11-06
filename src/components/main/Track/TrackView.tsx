@@ -7,6 +7,7 @@ import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { DragItem } from '../../../interfaces/dndInterfaces'
 import uuid from 'uuid';
+import _ from 'lodash';
 
 
 
@@ -32,7 +33,7 @@ const TrackView: React.FC<IProps> = ({
     const segmentsRef = useRef<HTMLDivElement>(null)
 
 
-
+    const throttledDropHover = _.throttle(handleDropHover, 50);
 
     const [, drop] = useDrop({
         accept: 'item',
@@ -40,7 +41,7 @@ const TrackView: React.FC<IProps> = ({
             const hoverBoundingRect = containerRef.current!.getBoundingClientRect();
             const clientOffset = monitor.getSourceClientOffset();
             const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-            handleDropHover(hoverClientY, item);
+            throttledDropHover(hoverClientY, item);
         },
     })
 

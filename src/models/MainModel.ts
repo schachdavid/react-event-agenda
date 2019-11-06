@@ -3,7 +3,7 @@ import moment from 'moment';
 import {Item} from './ItemModel';
 import {Track} from './TrackModel';
 import {Day} from './DayModel';
-import {Agenda} from './AgendaModel';
+import {Agenda, IAgenda} from './AgendaModel';
 
 
 class MainModel {
@@ -89,19 +89,17 @@ class MainModel {
 
 
 
-    agendaHistory: Array<Agenda> = [];
+    agendaHistory: Array<IAgenda> = [];
     pointer: number = -1;
 
     constructor() {
         this.pushToHistory();
-        // autorun(() => console.log(toJS(this.agenda)));
     }
 
     @action addItem(item: Item, trackId: string) {
         const track: Track | undefined = this.getTrackById(trackId);
         if (track) {
             track.items.push(item);
-            this.pushToHistory();
         }
     }
 
@@ -172,7 +170,6 @@ class MainModel {
                 const itemsTmp = track.items.filter((item) => item.id !== id)
                 if (itemsTmp.length !== track.items.length) {
                     track.items = itemsTmp;
-                    this.pushToHistory();
                     return;
                 }
             }
@@ -203,6 +200,7 @@ class MainModel {
     }
 
     pushToHistory() {
+        console.log("pushing to history");
         this.pointer++;
         this.agendaHistory.splice(this.pointer, this.agendaHistory.length);
         this.agendaHistory.push(toJS(this.agenda));
@@ -211,14 +209,14 @@ class MainModel {
     @action undo() {
         if (this.pointer > 0) {
             this.pointer--;
-            this.setAgenda(this.agendaHistory[this.pointer]);
+            this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
         }
     }
 
     @action redo() {
         if (this.pointer < this.agendaHistory.length - 1) {
             this.pointer++;
-            this.setAgenda(this.agendaHistory[this.pointer]);
+            this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
         }
     }
 

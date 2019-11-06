@@ -26,6 +26,7 @@ export interface IProps {
     hideTitle?: boolean,
     hideSpeaker?: boolean,
     hideLocation?: boolean,
+    initResizing: () => void,
     handleResizeEndTime: (diff: number) => void,
     finishResizeEndTime: () => void,
     handleResizeStartTime: (diff: number) => void,
@@ -47,6 +48,7 @@ const AgendaItemView: React.FC<IProps> = ({
     hovering,
     onMouseEnter,
     onMouseLeave,
+    initResizing,
     handleResizeEndTime,
     finishResizeEndTime,
     handleResizeStartTime,
@@ -68,6 +70,7 @@ const AgendaItemView: React.FC<IProps> = ({
     let currentDirection: Direction;
     const initializeResizing = (direction: Direction, e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         currentDirection = direction;
+        initResizing();
         if (e) {
             e.preventDefault();
             initialMousePosition = e.clientY;

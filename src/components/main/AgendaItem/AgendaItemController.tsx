@@ -28,6 +28,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const [width, setWidth] = useState(0);
 
 
+
     const refWidthContainer = useCallback(node => {
         if (node !== null) {
             setWidth(node.clientWidth - 1);
@@ -51,7 +52,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
         begin: () => {
             setHovering(false);
         },
-        end: () => {
+        end: () => {            
             viewModel.pushToHistory(); //TODO: does not really work yet, only push to history if item actually changed
         }
     })
@@ -61,41 +62,47 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     }, [])
 
     const deleteItem = () => {
-        viewModel.deleteItem(item.id)
+        viewModel.deleteItem(item.id, true)
     };
 
     const editItem = () => {
         setEditing(true);
     };
 
-    let initialEnd = moment(item.end);
+    let initialEndTime = moment(item.end);
+    const initResizing = () => {
+        setResizing(true);
+    }
+
+
     const handleResizeEndTime = (diff: number) => {
         const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
-        const newEnd: Moment = moment(initialEnd).add('minutes', minutes);
-        if (!newEnd.isSame(item.end)) viewModel.adjustItemEndTime(item.id, newEnd);
-        setResizing(true);
+        const newEnd: Moment = moment(initialEndTime).add('minutes', minutes);
+        if(!item.end.isSame(newEnd)) {
+            viewModel.adjustItemEndTime(item.id, newEnd);
+        }
     }
 
     const finishResizeEndTime = () => {
         setResizing(false);
-        if (!initialEnd.isSame(item.end)) {
-            initialEnd = item.end;
+        if (!initialEndTime.isSame(item.end)) {
+            initialEndTime = item.end;
             viewModel.pushToHistory();
         }
     }
 
-    let initialStart = moment(item.start);
+    let initialStartTime = moment(item.start);
     const handleResizeStartTime = (diff: number) => {
         const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
-        const newStart: Moment = moment(initialStart).add('minutes', minutes);
+        const newStart: Moment = moment(initialStartTime).add('minutes', minutes);
         if (!newStart.isSame(item.start)) viewModel.adjustItemStartTime(item.id, newStart);
         setResizing(true);
     }
 
     const finishResizeStartTime = () => {
         setResizing(false);
-        if (!initialStart.isSame(item.start)) {
-            initialStart = item.start;
+        if (!initialStartTime.isSame(item.start)) {
+            initialStartTime = item.start;
             viewModel.pushToHistory();
         }
     }
@@ -115,11 +122,6 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const height = itemDuration / intervalInMin * intervalPxHeight;
 
     const small = height == intervalPxHeight ? true : false;
-
-
-
-
-
 
 
     return editing ?
@@ -156,6 +158,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
                 dragging={isDragging}
                 resizing={resizing}
                 dragRef={dragMoveRef}
+                initResizing={initResizing}
                 handleResizeEndTime={handleResizeEndTime}
                 finishResizeEndTime={finishResizeEndTime}
                 handleResizeStartTime={handleResizeStartTime}

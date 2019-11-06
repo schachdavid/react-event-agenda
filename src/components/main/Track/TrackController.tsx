@@ -16,6 +16,7 @@ interface IProps {
 
 const TrackController: React.FC<IProps> = ({ track }: IProps) => {
     const viewModel = useViewModelContext();
+    
     const items: Array<IItem> = track.items;
 
     const intervalPxHeight = viewModel.getIntervalPxHeight();
