@@ -15,6 +15,7 @@ export interface IProps {
     speaker?: string,
     topPx: number,
     height: number,
+    save: () => void,
     cancelEditing: () => void
 }
 
@@ -25,6 +26,7 @@ const AgendaItemEditView: React.FC<IProps> = ({
     speaker,
     topPx,
     height,
+    save,
     cancelEditing }: IProps) => {
 
     const controls = <div className={styles.cancelButton}>
@@ -42,7 +44,7 @@ const AgendaItemEditView: React.FC<IProps> = ({
                     <TextField placeholder="Add a title" value={title} underlined />
                     <TextField placeholder="Add speakers" value={speaker} underlined />
                     <TextField placeholder="Add a location" underlined />
-                    <PrimaryButton text="Save" allowDisabledFocus className={styles.saveButton} />
+                    <PrimaryButton text="Save" allowDisabledFocus className={styles.saveButton} onClick={save} />
                     {controls}
                 </div>
             </div>

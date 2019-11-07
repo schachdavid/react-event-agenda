@@ -12,6 +12,11 @@ class AgendaViewModel implements AgendaViewModelInterface {
         this.agendaStore = new MainModel();
     }
 
+
+    debugExperiment(itemId: string) {
+        this.agendaStore.setTitle(itemId, "debuggin...");
+    }
+
     getStore() {
         return this.agendaStore;
     }
@@ -54,6 +59,7 @@ class AgendaViewModel implements AgendaViewModelInterface {
             }
         }
     }
+
 
 
     moveItem(trackId: string, id: string, newStart: Moment) {

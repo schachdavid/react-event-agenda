@@ -103,19 +103,26 @@ class MainModel {
         }
     }
 
-
-
     @action setAgenda(agenda: Agenda) {
         this.agenda = agenda;
     }
+
+    @action setTitle(itemId: string, newTitle: string) {
+        const item = this.getItem(itemId);
+        if(item) {
+            item.title = newTitle
+        }
+    }
+
+
 
 
     getDays() {
         return this.agenda.days;
     }
 
-    getAgenda() {
-        return this.agenda.toJSON();
+    getAgenda(): IAgenda {
+        return this.agenda;
     }
 
     getTracksByDay() {

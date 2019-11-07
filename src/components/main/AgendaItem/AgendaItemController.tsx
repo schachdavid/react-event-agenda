@@ -27,8 +27,6 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
 
     const [width, setWidth] = useState(0);
 
-
-
     const refWidthContainer = useCallback(node => {
         if (node !== null) {
             setWidth(node.clientWidth - 1);
@@ -132,6 +130,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
             speaker={item.speaker}
             height={height}
             topPx={topPx}
+            save={() => viewModel.debugExperiment(item.id)}
             cancelEditing={() => setEditing(false)} />
         : <div>
             <AgendaItemDragView

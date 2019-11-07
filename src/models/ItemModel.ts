@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { observable, computed } from 'mobx';
+import { observable } from 'mobx';
 
 
 export interface IItem {
@@ -30,7 +30,7 @@ export class Item {
      * Getter id
      * @return {string}
      */
-    @computed  public get id(): string {
+      public get id(): string {
         return this._id;
     }
 
@@ -46,7 +46,7 @@ export class Item {
      * Getter title
      * @return {string}
      */
-    @computed public get title(): string {
+     public get title(): string {
         return this._title;
     }
 
@@ -62,7 +62,7 @@ export class Item {
      * Getter speaker
      * @return {string}
      */
-    @computed  public get speaker(): string {
+      public get speaker(): string {
         return this._speaker;
     }
 
@@ -78,7 +78,7 @@ export class Item {
      * Getter start
      * @return {Moment}
      */
-    @computed  public get start(): Moment {
+      public get start(): Moment {
         return this._start;
     }
 
@@ -94,7 +94,7 @@ export class Item {
      * Getter end
      * @return {Moment}
      */
-    @computed public get end(): Moment {
+     public get end(): Moment {
         return this._end;
     }
 
