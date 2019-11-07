@@ -164,7 +164,7 @@ class MainModel {
         return undefined;
     }
 
-    deleteItem(id: string) {
+    @action deleteItem(id: string) {
         for (const day of this.agenda.days) {
             for (const track of day.tracks) {
                 const itemsTmp = track.items.filter((item) => item.id !== id)
@@ -219,14 +219,6 @@ class MainModel {
             this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
         }
     }
-
-    // findItem(item: Item) {
-    //     let foundItem: Item | undefined = this.items.find((curItem) => curItem.id === item.id);
-    //     if (!foundItem) {
-    //         throw new Error('Item not not found');
-    //     }
-    //     return foundItem;
-    // }
 
 }
 

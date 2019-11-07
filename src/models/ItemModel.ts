@@ -30,7 +30,7 @@ export class Item {
      * Getter id
      * @return {string}
      */
-     public get id(): string {
+    @computed  public get id(): string {
         return this._id;
     }
 
@@ -46,7 +46,7 @@ export class Item {
      * Getter title
      * @return {string}
      */
-     public get title(): string {
+    @computed public get title(): string {
         return this._title;
     }
 
@@ -62,7 +62,7 @@ export class Item {
      * Getter speaker
      * @return {string}
      */
-     public get speaker(): string {
+    @computed  public get speaker(): string {
         return this._speaker;
     }
 
@@ -78,7 +78,7 @@ export class Item {
      * Getter start
      * @return {Moment}
      */
-     public get start(): Moment {
+    @computed  public get start(): Moment {
         return this._start;
     }
 

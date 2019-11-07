@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { Day, IDay } from './DayModel';
 import { Moment } from 'moment';
 
@@ -30,7 +30,7 @@ export class Agenda {
     * Getter id
     * @return {string}
     */
-     public get id(): string {
+    @computed public get id(): string {
         return this._id;
     }
 
@@ -46,7 +46,7 @@ export class Agenda {
      * Getter startTime
      * @return {Moment}
      */
-     public get startTime(): Moment {
+     @computed public get startTime(): Moment {
         return this._startTime;
     }
 
@@ -62,7 +62,7 @@ export class Agenda {
      * Getter endTime
      * @return {Moment}
      */
-     public get endTime(): Moment {
+     @computed public get endTime(): Moment {
         return this._endTime;
     }
 
@@ -78,7 +78,7 @@ export class Agenda {
      * Getter days
      * @return {Array<Day>}
      */
-     public get days(): Array<Day> {
+     @computed public get days(): Array<Day> {
         return this._days;
     }
 

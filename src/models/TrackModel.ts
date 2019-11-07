@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { Item, IItem } from './ItemModel';
 
 
@@ -25,7 +25,7 @@ export class Track {
      * Getter name
      * @return {string}
      */
-    public get name(): string {
+    @computed public get name(): string {
         return this._name;
     }
 
@@ -41,7 +41,7 @@ export class Track {
      * Getter items
      * @return {Array<Item>}
      */
-    public get items(): Array<Item> {
+    @computed public get items(): Array<Item> {
         return this._items;
     }
 
@@ -57,7 +57,7 @@ export class Track {
      * Getter id
      * @return {string}
      */
-    public get id(): string {
+    @computed public get id(): string {
         return this._id;
     }
 

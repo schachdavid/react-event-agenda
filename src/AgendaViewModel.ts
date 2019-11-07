@@ -88,7 +88,7 @@ class AgendaViewModel implements AgendaViewModelInterface {
 
     adjustItemStartTime(itemId: string, newStartTime: Moment) {
         const item = this.agendaStore.getItem(itemId);
-        if (item) {
+        if (item && !item.start.isSame(newStartTime)) {
             item.start = newStartTime;
         }
         //TODO: implement checks here
@@ -96,7 +96,7 @@ class AgendaViewModel implements AgendaViewModelInterface {
 
     adjustItemEndTime(itemId: string, newEndTime: Moment) {
         const item = this.agendaStore.getItem(itemId);
-        if (item) {
+        if (item && !item.end.isSame(newEndTime)) {
             item.end = newEndTime;
         }
         //TODO: implement checks here

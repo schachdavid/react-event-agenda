@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { Track, ITrack } from './TrackModel';
 
 export interface IDay {
@@ -25,7 +25,7 @@ export class Day {
      * Getter date
      * @return {Moment}
      */
-     public get date(): Moment {
+    @computed public get date(): Moment {
         return this._date;
     }
 
@@ -41,7 +41,7 @@ export class Day {
      * Getter id
      * @return {string}
      */
-     public get id(): string {
+     @computed public get id(): string {
         return this._id;
     }
 
@@ -57,7 +57,7 @@ export class Day {
      * Getter tracks
      * @return {Array<Track>}
      */
-     public get tracks(): Array<Track> {
+     @computed public get tracks(): Array<Track> {
         return this._tracks;
     }
 
