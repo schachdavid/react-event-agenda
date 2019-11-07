@@ -23,9 +23,11 @@
   },
   "dependencies": {
     "@types/classnames": "^2.2.9",
+    "@types/color": "^3.0.0",
     "@types/lodash": "^4.14.142",
     "@types/uuid": "^3.4.5",
     "classnames": "^2.2.6",
+    "color": "^3.1.2",
     "hex-rgb": "^4.1.0",
     "lodash": "^4.17.15",
     "mobx": "^5.13.0",

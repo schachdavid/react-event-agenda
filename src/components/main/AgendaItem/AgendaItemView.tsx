@@ -5,7 +5,8 @@ import classNames from 'classnames';
 import { IconButton } from 'office-ui-fabric-react';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Customizer } from 'office-ui-fabric-react';
-import { getInvertedTheme } from '../../../theme';
+import { getInvertedTheme, getRGBPalette } from '../../../theme';
+import Color from 'color';
 
 
 export interface IProps {
@@ -92,16 +93,18 @@ const AgendaItemView: React.FC<IProps> = ({
         else if (Direction.Start === currentDirection) finishResizeStartTime();
     }
 
+    const hoverColor = Color(getRGBPalette().themePrimary).darken(0.06).string();
+
 
 
 
     const controls = hovering && !resizing ?
-        <div className={classNames(styles.controls)}>
+        <div className={styles.controls} style={{backgroundColor: hoverColor}}>
             <Stack tokens={{ childrenGap: 2 }} horizontal>
                 <Customizer settings={{ theme: getInvertedTheme() }}>
                     <IconButton iconProps={{ iconName: "Edit" }} onClick={editItem} />
                     <IconButton iconProps={{ iconName: "Delete" }} onClick={deleteItem} />
-                    <IconButton iconProps={{ iconName: "CircleRing" }} onClick={editItem} />
+                    {/* <IconButton iconProps={{ iconName: "CircleRing" }} onClick={editItem} /> */}
                 </Customizer>
             </Stack>
         </div>
@@ -115,11 +118,11 @@ const AgendaItemView: React.FC<IProps> = ({
         >
             <div className={styles.resizeDotTopContainer} onMouseDown={
                 (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.Start, e)}>
-                <div className={styles.resizeDot} />
+                <div className={styles.resizeDot}  style={{borderColor: hoverColor}}/>
             </div>
             <div className={styles.resizeDotBottomContainer} onMouseDown={
                 (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.End, e)}>
-                <div className={styles.resizeDot} />
+                <div className={styles.resizeDot} style={{borderColor: hoverColor}}/>
             </div>
         </div>
         : null;
@@ -139,6 +142,8 @@ const AgendaItemView: React.FC<IProps> = ({
                     ref={dragRef}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
+                    onClick={editItem}
+                    style={hovering ? {backgroundColor: hoverColor}: {}}
                     className={classNames(styles.main, {
                         [styles.mainHover]: hovering || resizing,
                     })} >

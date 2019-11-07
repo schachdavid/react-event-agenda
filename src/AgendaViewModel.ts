@@ -13,10 +13,6 @@ class AgendaViewModel implements AgendaViewModelInterface {
     }
 
 
-    debugExperiment(itemId: string) {
-        this.agendaStore.setTitle(itemId, "debuggin...");
-    }
-
     getStore() {
         return this.agendaStore;
     }
@@ -45,16 +41,34 @@ class AgendaViewModel implements AgendaViewModelInterface {
         return this.agendaStore.getAgenda().days;
     }
 
-    deleteItem(id: string, pushToHistory?: boolean) {
+    deleteItem(id: string, suppressPushToHistory?: boolean) {
         this.agendaStore.deleteItem(id);
-        if(pushToHistory) this.pushToHistory();
+        if(!suppressPushToHistory) this.pushToHistory();
     }
 
-    addItem(item: IItem, trackId: string, pushToHistory?: boolean) {
+    addItem(item: IItem, trackId: string, suppressPushToHistory?: boolean) {
         const track = this.agendaStore.getTrackById(trackId);
         if(track) {
             track.items.push(new Item(item))
-            if(pushToHistory) {
+            if(!suppressPushToHistory) {
+                this.pushToHistory();
+            }
+        }
+    }
+
+    updateItem(id: string, newProps: {title?: string, speaker?: string}, suppressPushToHistory?: boolean) {
+        const item = this.agendaStore.getItem(id);
+        if(item){
+            let changed = false;
+            if(newProps.title !== undefined && newProps.title !== item.title){ 
+                item.title = newProps.title;
+                changed = true;
+            }
+            if(newProps.speaker !== undefined && newProps.speaker !== item.speaker) {
+                item.speaker = newProps.speaker;
+                changed = true;
+            }
+            if(!suppressPushToHistory && changed) {
                 this.pushToHistory();
             }
         }

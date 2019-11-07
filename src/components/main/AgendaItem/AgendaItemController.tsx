@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import AgendaItemView from './AgendaItemView';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
-import AgendaItemEditView from './AgendaItemEdit/AgendaItemEditView';
 import { IItem } from '../../../models/ItemModel';
 import { useViewModelContext } from '../../../ViewModelContext';
 import moment, { Moment } from 'moment';
 import AgendaItemDragView from './AgendaItemDragView';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend'
+import { AgendaItemEdit } from './AgendaItemEdit/AgendaItemEditController';
 
 
 
@@ -60,7 +60,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     }, [])
 
     const deleteItem = () => {
-        viewModel.deleteItem(item.id, true)
+        viewModel.deleteItem(item.id)
     };
 
     const editItem = () => {
@@ -120,19 +120,19 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     const height = itemDuration / intervalInMin * intervalPxHeight;
 
     const small = height == intervalPxHeight ? true : false;
+ 
+    const agendaItemEdit = editing ?
+    <AgendaItemEdit
+        item={item}
+        height={height}
+        topPx={topPx}
+        cancel={() => setEditing(false)} />
+    : null;
 
 
-    return editing ?
-        <AgendaItemEditView
-            start={item.start.format("HH:mm")}
-            end={item.end.format("HH:mm")}
-            title={item.title}
-            speaker={item.speaker}
-            height={height}
-            topPx={topPx}
-            save={() => viewModel.debugExperiment(item.id)}
-            cancelEditing={() => setEditing(false)} />
-        : <div>
+    return <> 
+    {agendaItemEdit}
+        <div>
             <AgendaItemDragView
                 id={item.id}
                 height={height}
@@ -168,6 +168,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
                 onMouseLeave={() => { setHovering(false) }}
             />
         </div>
+        </>
 
 }
 
