@@ -6,7 +6,7 @@ import {Day} from './DayModel';
 import {Agenda, IAgenda} from './AgendaModel';
 
 
-class MainModel {
+class AgendaStore {
     @observable agenda: Agenda = new Agenda({
         id: "1",
         startTime: moment('2013-02-08 7:00', 'YYYY-MM-DD H:mm'),
@@ -229,7 +229,7 @@ class MainModel {
 
 }
 
-export default MainModel;
+export default AgendaStore;
 export {Item, IItem} from './ItemModel';
 export {Track, ITrack} from './TrackModel';
 export {Day, IDay} from './DayModel';

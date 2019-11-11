@@ -1,4 +1,4 @@
-import MainModel, { IItem, Item } from './models/MainModel';
+import AgendaStore, { IItem, Item } from './models/AgendaStore';
 import AgendaViewModelInterface from './interfaces/AgendaViewModelInterface';
 import moment, { Moment, Duration } from 'moment';
 
@@ -6,10 +6,10 @@ import moment, { Moment, Duration } from 'moment';
 
 
 class AgendaViewModel implements AgendaViewModelInterface {
-    agendaStore: MainModel;
+    agendaStore: AgendaStore;
 
     constructor() {
-        this.agendaStore = new MainModel();
+        this.agendaStore = new AgendaStore();
     }
 
 
@@ -117,8 +117,11 @@ class AgendaViewModel implements AgendaViewModelInterface {
     adjustItemEndTime(itemId: string, newEndTime: Moment) {
         const item = this.agendaStore.getItem(itemId);
         if (item && !item.end.isSame(newEndTime)) {
+            
             item.end = newEndTime;
         }
+
+
         //TODO: implement checks here
     }
 

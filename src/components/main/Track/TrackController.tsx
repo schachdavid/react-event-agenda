@@ -2,7 +2,7 @@ import React from 'react';
 import { useViewModelContext } from '../../../ViewModelContext';
 import { observer } from "mobx-react";
 import TrackView from './TrackView';
-import { ITrack as TrackData, IItem } from '../../../models/MainModel';
+import { ITrack as TrackData, IItem } from '../../../models/AgendaStore';
 import moment, { Duration } from 'moment';
 import { DragItem } from '../../../interfaces/dndInterfaces';
 import uuid from 'uuid';

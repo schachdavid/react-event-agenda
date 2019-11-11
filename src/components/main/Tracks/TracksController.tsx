@@ -3,7 +3,7 @@ import TracksView from './TracksView';
 import { useViewModelContext } from '../../../ViewModelContext';
 import { observer } from "mobx-react";
 import AgendaViewModel from '../../../AgendaViewModel';
-import { IDay } from '../../../models/MainModel';
+import { IDay } from '../../../models/AgendaStore';
 
 
 

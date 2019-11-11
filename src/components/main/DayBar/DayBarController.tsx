@@ -2,7 +2,7 @@ import React from 'react';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
 import DayBarView from './DayBarView';
-import { IDay } from '../../../models/MainModel';
+import { IDay } from '../../../models/AgendaStore';
 
 
 
