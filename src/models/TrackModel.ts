@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, IObservableArray } from 'mobx';
 import { Item, IItem } from './ItemModel';
 
 
@@ -10,7 +10,7 @@ export interface ITrack {
 
 export class Track {
     @observable private _name: string;
-    @observable private _items: Array<Item>;
+    @observable private _items: IObservableArray<Item>;
     @observable private _id: string;
 
 
@@ -18,6 +18,21 @@ export class Track {
         this._name = obj.name;
         this._items = observable(obj.items.map((item) => Item.fromJSON(item)));
         this._id = obj.id;
+    }
+
+    /**
+     * Sorts all agenda items in this track by start time
+     */
+    public sortItems()  {
+        this._items.replace( this._items.slice().sort((a,b) => {
+            if ( a.start.isBefore(b.start)){
+                return -1;
+              }
+              if ( a.start.isAfter(b.start)){
+                return 1;
+              }
+              return 0;
+        }));
     }
 
 
@@ -39,9 +54,9 @@ export class Track {
 
     /**
      * Getter items
-     * @return {Array<Item>}
+     * @return {IObservableArray<Item> | Array<Item>}
      */
-     public get items(): Array<Item> {
+     public get items(): IObservableArray<Item> {
         return this._items;
     }
 
@@ -49,8 +64,8 @@ export class Track {
      * Setter items
      * @param {Array<Item>} value
      */
-    public set items(value: Array<Item>) {
-        this._items = value;
+    public set items(value: IObservableArray<Item> ) {
+        this._items.replace(value);
     }
 
     /**

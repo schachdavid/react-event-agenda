@@ -1,10 +1,9 @@
 import { observable, action, toJS } from 'mobx';
 import moment from 'moment';
-import {Item} from './ItemModel';
-import {Track} from './TrackModel';
-import {Day} from './DayModel';
-import {Agenda, IAgenda} from './AgendaModel';
-
+import { Item } from './ItemModel';
+import { Track } from './TrackModel';
+import { Day } from './DayModel';
+import { Agenda, IAgenda } from './AgendaModel';
 
 class AgendaStore {
     @observable agenda: Agenda = new Agenda({
@@ -98,8 +97,10 @@ class AgendaStore {
 
     @action addItem(item: Item, trackId: string) {
         const track: Track | undefined = this.getTrackById(trackId);
+        
         if (track) {
-            track.items.push(item);
+            const items = track.items;
+            items.push(item);
         }
     }
 
@@ -109,7 +110,7 @@ class AgendaStore {
 
     @action setTitle(itemId: string, newTitle: string) {
         const item = this.getItem(itemId);
-        if(item) {
+        if (item) {
             item.title = newTitle
         }
     }
@@ -159,7 +160,6 @@ class AgendaStore {
 
 
     getItem(id: string) {
-        //read only 
         for (const day of this.agenda.days) {
             for (const track of day.tracks) {
                 const item: Item | undefined = track.items.find((item) => item.id === id);
@@ -171,12 +171,32 @@ class AgendaStore {
         return undefined;
     }
 
+
+    /**
+     *  Gets the item with the given Id and all following items on the same track 
+     *
+     * @param {string} id
+     * @returns
+     * @memberof AgendaStore
+     */
+    getItemAndFollowingItems(id: string) {
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const index: number = track.items.findIndex((item) => item.id === id);
+                if (index != -1) {
+                    return track.items.slice(index);
+                }
+            }
+        }
+        return undefined;
+    }
+
     @action deleteItem(id: string) {
         for (const day of this.agenda.days) {
             for (const track of day.tracks) {
                 const itemsTmp = track.items.filter((item) => item.id !== id)
                 if (itemsTmp.length !== track.items.length) {
-                    track.items = itemsTmp;
+                    track.items.replace(itemsTmp);
                     return;
                 }
             }
@@ -207,11 +227,12 @@ class AgendaStore {
     }
 
     pushToHistory() {
-        console.log("pushing to history");
         this.pointer++;
         this.agendaHistory.splice(this.pointer, this.agendaHistory.length);
         this.agendaHistory.push(toJS(this.agenda));
     }
+
+
 
     @action undo() {
         if (this.pointer > 0) {
@@ -230,7 +251,7 @@ class AgendaStore {
 }
 
 export default AgendaStore;
-export {Item, IItem} from './ItemModel';
-export {Track, ITrack} from './TrackModel';
-export {Day, IDay} from './DayModel';
-export {Agenda, IAgenda} from './AgendaModel';
+export { Item, IItem } from './ItemModel';
+export { Track, ITrack } from './TrackModel';
+export { Day, IDay } from './DayModel';
+export { Agenda, IAgenda } from './AgendaModel';

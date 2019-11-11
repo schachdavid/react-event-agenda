@@ -99,7 +99,7 @@ const AgendaItemView: React.FC<IProps> = ({
 
 
     const controls = hovering && !resizing ?
-        <div className={styles.controls} style={{backgroundColor: hoverColor}}>
+        <div className={styles.controls} style={{ backgroundColor: hoverColor }}>
             <Stack tokens={{ childrenGap: 2 }} horizontal>
                 <Customizer settings={{ theme: getInvertedTheme() }}>
                     <IconButton iconProps={{ iconName: "Edit" }} onClick={editItem} />
@@ -116,13 +116,21 @@ const AgendaItemView: React.FC<IProps> = ({
         <div onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            <div className={styles.resizeDotTopContainer} onMouseDown={
+            {/* <div className={styles.resizeDotTopContainer} onMouseDown={
                 (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.Start, e)}>
                 <div className={styles.resizeDot}  style={{borderColor: hoverColor}}/>
-            </div>
-            <div className={styles.resizeDotBottomContainer} onMouseDown={
+            </div> */}
+            {/* <div className={styles.resizeDotBottomContainer} onMouseDown={
                 (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.End, e)}>
                 <div className={styles.resizeDot} style={{borderColor: hoverColor}}/>
+            </div> */}
+
+            <div className={styles.resizeHandleBarContainer} onMouseDown={
+                (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.End, e)}>
+                <div className={styles.resizeHandleBar} >
+                    <div className={styles.resizeHandleBarLine} />
+                    <div className={styles.resizeHandleBarLine} />
+                </div>
             </div>
         </div>
         : null;
@@ -143,7 +151,7 @@ const AgendaItemView: React.FC<IProps> = ({
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     onClick={editItem}
-                    style={hovering ? {backgroundColor: hoverColor}: {}}
+                    style={hovering ? { backgroundColor: hoverColor } : {}}
                     className={classNames(styles.main, {
                         [styles.mainHover]: hovering || resizing,
                     })} >

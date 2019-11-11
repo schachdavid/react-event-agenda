@@ -41,11 +41,21 @@ const AgendaItemEditView: React.FC<IProps> = ({
           }, []);
 
         const firstInputRef = useCallback(node => {
-            if (node && node.current) {
-                node.current.focus();
+            if (node) {
+                node.focus();
             }
             return;
         }, []);
+
+        const containerRef = useCallback((node: HTMLElement | null) => {
+            if (node) {
+                node.scrollIntoView({block: "nearest"});
+            }
+            return;
+        }, []);
+
+
+        
         
 
     const handleKeyPress = (event: any) => {
@@ -80,7 +90,7 @@ const AgendaItemEditView: React.FC<IProps> = ({
 
 
     return (
-        <div className={styles.container} style={{ top: topPx, minHeight: height }} >
+        <div className={styles.container} ref={containerRef} style={{ top: topPx, minHeight: height }} >
             <div className={styles.main}>
                 <div className={styles.content}>
                     <div>

@@ -43,32 +43,30 @@ class AgendaViewModel implements AgendaViewModelInterface {
 
     deleteItem(id: string, suppressPushToHistory?: boolean) {
         this.agendaStore.deleteItem(id);
-        if(!suppressPushToHistory) this.pushToHistory();
+        if (!suppressPushToHistory) this.pushToHistory();
     }
 
     addItem(item: IItem, trackId: string, suppressPushToHistory?: boolean) {
-        const track = this.agendaStore.getTrackById(trackId);
-        if(track) {
-            track.items.push(new Item(item))
-            if(!suppressPushToHistory) {
-                this.pushToHistory();
-            }
+        this.agendaStore.addItem(new Item(item), trackId);
+        this.agendaStore.getTrackById(trackId)!.sortItems();
+        if (!suppressPushToHistory) {
+            this.pushToHistory();
         }
     }
 
-    updateItem(id: string, newProps: {title?: string, speaker?: string}, suppressPushToHistory?: boolean) {
+    updateItem(id: string, newProps: { title?: string, speaker?: string }, suppressPushToHistory?: boolean) {
         const item = this.agendaStore.getItem(id);
-        if(item){
+        if (item) {
             let changed = false;
-            if(newProps.title !== undefined && newProps.title !== item.title){ 
+            if (newProps.title !== undefined && newProps.title !== item.title) {
                 item.title = newProps.title;
                 changed = true;
             }
-            if(newProps.speaker !== undefined && newProps.speaker !== item.speaker) {
+            if (newProps.speaker !== undefined && newProps.speaker !== item.speaker) {
                 item.speaker = newProps.speaker;
                 changed = true;
             }
-            if(!suppressPushToHistory && changed) {
+            if (!suppressPushToHistory && changed) {
                 this.pushToHistory();
             }
         }
@@ -79,19 +77,39 @@ class AgendaViewModel implements AgendaViewModelInterface {
     moveItem(trackId: string, id: string, newStart: Moment) {
         //TODO: implement checks here
         const item = this.agendaStore.getItem(id);
-        const curTrack = this.agendaStore.getTrackForItem(id);
-
-        if (!item!.start.isSame(newStart)) {
-            const duration: Duration = moment.duration(item!.end.diff(item!.start));
-            const newEnd = moment(newStart).add(duration);
-            item!.start = newStart;
-            item!.end = newEnd;
-        }
+        let curTrack = this.agendaStore.getTrackForItem(id);
         
+
         if (item && (curTrack!.id !== trackId)) {
             this.agendaStore.deleteItem(id);
             this.agendaStore.addItem(item, trackId);
+            curTrack = this.agendaStore.getTrackById(trackId);
         }
+
+        if (!item!.start.isSame(newStart) && curTrack) {
+            const duration: Duration = moment.duration(item!.end.diff(item!.start));
+            const newEnd = moment(newStart).add(duration);
+          
+
+            //1. find first colliding item
+           
+          
+            //2. check if the colliding item's start or end time is closer
+            
+            //3. move item's starttime there
+            item!.start = newStart;
+            item!.end = newEnd;
+            //3. move all items after that accordingly
+
+
+        }
+
+        if (curTrack) {
+            curTrack.sortItems();
+        }
+
+
+       
     }
 
     undo() {
@@ -111,19 +129,34 @@ class AgendaViewModel implements AgendaViewModelInterface {
         if (item && !item.start.isSame(newStartTime)) {
             item.start = newStartTime;
         }
-        //TODO: implement checks here
+        //TODO: implement checks here/remove ?????
     }
 
     adjustItemEndTime(itemId: string, newEndTime: Moment) {
-        const item = this.agendaStore.getItem(itemId);
-        if (item && !item.end.isSame(newEndTime)) {
-            
-            item.end = newEndTime;
+        // const item = this.agendaStore.getItem(itemId);
+        const items = this.agendaStore.getItemAndFollowingItems(itemId);
+        if (items) {
+            const item = items[0];
+            const nextItem = items[1];
+            if (nextItem && nextItem.start.isSameOrBefore(item.end)) {
+                const duration: Duration = moment.duration(newEndTime.diff(item.end));
+                items.slice(1).forEach(curItem => {
+                    const newStart = moment(curItem.start).add(duration);
+                    const newEnd = moment(curItem.end).add(duration);
+                    curItem!.start = newStart;
+                    curItem!.end = newEnd;
+                });
+            }
+            if (!item.end.isSame(newEndTime)) {
+                item.end = newEndTime;
+            }
         }
 
 
-        //TODO: implement checks here
     }
+
+
+    
 
 
 

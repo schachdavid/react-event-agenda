@@ -5,7 +5,7 @@ import ViewModelContext from '../../../ViewModelContext';
 // import ListView from './components/List/ListView';
 import { MainCommandBar } from '../MainCommandBar/MainCommandBarController';
 import { Tracks } from '../Tracks/TracksController';
-import { CssProvider } from '../../util/CssProvider/CssProvider';
+import { CssProvider } from '../../utilComponents/CssProvider/CssProvider';
 import { getRGBPalette } from '../../../theme';
 import globalStyles from '../../../globalStyles.scss';
 import styles from './Agenda.module.scss';

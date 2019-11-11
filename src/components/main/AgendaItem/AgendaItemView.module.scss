@@ -58,6 +58,26 @@
   border: 2px solid;
 }
 
+.resizeHandleBar {
+  margin-bottom: 8px;
+}
+
+.resizeHandleBarLine {
+  height: 1px;
+  width: 30px;
+  background-color: var(--white);
+  margin-bottom: 2px;
+}
+
+.resizeHandleBarContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .resizeDotTopContainer {
   position: absolute;
   top: 0;
