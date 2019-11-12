@@ -29,7 +29,6 @@ const AgendaItemEditView: React.FC<IProps> = ({
     speaker,
     setSpeaker,
     topPx,
-    height,
     save,
     cancelEditing }: IProps) => {
 
@@ -49,7 +48,7 @@ const AgendaItemEditView: React.FC<IProps> = ({
 
         const containerRef = useCallback((node: HTMLElement | null) => {
             if (node) {
-                node.scrollIntoView({block: "nearest"});
+                node.scrollIntoView({block: "nearest", behavior: "smooth"});
             }
             return;
         }, []);
@@ -90,7 +89,7 @@ const AgendaItemEditView: React.FC<IProps> = ({
 
 
     return (
-        <div className={styles.container} ref={containerRef} style={{ top: topPx, minHeight: height }} >
+        <div className={styles.container} ref={containerRef} style={{ top: topPx }} >
             <div className={styles.main}>
                 <div className={styles.content}>
                     <div>

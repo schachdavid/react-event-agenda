@@ -1,17 +1,15 @@
 import React from 'react';
-// import ListController from './components/List/ListController';
 import AgendaViewModel from '../../../AgendaViewModel';
 import ViewModelContext from '../../../ViewModelContext';
-// import ListView from './components/List/ListView';
 import { MainCommandBar } from '../MainCommandBar/MainCommandBarController';
 import { Tracks } from '../Tracks/TracksController';
-import { CssProvider } from '../../utilComponents/CssProvider/CssProvider';
-import { getRGBPalette } from '../../../theme';
-import globalStyles from '../../../globalStyles.scss';
-import styles from './Agenda.module.scss';
-import classNames from 'classnames';
+import styles from './Agenda.scss';
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import cssVars from 'css-vars-ponyfill';
+
+import { getPalette } from '../../../theme';
+
 
 
 
@@ -19,19 +17,31 @@ interface IProps {
     agendaViewModel: AgendaViewModel,
 }
 
+cssVars();
+
+const colorPalette =  getPalette();
+
+let themeObj = {}
+Object.entries(colorPalette).forEach(([prop, value]) => { 
+    themeObj['--' + prop] = value;
+});
+
+cssVars({
+    variables:  themeObj
+  });
+
+
 const Agenda: React.FC<IProps> = ({ agendaViewModel }: IProps) => {
 
     return (
-        <CssProvider
-            theme={getRGBPalette()}
-            className={classNames(styles.fullWH, globalStyles.globalStyles)}>
+            <div className={styles.mainComponent}>
             <ViewModelContext.Provider value={agendaViewModel}>
                 <DndProvider backend={HTML5Backend} debugMode={true}>
                     <MainCommandBar></MainCommandBar>
                     <Tracks></Tracks>
                 </DndProvider>
             </ViewModelContext.Provider>
-        </CssProvider>
+            </div>
     )
 };
 

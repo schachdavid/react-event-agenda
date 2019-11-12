@@ -1,25 +1,27 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 
 
 interface IProps {
-    theme: any,
+    // theme: any,
     children: any,
     globalStyle?: React.CSSProperties | undefined,
     className?: string | undefined,
 }
 
-export const CssProvider: React.FC<IProps> = ({ theme, children, globalStyle, className }: IProps) => {
-    const node: any = useRef(null);
+export const CssProvider: React.FC<IProps> = ({ 
+    // theme,
+     children, globalStyle, className }: IProps) => {
+    // const node: any = useRef(null);
 
-    useEffect(() => {
-        Object.entries(theme).forEach(([prop, value]) => {
-            node.current.style.setProperty('--' + prop, value);
-            console.log('--' + prop, value)
-        });
-    });
+    // useEffect(() => {
+    //     Object.entries(theme).forEach(([prop, value]) => {
+    //         node.current.style.setProperty('--' + prop, value);
+    //         console.log('--' + prop, value)
+    //     });
+    // });
 
     return (
-        <div ref={node} className={className} style={globalStyle}>{children}</div>
+        <div className={className} style={globalStyle}>{children}</div>
     );
 }
 
