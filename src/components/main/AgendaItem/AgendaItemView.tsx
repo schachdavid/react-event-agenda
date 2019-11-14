@@ -36,6 +36,7 @@ export interface IProps {
     deleteItem: () => void,
     onMouseEnter?: (e: any) => any,
     onMouseLeave?: (e: any) => any,
+    customActionButtons?: Array<JSX.Element>
 }
 
 const AgendaItemView: React.FC<IProps> = ({
@@ -58,7 +59,8 @@ const AgendaItemView: React.FC<IProps> = ({
     deleteItem,
     dragging,
     dragRef,
-    resizing
+    resizing,
+    customActionButtons
 }: IProps) => {
 
 
@@ -102,9 +104,15 @@ const AgendaItemView: React.FC<IProps> = ({
         <div className={styles.controls} style={{ backgroundColor: hoverColor }}>
             <Stack tokens={{ childrenGap: 2 }} horizontal>
                 <Customizer settings={{ theme: getInvertedTheme() }}>
-                    <IconButton iconProps={{ iconName: "Edit" }} onClick={editItem} />
-                    <IconButton iconProps={{ iconName: "Delete" }} onClick={deleteItem} />
-                    {/* <IconButton iconProps={{ iconName: "CircleRing" }} onClick={editItem} /> */}
+                    {customActionButtons}
+                    <IconButton iconProps={{ iconName: "Edit" }} onClick={e => {
+                        e.stopPropagation();
+                        editItem();
+                    }} />
+                    <IconButton iconProps={{ iconName: "Delete" }} onClick={e => {
+                        e.stopPropagation();
+                        deleteItem();
+                    }} />
                 </Customizer>
             </Stack>
         </div>

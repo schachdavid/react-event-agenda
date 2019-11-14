@@ -1,27 +1,20 @@
 import { observable } from 'mobx';
 import { Day, IDay } from './DayModel';
-import { Moment } from 'moment';
 
 
 
 export interface IAgenda {
     id: string,
-    startTime: Moment,
-    endTime: Moment,
     days: Array<IDay>
 }
 
 export class Agenda {
     @observable private _id: string;
-    @observable private _startTime: Moment;
-    @observable private _endTime: Moment;
     @observable private _days: Array<Day>;
 
 
     constructor(obj: IAgenda) {
         this._id = obj.id;
-        this._startTime = obj.startTime;
-        this._endTime = obj.endTime;
         this._days = obj.days.map((day) => Day.fromJSON(day));
     }
 
@@ -43,41 +36,6 @@ export class Agenda {
     }
 
     /**
-     * Getter startTime
-     * @return {Moment}
-     */
-     public get startTime(): Moment {
-        return this._startTime;
-    }
-
-    /**
-     * Setter startTime
-     * @param {Moment} value
-     */
-    public set startTime(value: Moment) {
-        this._startTime = value;
-    }
-
-    /**
-     * Getter endTime
-     * @return {Moment}
-     */
-     public get endTime(): Moment {
-        return this._endTime;
-    }
-
-    /**
-     * Setter endTime
-     * @param {Moment} value
-     */
-    public set endTime(value: Moment) {
-        this._endTime = value;
-    }
-
-
-
-
-    /**
      * Getter days
      * @return {Array<Day>}
      */
@@ -97,8 +55,6 @@ export class Agenda {
     toJSON(): IAgenda {
         return {
             id: this._id,
-            startTime: this._startTime,
-            endTime: this._endTime,
             days: this._days.map((day) => day.toJSON())
         }
     }

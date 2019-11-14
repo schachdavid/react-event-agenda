@@ -8,11 +8,10 @@ import { Agenda, IAgenda } from './AgendaModel';
 class AgendaStore {
     @observable agenda: Agenda = new Agenda({
         id: "1",
-        startTime: moment('2013-02-08 7:00', 'YYYY-MM-DD H:mm'),
-        endTime: moment('2013-02-08 18:00', 'YYYY-MM-DD H:mm'),
         days: [
             new Day({
-                date: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
+                startTime: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
+                endTime: moment('2013-02-08 17:30', 'YYYY-MM-DD H:mm'),
                 id: "1",
                 tracks: [
                     new Track({
@@ -46,7 +45,8 @@ class AgendaStore {
                 ]
             }),
             new Day({
-                date: moment('2013-02-09 8:00 '),
+                startTime: moment('2013-02-09 7:00', 'YYYY-MM-DD H:mm'),
+                endTime: moment('2013-02-09 16:30', 'YYYY-MM-DD H:mm'),
                 id: "2",
                 tracks: [
                     new Track({
@@ -55,21 +55,21 @@ class AgendaStore {
                         items: [
                             new Item({
                                 id: "10",
-                                start: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
-                                end: moment('2013-02-08 8:45', 'YYYY-MM-DD H:mm'),
+                                start: moment('2013-02-09 8:00', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-09 8:45', 'YYYY-MM-DD H:mm'),
                                 title: "Breakfast"
                             }),
                             new Item({
                                 id: "11",
-                                start: moment('2013-02-08 8:45', 'YYYY-MM-DD H:mm'),
-                                end: moment('2013-02-08 9:30', 'YYYY-MM-DD H:mm'),
+                                start: moment('2013-02-09 8:45', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-09 9:30', 'YYYY-MM-DD H:mm'),
                                 title: "Presentation \"Design Thinking in 2018\"",
                                 speaker: "Dr. Germione Hanger"
                             }),
                             new Item({
                                 id: "12",
-                                start: moment('2013-02-08 9:30', 'YYYY-MM-DD H:mm'),
-                                end: moment('2013-02-08 9:45', 'YYYY-MM-DD H:mm'),
+                                start: moment('2013-02-09 9:30', 'YYYY-MM-DD H:mm'),
+                                end: moment('2013-02-09 9:45', 'YYYY-MM-DD H:mm'),
                                 title: "Coffee Break",
                             })
                         ]
@@ -96,9 +96,13 @@ class AgendaStore {
     }
 
     @action addItem(item: Item, trackId: string) {
-        const track: Track | undefined = this.getTrackById(trackId);
-        
-        if (track) {
+        const track = this.getTrackById(trackId);
+        const day = this.getDayForTrack(trackId);
+
+        if (day && track) {
+            const dayStartTime = day.startTime;
+            item.start.set({'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year')})
+            item.end.set({'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year')})
             const items = track.items;
             items.push(item);
         }
@@ -126,10 +130,16 @@ class AgendaStore {
         return this.agenda;
     }
 
-    getTracksByDay() {
-        const foundDay: Day | undefined = this.agenda.days.find((day) => day.date === day.date);
-        if (foundDay) {
-            return foundDay.tracks;
+
+    //TODO: backwards referencing??
+    getDayForTrack(trackId: string) {
+        let days = this.agenda.days;
+        for (let indexDays: number = 0; indexDays < days.length; indexDays++) {
+            let tracks = days[indexDays].tracks;
+            let foundTrack: Track | undefined = tracks.find((track: Track) => track.id === trackId);
+            if (foundTrack) {
+                return days[indexDays];
+            }
         }
         return undefined;
     }
@@ -152,6 +162,19 @@ class AgendaStore {
                 const item: Item | undefined = track.items.find((item) => item.id === id);
                 if (item) {
                     return track;
+                }
+            }
+        }
+        return;
+    }
+
+    //TODO: backwards referencing??
+    getDayForItem(id: string) {
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const item: Item | undefined = track.items.find((item) => item.id === id);
+                if (item) {
+                    return day;
                 }
             }
         }
@@ -214,16 +237,6 @@ class AgendaStore {
 
     getSegmentFactor() {
         return this.segmentFactor;
-    }
-
-
-
-    getStartTime() {
-        return this.agenda.startTime;
-    }
-
-    getEndTime() {
-        return this.agenda.endTime;
     }
 
     pushToHistory() {

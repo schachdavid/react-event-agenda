@@ -7,6 +7,7 @@ import { DayBar } from '../DayBar/DayBarController';
 import { TrackBar } from '../TrackBar/TrackBarController';
 import { ITrack as TrackData, IDay } from '../../../models/AgendaStore';
 import { TimeLine } from '../TimeLine/TimeLineController';
+import { ICustomItemAction } from '../../../interfaces/agendaProps';
 
 
 
@@ -14,9 +15,11 @@ export interface IProps {
     handleWidthChange: (newWidth: number) => void;
     days: Array<IDay>;
     singleTracks: boolean;
+    customItemActions?: Array<ICustomItemAction>
+
 }
 
-const TracksView: React.FC<IProps> = ({ days, handleWidthChange, singleTracks }: IProps) => {
+const TracksView: React.FC<IProps> = ({ days, handleWidthChange, singleTracks, customItemActions }: IProps) => {
 
     const [width, setWidth] = useState(0);
 
@@ -50,7 +53,7 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, singleTracks }:
         });
 
         trackViews = tracks.map((track: TrackData) => {
-            return <Track key={track.id} track={track}></Track>
+            return <Track key={track.id} track={track} customItemActions={customItemActions}></Track>
         });
     } else {
         const tracks: Array<TrackData> = days[0].tracks;

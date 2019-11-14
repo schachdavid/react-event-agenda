@@ -9,17 +9,20 @@ import AgendaItemDragView from './AgendaItemDragView';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import { AgendaItemEdit } from './AgendaItemEdit/AgendaItemEditController';
+import { IconButton } from 'office-ui-fabric-react';
+import { ICustomItemAction } from '../../../interfaces/agendaProps';
 
 
 
 interface IProps {
-    item: IItem
+    item: IItem,
+    customItemActions?: Array<ICustomItemAction>
 }
 
 
 
 
-const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
+const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IProps) => {
     const viewModel = useViewModelContext();
     const [hovering, setHovering] = useState(false); // TODO: move into mobx state
     const [editing, setEditing] = useState(false); // TODO: move into mobx state
@@ -50,7 +53,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
         begin: () => {
             setHovering(false);
         },
-        end: () => {            
+        end: () => {
             viewModel.pushToHistory(); //TODO: does not really work yet, only push to history if item actually changed
         }
     })
@@ -59,11 +62,11 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
         previewMove(getEmptyImage(), { captureDraggingState: true });
     }, [])
 
-    const deleteItem = () => {
+    const deleteItem = () => {            
         viewModel.deleteItem(item.id)
     };
 
-    const editItem = () => {
+    const editItem = () => {            
         setEditing(true);
     };
 
@@ -75,8 +78,8 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
 
     const handleResizeEndTime = (diff: number) => {
         const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
-        const newEnd: Moment = moment(initialEndTime).add('minutes', minutes);
-        if(!item.end.isSame(newEnd)) {
+        const newEnd: Moment = moment(initialEndTime).add(minutes, 'minutes');
+        if (!item.end.isSame(newEnd)) {
             viewModel.adjustItemEndTime(item.id, newEnd);
         }
     }
@@ -92,7 +95,7 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
     let initialStartTime = moment(item.start);
     const handleResizeStartTime = (diff: number) => {
         const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
-        const newStart: Moment = moment(initialStartTime).add('minutes', minutes);
+        const newStart: Moment = moment(initialStartTime).add(minutes, 'minutes');
         if (!newStart.isSame(item.start)) viewModel.adjustItemStartTime(item.id, newStart);
         setResizing(true);
     }
@@ -108,30 +111,45 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
 
     const intervalPxHeight = viewModel.getIntervalPxHeight();
     const intervalInMin = viewModel.getIntervalInMin();
-    let startTimeTrack: Moment = moment(viewModel.getStartTime());
-    startTimeTrack.year(item.start.get('year'));
-    startTimeTrack.month(item.start.get('month'));
-    startTimeTrack.date(item.start.get('date'));
+    const day = viewModel.getDayForItem(item.id);
+    let timeLineStartTimeTmp = viewModel.getTimeLineStartTime(day ? day.startTime : undefined);
 
-    const topMin: number = moment.duration(item.start.diff(startTimeTrack)).asMinutes();
+
+    let timeLineStartTime: Moment = timeLineStartTimeTmp ? timeLineStartTimeTmp : moment();
+
+    const topMin: number = moment.duration(item.start.diff(timeLineStartTime)).asMinutes();
     const topPx: number = topMin / intervalInMin * intervalPxHeight;
 
     const itemDuration: number = moment.duration(item.end.diff(item.start)).asMinutes();
     const height = itemDuration / intervalInMin * intervalPxHeight;
 
     const small = height == intervalPxHeight ? true : false;
- 
+
     const agendaItemEdit = editing ?
-    <AgendaItemEdit
-        item={item}
-        height={height}
-        topPx={topPx}
-        cancel={() => setEditing(false)} />
-    : null;
+        <AgendaItemEdit
+            item={item}
+            height={height}
+            topPx={topPx}
+            cancel={() => setEditing(false)} />
+        : null;
 
 
-    return <> 
-    {agendaItemEdit}
+    
+
+
+    const customActionButtons = customItemActions ? customItemActions.map((customAction => 
+        <IconButton
+        iconProps={{ iconName: customAction.iconName }}
+        key={customAction.iconName}
+        onClick={(e: any) => {
+            e.stopPropagation();
+            customAction.action(item);
+        }} />
+    )) : undefined;
+    
+
+    return <>
+        {agendaItemEdit}
         <div>
             <AgendaItemDragView
                 id={item.id}
@@ -166,9 +184,10 @@ const AgendaItemController: React.FC<IProps> = ({ item }: IProps) => {
                 deleteItem={() => deleteItem()}
                 onMouseEnter={() => { setHovering(true) }}
                 onMouseLeave={() => { setHovering(false) }}
+                customActionButtons={customActionButtons}
             />
         </div>
-        </>
+    </>
 
 }
 

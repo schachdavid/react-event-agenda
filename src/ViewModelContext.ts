@@ -1,5 +1,5 @@
 import React from 'react';
-import AgendaViewModel from './AgendaViewModel';
+import {AgendaViewModel} from './AgendaViewModel';
 
 
 const ViewModelContext = React.createContext<AgendaViewModel | null>(null);

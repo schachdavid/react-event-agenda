@@ -46,15 +46,6 @@ export default interface AgendaViewModelI {
      */
     redo():void;
 
-     /**
-     * Gets the agenda's start time.
-     */
-    getStartTime(): Moment;
-
-     /**
-     * Gets the agenda's end time.
-     */
-    getEndTime(): Moment;
 
     /**
      * Push current agenda data to the history stack for the undo/redo functionality.

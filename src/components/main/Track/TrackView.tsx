@@ -8,6 +8,7 @@ import { XYCoord } from 'dnd-core';
 import { DragItem } from '../../../interfaces/dndInterfaces'
 import uuid from 'uuid';
 import _ from 'lodash';
+import { ICustomItemAction } from '../../../interfaces/agendaProps';
 
 
 
@@ -17,7 +18,9 @@ export interface IProps {
     segmentHeight: number,
     handleDropHover: (hoverClientY: number, dragItem: DragItem) => void,
     handleInitializeDrawUp: (initialMousePosition: number) => void,
-    handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void
+    handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void,
+    customItemActions?: Array<ICustomItemAction>
+
 }
 
 const TrackView: React.FC<IProps> = ({
@@ -26,14 +29,15 @@ const TrackView: React.FC<IProps> = ({
     segmentHeight,
     handleDropHover,
     handleInitializeDrawUp,
-    handleDrawUp
+    handleDrawUp,
+    customItemActions
 }: IProps) => {
-    const agendaItems = items.map((item: IItem) => <AgendaItem key={item.id} item={item}></AgendaItem>)
+    const agendaItems = items.map((item: IItem) => <AgendaItem key={item.id} item={item} customItemActions={customItemActions}></AgendaItem>)
     const containerRef = useRef<HTMLDivElement>(null)
     const segmentsRef = useRef<HTMLDivElement>(null)
 
 
-    const throttledDropHover = _.throttle(handleDropHover, 50);
+    const throttledDropHover = _.throttle(handleDropHover, 20);
 
     const [, drop] = useDrop({
         accept: 'item',

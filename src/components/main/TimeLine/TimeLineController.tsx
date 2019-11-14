@@ -16,11 +16,10 @@ const TimeLineController: React.FC<IProps> = ({ }: IProps) => {
     const intervalPxHeight = viewModel.getIntervalPxHeight();
     const intervalInMin = viewModel.getIntervalInMin();
     const segmentFactor = viewModel.getSegmentFactor();
-    const endTime = viewModel.getEndTime();
-    const startTime = viewModel.getStartTime();
+    const endTime = viewModel.getTimeLineEndTime();
+    const startTime = viewModel.getTimeLineStartTime();
 
-
-    var duration: Duration = moment.duration(endTime.diff(startTime));
+    var duration: Duration = moment.duration(endTime!.diff(startTime));
     var minutes = duration.asMinutes();
 
     const numberOfSegments = minutes / intervalInMin / segmentFactor;
@@ -32,9 +31,11 @@ const TimeLineController: React.FC<IProps> = ({ }: IProps) => {
     timeLabels.push(currentTime.format('HH:mm'));
 
     for (let i: number = 0; i < numberOfSegments - 1; i++) {
-        currentTime.add('minutes', intervalInMin*segmentFactor);
+        currentTime.add(intervalInMin*segmentFactor, 'minutes');
         timeLabels.push(currentTime.format('HH:mm'));
     }
+
+    
 
 
     return <TimeLineView

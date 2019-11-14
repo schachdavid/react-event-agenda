@@ -5,7 +5,7 @@ import moment, { Moment, Duration } from 'moment';
 
 
 
-class AgendaViewModel implements AgendaViewModelInterface {
+export class AgendaViewModel implements AgendaViewModelInterface {
     agendaStore: AgendaStore;
 
     constructor() {
@@ -15,14 +15,6 @@ class AgendaViewModel implements AgendaViewModelInterface {
 
     getStore() {
         return this.agendaStore;
-    }
-
-    getStartTime() {
-        return this.agendaStore.getStartTime();
-    }
-
-    getEndTime() {
-        return this.agendaStore.getEndTime();
     }
 
     getIntervalPxHeight() {
@@ -40,6 +32,57 @@ class AgendaViewModel implements AgendaViewModelInterface {
     getDays() {
         return this.agendaStore.getAgenda().days;
     }
+
+    getDayForTrack(trackId: string) {
+        return this.agendaStore.getDayForTrack(trackId);
+    }
+
+    getDayForItem(id: string) {
+        return this.agendaStore.getDayForItem(id);
+    }
+
+
+
+    getTimeLineStartTime(dateToSet?: Moment) {
+        const days = this.getDays();
+        const date = dateToSet ? moment(dateToSet) : days[0].startTime;
+        if (date) {
+            const startTimes = days.map(day => {
+                const currentTime = moment(day.startTime);
+                currentTime.set({
+                    'date': date.get('date'),
+                    'month': date.get('month'),
+                    'year': date.get('year')
+                });
+                return currentTime;
+            });
+            console.log( moment.min(startTimes).format('DD.MM.YY HH:mm'));
+            
+            return moment.min(startTimes);
+        }
+        return;
+    }
+
+    getTimeLineEndTime(dateToSet?: Moment) {
+        const days = this.getDays();
+        const date = dateToSet ? moment(dateToSet) : days[0].startTime;
+        if (date) {
+            const endTimes = days.map(day => {
+                const currentTime = moment(day.endTime);
+                currentTime.set({
+                    'date': date.get('date'),
+                    'month': date.get('month'),
+                    'year': date.get('year')
+                });
+                return currentTime;
+            });
+            console.log( moment.max(endTimes).format('DD.MM.YY HH:mm')); 
+            return moment.max(endTimes);
+        }
+        return;
+    }
+
+
 
     deleteItem(id: string, suppressPushToHistory?: boolean) {
         this.agendaStore.deleteItem(id);
@@ -73,43 +116,94 @@ class AgendaViewModel implements AgendaViewModelInterface {
     }
 
 
+    moveItemsForced(items: Array<Item>, duration: Duration) {
+        items.forEach(curItem => {
+            const newStart = moment(curItem.start).add(duration);
+            const newEnd = moment(curItem.end).add(duration);
+            curItem!.start = newStart;
+            curItem!.end = newEnd;
+        });
+    }
+
+
+
+
+    _lastItemId = "";
+    _lastNewStart = moment();
+
 
     moveItem(trackId: string, id: string, newStart: Moment) {
         //TODO: implement checks here
         const item = this.agendaStore.getItem(id);
         let curTrack = this.agendaStore.getTrackForItem(id);
-        
 
         if (item && (curTrack!.id !== trackId)) {
+            console.log("chenged track");
+
             this.agendaStore.deleteItem(id);
             this.agendaStore.addItem(item, trackId);
             curTrack = this.agendaStore.getTrackById(trackId);
-        }
+            const startMovedTrack = item.start;
+            newStart.set({ 'date': startMovedTrack.get('date'), 'month': startMovedTrack.get('month'), 'year': startMovedTrack.get('year') })
+        } else if (item && item.start.isSame(newStart)) return;
 
-        if (!item!.start.isSame(newStart) && curTrack) {
-            const duration: Duration = moment.duration(item!.end.diff(item!.start));
-            const newEnd = moment(newStart).add(duration);
-          
+        if (id === this._lastItemId && this._lastNewStart.isSame(newStart)) return;
+        this._lastItemId = id;
+        this._lastNewStart = newStart;
+
+
+        //collision checking:
+        if (item && curTrack) {
+            console.log(item.start.format('DD.MM.YYYY HH:mm'), newStart.format('DD.MM.YYYY HH:mm'));
+
+            const itemDuration: Duration = moment.duration(item!.end.diff(item!.start));
+            const newEnd = moment(newStart).add(itemDuration);
+            const items = curTrack.items;
+            const movedItem = new Item(item.toJSON());
+            movedItem.start = newStart;
+            movedItem.end = newEnd;
+
+            //TODO: move overlapping checking in seperate function
 
             //1. find first colliding item
-           
-          
-            //2. check if the colliding item's start or end time is closer
-            
-            //3. move item's starttime there
-            item!.start = newStart;
-            item!.end = newEnd;
-            //3. move all items after that accordingly
+            const overlappingItemIndex = items.findIndex((curItem: Item) => {
+                return (curItem.start.isSameOrAfter(movedItem.start) && curItem.start.isBefore(movedItem.end) ||
+                    curItem.end.isAfter(movedItem.start) && curItem.end.isSameOrBefore(movedItem.end) ||
+                    movedItem.start.isSameOrAfter(curItem.start) && movedItem.start.isBefore(curItem.end) ||
+                    movedItem.end.isAfter(curItem.start) && movedItem.end.isSameOrBefore(curItem.end)) && movedItem.id !== curItem.id
+            })
 
+            const overlappingItem = items[overlappingItemIndex];
+
+            if (overlappingItem) {
+                //2. check if the colliding item's start or end time is closer
+                const movedItemMiddle = moment(movedItem.start).add(movedItem.start.diff(movedItem.end));
+                const overlappingItemMiddle = moment(overlappingItem.start).add(overlappingItem.start.diff(overlappingItem.end));
+                //3. move item's starttime there
+                if (movedItemMiddle.isSameOrAfter(overlappingItemMiddle)) {
+                    // item.start = overlappingItem.end;
+                    // item.end = moment(item.start).add(itemDuration);
+                    //4. move all items after that accordingly
+                    // const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => curItem.id !== item.id)
+                    // this.moveItemsForced(otherItemsToMove, itemDuration);
+
+                } else {
+                    // item.start = overlappingItem.start;
+                    // item.end = moment(item.start).add(itemDuration);
+                    //4. move all items after that accordingly
+                    // const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => curItem.id !== item.id)
+                    // this.moveItemsForced(otherItemsToMove, itemDuration);
+                }
+            } else {
+                item!.start = newStart;
+                item!.end = newEnd;
+            }
 
         }
 
         if (curTrack) {
             curTrack.sortItems();
         }
-
-
-       
     }
 
     undo() {
@@ -140,23 +234,18 @@ class AgendaViewModel implements AgendaViewModelInterface {
             const nextItem = items[1];
             if (nextItem && nextItem.start.isSameOrBefore(item.end)) {
                 const duration: Duration = moment.duration(newEndTime.diff(item.end));
-                items.slice(1).forEach(curItem => {
-                    const newStart = moment(curItem.start).add(duration);
-                    const newEnd = moment(curItem.end).add(duration);
-                    curItem!.start = newStart;
-                    curItem!.end = newEnd;
-                });
+                this.moveItemsForced(items.slice(1), duration)
             }
             if (!item.end.isSame(newEndTime)) {
                 item.end = newEndTime;
             }
         }
 
-
     }
 
 
-    
+
+
 
 
 
@@ -167,4 +256,3 @@ class AgendaViewModel implements AgendaViewModelInterface {
 
 }
 
-export default AgendaViewModel;

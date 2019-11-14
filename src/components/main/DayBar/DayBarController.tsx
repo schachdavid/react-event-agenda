@@ -15,7 +15,7 @@ interface IProps {
 const DayBarController: React.FC<IProps> = ({ day }: IProps) => {
     // const viewModel = useViewModelContext();
 
-    const dayName: string = day.date.format("ddd, MMM D");;
+    const dayName: string = day.startTime.format("ddd, MMM D");;
 
     return <DayBarView dayName={dayName}></DayBarView>
 }

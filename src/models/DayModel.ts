@@ -3,38 +3,57 @@ import { observable } from 'mobx';
 import { Track, ITrack } from './TrackModel';
 
 export interface IDay {
-    date: Moment,
+    startTime: Moment,
+    endTime: Moment,
     id: string,
     tracks: Array<ITrack>
 }
 
 
 export class Day {
-    @observable private _date: Moment;
+    @observable private _startTime: Moment;
+    @observable private _endTime: Moment;
     @observable private _id: string;
     @observable private _tracks: Array<Track>;
 
 
     constructor(obj: IDay) {
-        this._date = obj.date;
+        this._startTime = obj.startTime;
+        this._endTime = obj.endTime;
         this._id = obj.id;
         this._tracks = obj.tracks.map((track) => Track.fromJSON(track));
     }
 
     /**
-     * Getter date
+     * Getter startTime
      * @return {Moment}
      */
-     public get date(): Moment {
-        return this._date;
+     public get startTime(): Moment {
+        return this._startTime;
     }
 
     /**
-     * Setter date
+     * Setter startTime
      * @param {Moment} value
      */
-    public set date(value: Moment) {
-        this._date = value;
+    public set startTime(value: Moment) {
+        this._startTime = value;
+    }
+
+    /**
+     * Getter _endTime
+     * @return {Moment}
+     */
+    public get endTime(): Moment {
+        return this._endTime;
+    }
+
+    /**
+     * Setter _endTime
+     * @param {Moment} value
+     */
+    public set endTime(value: Moment) {
+        this._endTime = value;
     }
 
     /**
@@ -72,7 +91,8 @@ export class Day {
     toJSON(): IDay {
         return {
             id: this._id,
-            date: this._date,
+            startTime: this._startTime,
+            endTime: this._endTime,
             tracks: this._tracks.map((track) => track.toJSON())
         }
     }
