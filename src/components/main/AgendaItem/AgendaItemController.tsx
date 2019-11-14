@@ -52,9 +52,8 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
         }),
         begin: () => {
             setHovering(false);
-        },
-        end: () => {
-            viewModel.pushToHistory(); //TODO: does not really work yet, only push to history if item actually changed
+            console.log("beginning");
+            viewModel.pushToHistory();
         }
     })
 

@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { observable } from 'mobx';
 
 
@@ -22,8 +22,8 @@ export class Item {
         this._id = obj.id!;
         this._title = obj.title!;
         this._speaker = obj.speaker!;
-        this._start = obj.start!;
-        this._end = obj.end!;
+        this._start = moment(obj.start);
+        this._end = moment(obj.end);
     }
 
     /**
@@ -112,7 +112,7 @@ export class Item {
             title: this._title,
             speaker: this._speaker,
             start: this._start,
-            end: this._end
+            end: this._end,
         }
     }
 

@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { observable } from 'mobx';
 import { Track, ITrack } from './TrackModel';
 
@@ -18,8 +18,8 @@ export class Day {
 
 
     constructor(obj: IDay) {
-        this._startTime = obj.startTime;
-        this._endTime = obj.endTime;
+        this._startTime = moment(obj.startTime);
+        this._endTime = moment(obj.endTime);
         this._id = obj.id;
         this._tracks = obj.tracks.map((track) => Track.fromJSON(track));
     }

@@ -3,22 +3,26 @@ import { useViewModelContext } from '../../../ViewModelContext';
 import { observer } from "mobx-react";
 import TrackView from './TrackView';
 import { ITrack as TrackData, IItem } from '../../../models/AgendaStore';
-import moment, { Duration } from 'moment';
-import { DragItem } from '../../../interfaces/dndInterfaces';
+import moment, { Duration, Moment } from 'moment';
 import uuid from 'uuid';
 import { ICustomItemAction } from '../../../interfaces/agendaProps';
+import { DragItem } from '../../../interfaces/dndInterfaces';
 
 
 
 interface IProps {
     track: TrackData,
-    customItemActions?: Array<ICustomItemAction>
+    customItemActions?: Array<ICustomItemAction>,
+    moveDragItem: (trackId: string, newStart: Moment, dragItem: DragItem) => void
 
 
 }
 
 
-const TrackController: React.FC<IProps> = ({ track, customItemActions }: IProps) => {
+const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragItem }: IProps) => {
+
+
+
     const viewModel = useViewModelContext();
 
     const items: Array<IItem> = track.items;
@@ -43,8 +47,11 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions }: IProps)
     const handleDropHover = (hoverClientY: number, dragItem: DragItem) => {
         const minutesStart = Math.round(hoverClientY / intervalPxHeight) * intervalInMin;
         const newStart = moment(startTime).add(minutesStart, 'minutes');
-        viewModel.moveItem(track.id, dragItem.id, newStart);
+        moveDragItem(track.id, newStart, dragItem);
     }
+
+
+
 
 
 

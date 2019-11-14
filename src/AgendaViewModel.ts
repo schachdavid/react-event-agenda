@@ -56,8 +56,6 @@ export class AgendaViewModel implements AgendaViewModelInterface {
                 });
                 return currentTime;
             });
-            console.log( moment.min(startTimes).format('DD.MM.YY HH:mm'));
-            
             return moment.min(startTimes);
         }
         return;
@@ -76,7 +74,6 @@ export class AgendaViewModel implements AgendaViewModelInterface {
                 });
                 return currentTime;
             });
-            console.log( moment.max(endTimes).format('DD.MM.YY HH:mm')); 
             return moment.max(endTimes);
         }
         return;
@@ -128,33 +125,34 @@ export class AgendaViewModel implements AgendaViewModelInterface {
 
 
 
-    _lastItemId = "";
-    _lastNewStart = moment();
 
 
     moveItem(trackId: string, id: string, newStart: Moment) {
-        //TODO: implement checks here
-        const item = this.agendaStore.getItem(id);
+
+        const items = this.agendaStore.getItemAndFollowingItems(id);
+        if(!items) return;
+
+        const item = items[0];
+
+
+        if(items[1].start.isSame(item.end)) {
+
+        }
+
+
+
         let curTrack = this.agendaStore.getTrackForItem(id);
 
         if (item && (curTrack!.id !== trackId)) {
-            console.log("chenged track");
-
             this.agendaStore.deleteItem(id);
             this.agendaStore.addItem(item, trackId);
             curTrack = this.agendaStore.getTrackById(trackId);
-            const startMovedTrack = item.start;
-            newStart.set({ 'date': startMovedTrack.get('date'), 'month': startMovedTrack.get('month'), 'year': startMovedTrack.get('year') })
         } else if (item && item.start.isSame(newStart)) return;
-
-        if (id === this._lastItemId && this._lastNewStart.isSame(newStart)) return;
-        this._lastItemId = id;
-        this._lastNewStart = newStart;
 
 
         //collision checking:
         if (item && curTrack) {
-            console.log(item.start.format('DD.MM.YYYY HH:mm'), newStart.format('DD.MM.YYYY HH:mm'));
+            // console.log(item.start.format('DD.MM.YYYY HH:mm'), newStart.format('DD.MM.YYYY HH:mm'));
 
             const itemDuration: Duration = moment.duration(item!.end.diff(item!.start));
             const newEnd = moment(newStart).add(itemDuration);
@@ -177,22 +175,24 @@ export class AgendaViewModel implements AgendaViewModelInterface {
 
             if (overlappingItem) {
                 //2. check if the colliding item's start or end time is closer
-                const movedItemMiddle = moment(movedItem.start).add(movedItem.start.diff(movedItem.end));
-                const overlappingItemMiddle = moment(overlappingItem.start).add(overlappingItem.start.diff(overlappingItem.end));
-                //3. move item's starttime there
+                const movedItemMiddle = moment(movedItem.start).add(movedItem.end.diff(movedItem.start) / 2);
+                const overlappingItemMiddle = moment(overlappingItem.start).add(overlappingItem.end.diff(overlappingItem.start) / 2);
+
                 if (movedItemMiddle.isSameOrAfter(overlappingItemMiddle)) {
-                    // item.start = overlappingItem.end;
-                    // item.end = moment(item.start).add(itemDuration);
+                    //3. move item's starttime there
+                    item.start = overlappingItem.end;
+                    item.end = moment(item.start).add(itemDuration);
                     //4. move all items after that accordingly
-                    // const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => curItem.id !== item.id)
-                    // this.moveItemsForced(otherItemsToMove, itemDuration);
+                    const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => curItem.id !== item.id)
+                    this.moveItemsForced(otherItemsToMove, itemDuration);
 
                 } else {
-                    // item.start = overlappingItem.start;
-                    // item.end = moment(item.start).add(itemDuration);
+                    //3. move item's starttime there
+                    item.start = overlappingItem.start;
+                    item.end = moment(item.start).add(itemDuration);
                     //4. move all items after that accordingly
-                    // const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => curItem.id !== item.id)
-                    // this.moveItemsForced(otherItemsToMove, itemDuration);
+                    const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => curItem.id !== item.id)
+                    this.moveItemsForced(otherItemsToMove, itemDuration);
                 }
             } else {
                 item!.start = newStart;
@@ -233,6 +233,7 @@ export class AgendaViewModel implements AgendaViewModelInterface {
             const item = items[0];
             const nextItem = items[1];
             if (nextItem && nextItem.start.isSameOrBefore(item.end)) {
+
                 const duration: Duration = moment.duration(newEndTime.diff(item.end));
                 this.moveItemsForced(items.slice(1), duration)
             }
