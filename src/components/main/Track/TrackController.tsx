@@ -1,5 +1,5 @@
 import React from 'react';
-import { useViewModelContext } from '../../../ViewModelContext';
+import { useViewModelContext } from '../../../hooks/ViewModelContext';
 import { observer } from "mobx-react";
 import TrackView from './TrackView';
 import { ITrack as TrackData, IItem } from '../../../models/AgendaStore';
@@ -61,7 +61,7 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
         const minutesStart = Math.floor(initialMousePosition / intervalPxHeight) * intervalInMin;
         const itemStart = moment(startTime).add(minutesStart, 'minutes');
         const itemEnd = moment(itemStart).add(intervalInMin, 'minutes');
-        viewModel.addItem({ id: drawUpItemId, start: itemStart, end: itemEnd }, track.id);
+        viewModel.addItem({ id: drawUpItemId, start: itemStart, end: itemEnd }, track.id, true);
     }
 
     const handleDrawUp = (initialMousePosition: number, currentMousePosition: number) => {
@@ -84,6 +84,10 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
         }
     }
 
+    const finishDrawUp = () => {
+        viewModel.pushToHistory();
+    }
+
 
     return <TrackView
         items={items}
@@ -92,6 +96,7 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
         handleDropHover={handleDropHover}
         handleInitializeDrawUp={handleInitializeDrawUp}
         handleDrawUp={handleDrawUp}
+        finishDrawUp={finishDrawUp}
         customItemActions={customItemActions}
     />
 }

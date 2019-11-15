@@ -1,5 +1,5 @@
 import React from 'react';
-import { useViewModelContext } from '../../../ViewModelContext';
+import { useViewModelContext } from '../../../hooks/ViewModelContext';
 import { observer } from "mobx-react";
 import TimeLineView from './TimeLineView';
 import moment, { Duration } from 'moment';

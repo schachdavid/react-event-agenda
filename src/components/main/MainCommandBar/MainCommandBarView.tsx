@@ -4,7 +4,8 @@ import { observer } from 'mobx-react';
 import { CommandBar } from 'office-ui-fabric-react/lib/components/CommandBar';
 import { Customizer } from 'office-ui-fabric-react';
 import styles from './MainCommandBarView.module.scss';
-import { getInvertedTheme } from '../../../theme';
+import { invertTheme } from '../../../util';
+import { useColorPaletteContext } from '../../../hooks/ColorPaletteContext';
 
 
 export interface IProps {
@@ -13,6 +14,9 @@ export interface IProps {
 }
 
 const MainCommandBarView: React.FC<IProps> = ({undo, redo}: IProps) => {
+
+    const colorPalette = useColorPaletteContext();
+
     const items = [
         {
             key: 'undo',
@@ -50,7 +54,7 @@ const MainCommandBarView: React.FC<IProps> = ({undo, redo}: IProps) => {
     
     return (
             <div className={styles.container}>
-                <Customizer settings={{theme: getInvertedTheme()}}>
+                <Customizer settings={{theme: invertTheme(Object.assign({}, colorPalette))}}>
                     <CommandBar items={items} farItems={farItems} />
                 </Customizer>
             </div>

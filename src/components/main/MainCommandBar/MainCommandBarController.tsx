@@ -1,6 +1,6 @@
 import React from 'react';
 import MainCommandBarView from './MainCommandBarView';
-import { useViewModelContext } from '../../../ViewModelContext';
+import { useViewModelContext } from '../../../hooks/ViewModelContext';
 import { observer } from "mobx-react";
 
 

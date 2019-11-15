@@ -20,7 +20,7 @@ export interface IProps {
     handleInitializeDrawUp: (initialMousePosition: number) => void,
     handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void,
     customItemActions?: Array<ICustomItemAction>
-
+    finishDrawUp: () => void
 }
 
 const TrackView: React.FC<IProps> = ({
@@ -30,6 +30,7 @@ const TrackView: React.FC<IProps> = ({
     handleDropHover,
     handleInitializeDrawUp,
     handleDrawUp,
+    finishDrawUp,
     customItemActions
 }: IProps) => {
     const agendaItems = items.map((item: IItem) => <AgendaItem key={item.id} item={item} customItemActions={customItemActions}></AgendaItem>)
@@ -78,6 +79,8 @@ const TrackView: React.FC<IProps> = ({
     const stopDrawUp = () => {
         window.removeEventListener('mousemove', drawUp);
         window.removeEventListener('mouseup', stopDrawUp);
+        finishDrawUp();
+        
     }
 
 

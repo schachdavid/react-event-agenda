@@ -1,25 +1,18 @@
 import React from 'react';
 import { AgendaViewModel } from '../../../AgendaViewModel';
-import ViewModelContext from '../../../ViewModelContext';
+import ViewModelContext from '../../../hooks/ViewModelContext';
 import { MainCommandBar } from '../MainCommandBar/MainCommandBarController';
 import { Tracks } from '../Tracks/TracksController';
 import styles from './Agenda.scss';
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import cssVars from 'css-vars-ponyfill';
-import { getPalette } from './../../../theme';
 
 // TODO: to be replaced, icons should be passed via props
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import { loadTheme } from 'office-ui-fabric-react';
+import { loadTheme, IPalette } from 'office-ui-fabric-react';
 import { ICustomItemAction } from '../../../interfaces/agendaProps';
-
-
-initializeIcons();
-
-loadTheme({
-    palette: getPalette()
-});
+import { ColorPaletteContext, defaultPalette } from '../../../hooks/ColorPaletteContext';
 
 
 
@@ -27,35 +20,41 @@ loadTheme({
 
 interface IProps {
     agendaViewModel: AgendaViewModel,
-    customItemActions?: Array<ICustomItemAction>
+    customItemActions?: Array<ICustomItemAction>,
+    colorPalette?: Partial<IPalette>
 }
 
-cssVars();
+const Agenda: React.FC<IProps> = ({ agendaViewModel, customItemActions, colorPalette }: IProps) => {
+    initializeIcons();
 
-const colorPalette = getPalette();
+    loadTheme({
+        palette: colorPalette ? colorPalette : defaultPalette
+    });
 
-let themeObj = {}
-Object.entries(colorPalette).forEach(([prop, value]) => {
-    themeObj['--' + prop] = value;
-});
+    cssVars();
 
-cssVars({
-    variables: themeObj
-});
+    const palette = colorPalette ? colorPalette : defaultPalette
 
+    let themeObj = {}
+    Object.entries(palette).forEach(([prop, value]) => {
+        themeObj['--' + prop] = value;
+    });
 
-const Agenda: React.FC<IProps> = ({ agendaViewModel, customItemActions }: IProps) => {
+    cssVars({
+        variables: themeObj
+    });
 
     return (
         <div className={styles.mainComponent}>
-            <ViewModelContext.Provider value={agendaViewModel}>
-                <DndProvider backend={HTML5Backend} debugMode={true}>
-                    <MainCommandBar></MainCommandBar>
-                    <Tracks customItemActions={customItemActions}>
-                    
-                    </Tracks>
-                </DndProvider>
-            </ViewModelContext.Provider>
+            <ColorPaletteContext.Provider value={colorPalette ? colorPalette : defaultPalette}>
+                <ViewModelContext.Provider value={agendaViewModel}>
+                    <DndProvider backend={HTML5Backend} debugMode={true}>
+                        <MainCommandBar></MainCommandBar>
+                        <Tracks customItemActions={customItemActions}>
+                        </Tracks>
+                    </DndProvider>
+                </ViewModelContext.Provider>
+            </ColorPaletteContext.Provider>
         </div>
     )
 };

@@ -3,7 +3,7 @@ import AgendaItemView from './AgendaItemView';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
 import { IItem } from '../../../models/ItemModel';
-import { useViewModelContext } from '../../../ViewModelContext';
+import { useViewModelContext } from '../../../hooks/ViewModelContext';
 import moment, { Moment } from 'moment';
 import AgendaItemDragView from './AgendaItemDragView';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
@@ -54,6 +54,10 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
             setHovering(false);
             console.log("beginning");
             viewModel.pushToHistory();
+
+        },
+        end: () => {
+            console.log("ending");
         }
     })
 
@@ -181,8 +185,8 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
                 finishResizeStartTime={finishResizeStartTime}
                 editItem={() => editItem()}
                 deleteItem={() => deleteItem()}
-                onMouseEnter={() => { setHovering(true) }}
-                onMouseLeave={() => { setHovering(false) }}
+                onMouseEnter={() => { if(!resizing) setHovering(true) }}
+                onMouseLeave={() => { if(!resizing) setHovering(false) }}
                 customActionButtons={customActionButtons}
             />
         </div>

@@ -79,6 +79,11 @@
   justify-content: center;
 }
 
+
+.resizeHandleBarContainer:hover {
+  cursor: ns-resize;
+}
+
 .resizeDotTopContainer {
   position: absolute;
   top: 0;

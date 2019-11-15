@@ -135,8 +135,8 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         const item = items[0];
 
 
-        if(items[1].start.isSame(item.end)) {
-
+        if(items[1] && items[1].start.isSame(item.end) && !item.start.isSame(newStart)) {
+            this.moveItemsForced(items.slice(1), moment.duration((item.start.diff(item.end))));
         }
 
 

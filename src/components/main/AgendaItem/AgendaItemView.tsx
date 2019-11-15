@@ -5,8 +5,9 @@ import classNames from 'classnames';
 import { IconButton } from 'office-ui-fabric-react';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Customizer } from 'office-ui-fabric-react';
-import { getInvertedTheme, getRGBPalette } from '../../../theme';
 import Color from 'color';
+import { useColorPaletteContext } from '../../../hooks/ColorPaletteContext';
+import { invertTheme } from '../../../util';
 
 
 export interface IProps {
@@ -63,6 +64,9 @@ const AgendaItemView: React.FC<IProps> = ({
     customActionButtons
 }: IProps) => {
 
+    const colorPalette = useColorPaletteContext();
+
+
 
     enum Direction {
         Start,
@@ -74,6 +78,7 @@ const AgendaItemView: React.FC<IProps> = ({
     const initializeResizing = (direction: Direction, e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         currentDirection = direction;
         initResizing();
+        document.body.style.cursor = "ns-resize";
         if (e) {
             e.preventDefault();
             initialMousePosition = e.clientY;
@@ -91,19 +96,18 @@ const AgendaItemView: React.FC<IProps> = ({
     const stopResize = () => {
         window.removeEventListener('mousemove', resize); //TODO: throttle here
         window.removeEventListener('mouseup', stopResize);
+        document.body.style.cursor = "auto";
+
         if (Direction.End === currentDirection) finishResizeEndTime();
         else if (Direction.Start === currentDirection) finishResizeStartTime();
     }
 
-    const hoverColor = Color(getRGBPalette().themePrimary).darken(0.06).string();
-
-
-
+    const hoverColor = Color(colorPalette.themePrimary).darken(0.06).string();
 
     const controls = hovering && !resizing ?
         <div className={styles.controls} style={{ backgroundColor: hoverColor }}>
             <Stack tokens={{ childrenGap: 2 }} horizontal>
-                <Customizer settings={{ theme: getInvertedTheme() }}>
+                <Customizer settings={{ theme: invertTheme(Object.assign({}, colorPalette)) }}>
                     {customActionButtons}
                     <IconButton iconProps={{ iconName: "Edit" }} onClick={e => {
                         e.stopPropagation();

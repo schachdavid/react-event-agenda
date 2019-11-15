@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TracksView from './TracksView';
-import { useViewModelContext } from '../../../ViewModelContext';
+import { useViewModelContext } from '../../../hooks/ViewModelContext';
 import { observer } from "mobx-react";
 import {AgendaViewModel} from '../../../AgendaViewModel';
 import { IDay } from '../../../models/AgendaStore';
