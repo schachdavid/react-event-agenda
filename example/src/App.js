@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Agenda, { AgendaViewModel } from 'react-event-agenda'
+import { IoMdInformationCircleOutline } from 'react-icons/io';
+import { initializeIcons } from '@uifabric/icons';
 
 
 export default class App extends Component {
@@ -7,14 +9,17 @@ export default class App extends Component {
   constructor() {
     super();
     this.agendaViewModel = new AgendaViewModel();
+    initializeIcons();
   }
 
   customItemActions = [
     {
       iconName: 'info',
-      action: (item) => console.log(item.id, item.start.format('DD.MM.YYYY HH:mm'), item.end.format('DD.MM.YYYY HH:mm')),
+      iconToRender: <IoMdInformationCircleOutline size={'1.2em'}/>,
+      action: (item) => console.log(item.uiState, item.id, item.start.format('DD.MM.YYYY HH:mm'), item.end.format('DD.MM.YYYY HH:mm')),
     }
   ]
+
 
   colorPalette = {
     themePrimary: '#29b59a',
@@ -50,6 +55,7 @@ export default class App extends Component {
         <Agenda
           agendaViewModel={this.agendaViewModel}
           customItemActions={this.customItemActions}
+          // colorPalette={this.colorPalette}
         />
       </div>
     )

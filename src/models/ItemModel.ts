@@ -2,13 +2,22 @@ import moment, { Moment } from 'moment';
 import { observable } from 'mobx';
 
 
+
+
+export enum ItemUIState {
+    Editing
+}
+
 export interface IItem {
     readonly id: string,
     readonly title?: string,
     readonly speaker?: string,
     readonly start: Moment,
-    readonly end: Moment
+    readonly end: Moment,
+    readonly uiState?: ItemUIState
 }
+
+
 
 export class Item {
     @observable private _id: string;
@@ -16,6 +25,23 @@ export class Item {
     @observable private _speaker: string;
     @observable private _start: Moment;
     @observable private _end: Moment;
+    @observable private _uiState?: ItemUIState = undefined;
+
+    /**
+     * Getter uiState
+     * @return {ItemUIState | undefined}
+     */
+	public get uiState(): ItemUIState | undefined  {
+		return this._uiState;
+	}
+
+    /**
+     * Setter uiState
+     * @param {ItemUIState | undefined} value
+     */
+	public set uiState(value: ItemUIState | undefined) {
+		this._uiState = value;
+	}
 
 
     constructor(obj: IItem) {

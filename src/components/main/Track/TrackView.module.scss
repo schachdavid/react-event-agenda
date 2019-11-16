@@ -8,7 +8,25 @@
 .segment {
   border-right: 1px solid var(--neutralTertiary);
   background-color: var(--neutralLighter);
-  border-bottom: 1px dashed var(--neutralQuaternary);
+  display: flex;
+  flex-direction: column;
+}
+
+.smallSegment {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.smallSegment>div {
+  height: 100%;
+  width: 100%;
+}
+
+
+
+.smallSegmentHover>div:hover {
+  background-color: var(--neutralLight);
 }
 
 

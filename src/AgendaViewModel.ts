@@ -1,19 +1,30 @@
 import AgendaStore, { IItem, Item } from './models/AgendaStore';
 import AgendaViewModelInterface from './interfaces/AgendaViewModelInterface';
 import moment, { Moment, Duration } from 'moment';
+import UIStore, { UIState } from './models/UIStore';
+import { ItemUIState } from './models/ItemModel';
 
 
 
 
 export class AgendaViewModel implements AgendaViewModelInterface {
     agendaStore: AgendaStore;
+    uiStore: UIStore;
 
     constructor() {
         this.agendaStore = new AgendaStore();
+        this.uiStore = new UIStore();
     }
 
+    getUIState() {
+        return this.uiStore.getUiState();
+    }
 
-    getStore() {
+    setUIState(newState: UIState) {
+        this.uiStore.setUiState(newState);
+    }
+
+    getAgendaStore() {
         return this.agendaStore;
     }
 
@@ -39,6 +50,10 @@ export class AgendaViewModel implements AgendaViewModelInterface {
 
     getDayForItem(id: string) {
         return this.agendaStore.getDayForItem(id);
+    }
+
+    getItem(id: string) {
+        return  this.agendaStore.getItem(id);
     }
 
 
@@ -112,14 +127,25 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         }
     }
 
+    updateItemUIState(id: string, newUIState: ItemUIState | undefined) {
+        const item = this.agendaStore.getItem(id);
+        if (item) {
+            item.uiState = newUIState;
+        }
+    }
 
-    moveItemsForced(items: Array<Item>, duration: Duration) {
+
+    moveItemsForced(items: Array<Item>, milSecToMove: number) {
         items.forEach(curItem => {
-            const newStart = moment(curItem.start).add(duration);
-            const newEnd = moment(curItem.end).add(duration);
+            const newStart = moment(curItem.start).add(milSecToMove);
+            const newEnd = moment(curItem.end).add(milSecToMove);
             curItem!.start = newStart;
             curItem!.end = newEnd;
         });
+    }
+
+    moveItemForced(item: Item, milSecToMove: number) {
+        this.moveItemsForced([item], milSecToMove);
     }
 
 
@@ -129,39 +155,46 @@ export class AgendaViewModel implements AgendaViewModelInterface {
 
     moveItem(trackId: string, id: string, newStart: Moment) {
 
-        const items = this.agendaStore.getItemAndFollowingItems(id);
-        if(!items) return;
-
-        const item = items[0];
-
-
-        if(items[1] && items[1].start.isSame(item.end) && !item.start.isSame(newStart)) {
-            this.moveItemsForced(items.slice(1), moment.duration((item.start.diff(item.end))));
-        }
-
-
-
         let curTrack = this.agendaStore.getTrackForItem(id);
 
+        if (!curTrack) return;
+
+        let items = curTrack.items;
+        const itemIndex = curTrack.items.findIndex(item => item.id === id);
+
+        // const items = this.agendaStore.getItemAndFollowingItems(id);
+        if (!items) return;
+
+        const item = items[itemIndex];
+
+
+        //check if currently the item is between to others and needs to be cut out
+        if (itemIndex + 1 < items.length &&
+            items[itemIndex + 1].start.isSame(item.end) &&
+            itemIndex - 1 >= 0 &&
+            items[itemIndex - 1].end.isSame(item.start) &&
+            !item.start.isSame(newStart)) {
+            this.moveItemsForced(items.slice(itemIndex + 1), (item.start.diff(item.end)));
+        }
+
+        //check if the track has changed
         if (item && (curTrack!.id !== trackId)) {
             this.agendaStore.deleteItem(id);
             this.agendaStore.addItem(item, trackId);
             curTrack = this.agendaStore.getTrackById(trackId);
+            if (curTrack) {
+                items = curTrack.items;
+            }
         } else if (item && item.start.isSame(newStart)) return;
 
 
         //collision checking:
         if (item && curTrack) {
-            // console.log(item.start.format('DD.MM.YYYY HH:mm'), newStart.format('DD.MM.YYYY HH:mm'));
-
             const itemDuration: Duration = moment.duration(item!.end.diff(item!.start));
             const newEnd = moment(newStart).add(itemDuration);
-            const items = curTrack.items;
             const movedItem = new Item(item.toJSON());
             movedItem.start = newStart;
             movedItem.end = newEnd;
-
-            //TODO: move overlapping checking in seperate function
 
             //1. find first colliding item
             const overlappingItemIndex = items.findIndex((curItem: Item) => {
@@ -179,24 +212,56 @@ export class AgendaViewModel implements AgendaViewModelInterface {
                 const overlappingItemMiddle = moment(overlappingItem.start).add(overlappingItem.end.diff(overlappingItem.start) / 2);
 
                 if (movedItemMiddle.isSameOrAfter(overlappingItemMiddle)) {
-                    //3. move item's starttime there
-                    item.start = overlappingItem.end;
+                    //3. move item there
+                    item.start = moment(overlappingItem.end);
                     item.end = moment(item.start).add(itemDuration);
                     //4. move all items after that accordingly
-                    const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => curItem.id !== item.id)
-                    this.moveItemsForced(otherItemsToMove, itemDuration);
-
+                    if (overlappingItemIndex + 1 < items.length) {
+                        let nextOverlappingItem = items[overlappingItemIndex + 1];
+                        //edge case nextOverlapping Item is the item to move
+                        let shouldMove = true;
+                        if (nextOverlappingItem === item) {
+                            if (overlappingItemIndex + 2 < items.length) {
+                                nextOverlappingItem = items[overlappingItemIndex + 2];
+                            } else {
+                                shouldMove = false;
+                            }
+                        }
+                        if (shouldMove && item.end.isAfter(nextOverlappingItem.start)) {
+                            const moveMilSec = item.end.diff(nextOverlappingItem.start)
+                            const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => curItem.id !== item.id)
+                            this.moveItemsForced(otherItemsToMove, moveMilSec);
+                        }
+                    }
                 } else {
-                    //3. move item's starttime there
-                    item.start = overlappingItem.start;
-                    item.end = moment(item.start).add(itemDuration);
+                    //3. move item there
+                    item.end = moment(overlappingItem.start);
+                    item.start = moment(item.end).subtract(itemDuration)
                     //4. move all items after that accordingly
-                    const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => curItem.id !== item.id)
-                    this.moveItemsForced(otherItemsToMove, itemDuration);
+                    if (overlappingItemIndex - 1 >= 0) {
+                        let previousOverlappingItem = items[overlappingItemIndex - 1];
+                        //edge case perviousOverlapping Item is the item to move
+                        let shouldMove = true;
+                        if (previousOverlappingItem === item) {
+                            if (overlappingItemIndex - 2 >= 0) {
+                                previousOverlappingItem = items[overlappingItemIndex - 2];
+                            } else {
+                                shouldMove = false;
+                            }
+                        }
+                        if (shouldMove && item.start.isBefore(previousOverlappingItem.end)) {
+                            const moveMilSec = previousOverlappingItem.end.diff(item.start);
+                            const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => curItem.id !== item.id);
+                            this.moveItemForced(item, moveMilSec);
+                            this.moveItemsForced(otherItemsToMove, moveMilSec);
+                        }
+                    }
+
+
                 }
             } else {
-                item!.start = newStart;
-                item!.end = newEnd;
+                item!.start = moment(newStart);
+                item!.end = moment(newEnd);
             }
 
         }
@@ -205,6 +270,9 @@ export class AgendaViewModel implements AgendaViewModelInterface {
             curTrack.sortItems();
         }
     }
+
+
+
 
     undo() {
         this.agendaStore.undo();
@@ -219,9 +287,16 @@ export class AgendaViewModel implements AgendaViewModelInterface {
     }
 
     adjustItemStartTime(itemId: string, newStartTime: Moment) {
-        const item = this.agendaStore.getItem(itemId);
-        if (item && !item.start.isSame(newStartTime)) {
-            item.start = newStartTime;
+        const track = this.agendaStore.getTrackForItem(itemId);
+        const items = track && track.items ? track.items : undefined;
+        
+        if (items) {
+            const index = items.findIndex(curItem => curItem.id === itemId);
+            const item = items[index];
+            if(index - 1 >= 0 && items[index - 1].end.isAfter(newStartTime)) return;
+            if (item && !item.start.isSame(newStartTime)) {
+                item.start = newStartTime;
+            }
         }
         //TODO: implement checks here/remove ?????
     }
@@ -231,11 +306,10 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         const items = this.agendaStore.getItemAndFollowingItems(itemId);
         if (items) {
             const item = items[0];
+            if (newEndTime.isSameOrBefore(item.start)) return;
             const nextItem = items[1];
             if (nextItem && nextItem.start.isSameOrBefore(item.end)) {
-
-                const duration: Duration = moment.duration(newEndTime.diff(item.end));
-                this.moveItemsForced(items.slice(1), duration)
+                this.moveItemsForced(items.slice(1), newEndTime.diff(item.end))
             }
             if (!item.end.isSame(newEndTime)) {
                 item.end = newEndTime;

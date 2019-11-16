@@ -173,21 +173,18 @@ const AgendaItemView: React.FC<IProps> = ({
                             <div>
                                 {start} - {end}
                             </div>
-                            <div className={styles.title}>
-                                {title}
+                            <div className={classNames(styles.title, styles.textWrap)}>
+                                {title ? title : "(No title)"}
                             </div>
-                            <div>
+                            <div className={styles.textWrap}>
                                 {speaker}
                             </div>
-                            {/* <div>
-                        Location
-                    </div> */}
                             {controls}
                         </div>
                         :
                         <div className={styles.content}>
                             <div className={styles.titleSmall}>
-                                {title}
+                                {title ? title : "(No title)"}
                             </div>
                             {controls}
                         </div>

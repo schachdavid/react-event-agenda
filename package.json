@@ -38,6 +38,7 @@
     "office-ui-fabric-react": "^7.44.0",
     "react-dnd": "^9.4.0",
     "react-dnd-html5-backend": "^9.4.0",
+    "react-ionicons": "^3.0.1",
     "uuid": "^3.3.3"
   },
   "peerDependencies": {

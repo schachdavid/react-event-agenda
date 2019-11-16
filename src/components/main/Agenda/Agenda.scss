@@ -5,7 +5,7 @@
 .mainComponent {
   font-family: 'Open Sans', sans-serif;
   width: 100%;
-    height: 100%;
+  height: 100%;
 }
 
 // .fullWH {
@@ -39,4 +39,9 @@
     --neutralDark: #605e5d;
     --black: #494847;
     --white: #ffffff;
+  }
+
+
+  .iconStrokeWidthContainer svg {
+    stroke-width: 1.2;
   }

@@ -5,10 +5,12 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "office-ui-fabric-react": "^7.61.1",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-app-polyfill": "^1.0.4",
     "react-dom": "^16.4.1",
+    "react-icons": "^3.8.0",
     "react-scripts": "^1.1.4"
   },
   "browserslist": {

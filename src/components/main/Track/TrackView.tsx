@@ -9,29 +9,34 @@ import { DragItem } from '../../../interfaces/dndInterfaces'
 import uuid from 'uuid';
 import _ from 'lodash';
 import { ICustomItemAction } from '../../../interfaces/agendaProps';
+import classNames from 'classnames'
 
 
 
 export interface IProps {
     items: Array<IItem>,
     numberOfSegments: number,
-    segmentHeight: number,
+    numberOfSmallSegments: number,
+    smallSegmentHeight: number,
     handleDropHover: (hoverClientY: number, dragItem: DragItem) => void,
     handleInitializeDrawUp: (initialMousePosition: number) => void,
     handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void,
-    customItemActions?: Array<ICustomItemAction>
-    finishDrawUp: () => void
+    customItemActions?: Array<ICustomItemAction>,
+    finishDrawUp: () => void,
+    enableHover: boolean
 }
 
 const TrackView: React.FC<IProps> = ({
     items,
     numberOfSegments,
-    segmentHeight,
+    numberOfSmallSegments,
+    smallSegmentHeight,
     handleDropHover,
     handleInitializeDrawUp,
     handleDrawUp,
     finishDrawUp,
-    customItemActions
+    customItemActions,
+    enableHover
 }: IProps) => {
     const agendaItems = items.map((item: IItem) => <AgendaItem key={item.id} item={item} customItemActions={customItemActions}></AgendaItem>)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -80,15 +85,24 @@ const TrackView: React.FC<IProps> = ({
         window.removeEventListener('mousemove', drawUp);
         window.removeEventListener('mouseup', stopDrawUp);
         finishDrawUp();
-        
+
     }
 
 
+    let smallSegments: Array<any> = [];
+
+    for (let i: number = 0; i < numberOfSmallSegments; i++) {
+        smallSegments.push(<div key={uuid()} className={classNames(enableHover ? styles.smallSegmentHover : '', styles.smallSegment)} style={{ height: smallSegmentHeight + 'px', borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : '' }}>
+            <div />
+        </div>)
+    }
 
     let segments: Array<any> = [];
 
     for (let i: number = 0; i < numberOfSegments; i++) {
-        segments.push(<div key={uuid()} className={styles.segment} style={{ height: segmentHeight + 'px' }}></div>)
+        segments.push(<div key={uuid()} className={styles.segment}>
+            {smallSegments}
+        </div>)
     }
 
     return (
