@@ -2,12 +2,13 @@ import React from 'react';
 import { observer } from "mobx-react";
 import styles from './AgendaItemView.module.scss';
 import classNames from 'classnames';
-import { IconButton } from 'office-ui-fabric-react';
+import { IconButton, createTheme } from 'office-ui-fabric-react';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Customizer } from 'office-ui-fabric-react';
-import Color from 'color';
-import { useColorPaletteContext } from '../../../hooks/ColorPaletteContext';
-import { invertTheme } from '../../../util';
+import color from 'color';
+import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
+import { invertTheme } from '../../util';
+// import { invertTheme } from '../../../util';
 
 
 export interface IProps {
@@ -20,7 +21,9 @@ export interface IProps {
     height: number,
     small: boolean,
     hovering?: boolean,
-    selected?: boolean,
+    selecting: boolean,
+    selected: boolean,
+    handleSelectClick: (event: any) => void,
     resizing?: boolean,
     dragging: boolean,
     dragRef: any,
@@ -61,6 +64,9 @@ const AgendaItemView: React.FC<IProps> = ({
     dragging,
     dragRef,
     resizing,
+    selected,
+    handleSelectClick,
+    selecting,
     customActionButtons
 }: IProps) => {
 
@@ -102,12 +108,41 @@ const AgendaItemView: React.FC<IProps> = ({
         else if (Direction.Start === currentDirection) finishResizeStartTime();
     }
 
-    const hoverColor = Color(colorPalette.themePrimary).darken(0.06).string();
+    const hoverColor = selected ? color(colorPalette.themePrimary).darken(0.1).toString() : color(colorPalette.themePrimary).alpha(0.6).toString();
+    const normalColor = selected ? colorPalette.themePrimary : color(colorPalette.themePrimary).alpha(0.5).toString();
 
-    const controls = hovering && !resizing ?
-        <div className={styles.controls} style={{ backgroundColor: hoverColor }}>
+    const newColorPalette = Object.assign({}, colorPalette);
+
+    const whiteTmp = newColorPalette.white
+
+    //background color
+    newColorPalette.white = newColorPalette.themePrimary;
+
+    //icon color
+    newColorPalette.themePrimary = newColorPalette.themeDarker;
+
+    //hover background color
+    newColorPalette.neutralLighter = normalColor;
+
+    // font color
+    newColorPalette.neutralPrimary = whiteTmp;
+
+    //hover icon color
+    newColorPalette.themeDarkAlt = newColorPalette.themeDarker;;
+
+    // hover font color
+    newColorPalette.neutralDark = whiteTmp;
+
+    const theme = createTheme({
+        palette: newColorPalette
+    });
+
+    const themeSelected = invertTheme(colorPalette);
+
+    const controls = hovering && !resizing && !selecting ?
+        <div className={!small ? styles.controls : null} >
             <Stack tokens={{ childrenGap: 2 }} horizontal>
-                <Customizer settings={{ theme: invertTheme(Object.assign({}, colorPalette)) }}>
+                <Customizer settings={{ theme: theme }}>
                     {customActionButtons}
                     <IconButton iconProps={{ iconName: "Edit" }} onClick={e => {
                         e.stopPropagation();
@@ -117,14 +152,29 @@ const AgendaItemView: React.FC<IProps> = ({
                         e.stopPropagation();
                         deleteItem();
                     }} />
+                    <IconButton iconProps={{ iconName:"CircleRing" }} onClick={e => {
+                        e.stopPropagation();
+                        handleSelectClick(e)
+                    }} />
                 </Customizer>
+            </Stack>
+        </div>
+        : null;
+
+    const checkIcon = selecting ?
+        <div className={!small ? styles.controls : null} >
+            <Stack tokens={{ childrenGap: 2 }} horizontal>
+                <Customizer settings={{ theme: selected ? themeSelected : theme }}><IconButton iconProps={{ iconName: selected ? "SkypeCircleCheck" : "CircleRing" }} onClick={e => {
+                    e.stopPropagation();
+                    handleSelectClick(e)
+                }} /></Customizer>
             </Stack>
         </div>
         : null;
 
 
 
-    const resizeDots = hovering || resizing ?
+    const resizeDots = (hovering || resizing) && !selecting ?
         <div onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
@@ -157,15 +207,16 @@ const AgendaItemView: React.FC<IProps> = ({
                 <div className={styles.shadow} />
             </div>
             :
-            <div className={styles.container} style={{ top: topPx, height: height }} >
+            <div className={classNames(styles.container)} style={{ top: topPx, height: height }} >
                 <div
                     ref={dragRef}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    onClick={editItem}
-                    style={hovering ? { backgroundColor: hoverColor } : {}}
+                    onClick={selecting ? handleSelectClick : editItem}
+                    style={{ backgroundColor: hovering ? hoverColor : normalColor }}
                     className={classNames(styles.main, {
                         [styles.mainHover]: hovering || resizing,
+                        [styles.mainSelected]: selected,
                     })} >
 
                     {!small ?
@@ -180,13 +231,15 @@ const AgendaItemView: React.FC<IProps> = ({
                                 {speaker}
                             </div>
                             {controls}
+                            {checkIcon}
                         </div>
                         :
-                        <div className={styles.content}>
+                        <div className={classNames(styles.contentSmall, styles.content)}>
                             <div className={styles.titleSmall}>
                                 {title ? title : "(No title)"}
                             </div>
                             {controls}
+                            {checkIcon}
                         </div>
                     }
                 </div>

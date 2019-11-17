@@ -3,28 +3,30 @@ import { IPalette, createTheme } from 'office-ui-fabric-react';
 
 export const invertTheme = (palette: Partial<IPalette>) => {
 
-  const whiteTmp = palette.white;
+  const newPalette = Object.assign({}, palette);
+
+  const whiteTmp = newPalette.white;
 
   //background color
-  palette.white = palette.themePrimary;
+  newPalette.white = newPalette.themePrimary;
 
   //icon color
-  palette.themePrimary = whiteTmp;
+  newPalette.themePrimary = whiteTmp;
 
   //hover background color
-  palette.neutralLighter = palette.themeDark;
+  newPalette.neutralLighter = newPalette.themeDark;
 
   // font color
-  palette.neutralPrimary = whiteTmp;
+  newPalette.neutralPrimary = whiteTmp;
 
   //hover icon color
-  palette.themeDarkAlt = whiteTmp;
+  newPalette.themeDarkAlt = whiteTmp;
 
   // hover font color
-  palette.neutralDark = whiteTmp;
+  newPalette.neutralDark = whiteTmp;
 
   const theme = createTheme({
-    palette: palette
+    palette: newPalette
   });
 
   return theme;

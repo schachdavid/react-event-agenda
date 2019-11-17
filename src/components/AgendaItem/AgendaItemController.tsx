@@ -2,16 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import AgendaItemView from './AgendaItemView';
 // import { useViewModelContext } from '../../ViewModelContext';
 import { observer } from "mobx-react";
-import { IItem, ItemUIState } from '../../../models/ItemModel';
-import { useViewModelContext } from '../../../hooks/ViewModelContext';
+import { IItem, ItemUIState } from '../../models/ItemModel';
+import { useViewModelContext } from '../../hooks/ViewModelContext';
 import moment, { Moment } from 'moment';
 import AgendaItemDragView from './AgendaItemDragView';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import { AgendaItemEdit } from './AgendaItemEdit/AgendaItemEditController';
 import { IconButton } from 'office-ui-fabric-react';
-import { ICustomItemAction } from '../../../interfaces/agendaProps';
-import { UIState } from '../../../models/UIStore';
+import { ICustomItemAction } from '../../interfaces/agendaProps';
+import { UIState } from '../../models/UIStore';
 
 
 
@@ -26,6 +26,7 @@ interface IProps {
 const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IProps) => {
     const viewModel = useViewModelContext();
     const [hovering, setHovering] = useState(false); // TODO: move into mobx state
+
     const [resizing, setResizing] = useState(false); // TODO: move into mobx state
 
 
@@ -54,11 +55,11 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
         }),
         begin: () => {
             setHovering(false);
-            viewModel.setUIState(UIState.Moving);
+            viewModel.updateUIState(UIState.Moving);
             viewModel.pushToHistory();
         },
         end: () => {
-            viewModel.setUIState(UIState.Normal);
+            viewModel.updateUIState(UIState.Normal);
         }
     })
 
@@ -77,7 +78,7 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
     let initialEndTime = moment(item.end);
     const initResizing = () => {
         setResizing(true);
-        viewModel.setUIState(UIState.Resizing);
+        viewModel.updateUIState(UIState.Resizing);
     }
 
 
@@ -91,7 +92,7 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
 
     const finishResizeEndTime = () => {
         setResizing(false);
-        viewModel.setUIState(UIState.Normal);
+        viewModel.updateUIState(UIState.Normal);
         if (!initialEndTime.isSame(item.end)) {
             initialEndTime = item.end;
             viewModel.pushToHistory();
@@ -113,6 +114,33 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
             viewModel.pushToHistory();
         }
     }
+
+    const handleSelectClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const selectedItems = viewModel.getSelectedItems();
+        if (item.uiState !== ItemUIState.Selected) {
+            if (selectedItems.length == 0) {
+                viewModel.updateUIState(UIState.Selecting);
+                viewModel.updateItemUIState(item.id, ItemUIState.Selected);
+                viewModel.pushToSelectHistory(item.id);
+            }
+            else if (event.shiftKey) {
+                viewModel.selectItemsWithShift(item.id);
+            } else {
+                viewModel.updateItemUIState(item.id, ItemUIState.Selected);
+                viewModel.pushToSelectHistory(item.id);
+            }
+        }
+        else {
+            if (selectedItems.length == 1) { 
+                viewModel.updateUIState(UIState.Normal) 
+                viewModel.clearSelectHistory();
+            };
+            viewModel.updateItemUIState(item.id, undefined);
+            viewModel.deleteFromSelectHistory(item.id);
+        }
+
+    }
+
 
 
     const intervalPxHeight = viewModel.getIntervalPxHeight();
@@ -189,7 +217,10 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
                 deleteItem={() => deleteItem()}
                 onMouseEnter={() => { if (!resizing) setHovering(true) }}
                 onMouseLeave={() => { if (!resizing) setHovering(false) }}
+                selected={item.uiState === ItemUIState.Selected}
+                handleSelectClick={handleSelectClick}
                 customActionButtons={customActionButtons}
+                selecting={viewModel.getUIState() === UIState.Selecting}
             />
         </div>
     </>

@@ -5,7 +5,8 @@ import { observable } from 'mobx';
 
 
 export enum ItemUIState {
-    Editing
+    Editing,
+    Selected
 }
 
 export interface IItem {

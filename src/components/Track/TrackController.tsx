@@ -1,14 +1,14 @@
 import React from 'react';
-import { useViewModelContext } from '../../../hooks/ViewModelContext';
+import { useViewModelContext } from '../../hooks/ViewModelContext';
 import { observer } from "mobx-react";
 import TrackView from './TrackView';
-import { ITrack as TrackData, IItem } from '../../../models/AgendaStore';
+import { ITrack as TrackData, IItem } from '../../models/AgendaStore';
 import moment, { Duration, Moment } from 'moment';
 import uuid from 'uuid';
-import { ICustomItemAction } from '../../../interfaces/agendaProps';
-import { DragItem } from '../../../interfaces/dndInterfaces';
-import { UIState } from '../../../models/UIStore';
-import { ItemUIState } from '../../../models/ItemModel';
+import { ICustomItemAction } from '../../interfaces/agendaProps';
+import { DragItem } from '../../interfaces/dndInterfaces';
+import { UIState } from '../../models/UIStore';
+import { ItemUIState } from '../../models/ItemModel';
 
 
 
@@ -47,7 +47,7 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
 
     const smallSegmentHeight = intervalPxHeight;
 
-    const enableHover = viewModel.getUIState() === UIState.Normal;
+    const enableHover = viewModel.getUIState() === UIState.Normal;    
 
     const handleDropHover = (hoverClientY: number, dragItem: DragItem) => {
         const minutesStart = Math.round(hoverClientY / intervalPxHeight) * intervalInMin;
@@ -62,7 +62,7 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
 
     let drawUpItemId: string;
     const handleInitializeDrawUp = (initialMousePosition: number) => {
-        viewModel.setUIState(UIState.Creating);
+        viewModel.updateUIState(UIState.Creating);
         drawUpItemId = uuid();
         const minutesStart = Math.floor(initialMousePosition / intervalPxHeight) * intervalInMin;
         const itemStart = moment(startTime).add(minutesStart, 'minutes');
@@ -95,7 +95,7 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
     }
 
     const finishDrawUp = () => {
-        viewModel.setUIState(UIState.Normal);
+        viewModel.updateUIState(UIState.Normal);
         viewModel.pushToHistory();
         viewModel.updateItemUIState(drawUpItemId, ItemUIState.Editing);
     }

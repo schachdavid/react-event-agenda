@@ -1,14 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { observer } from "mobx-react";
 import styles from './TrackView.module.scss';
 import { AgendaItem } from '../AgendaItem/AgendaItemController';
-import { IItem } from '../../../models/ItemModel';
+import { IItem } from '../../models/ItemModel';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
-import { DragItem } from '../../../interfaces/dndInterfaces'
+import { DragItem } from '../../interfaces/dndInterfaces'
 import uuid from 'uuid';
-import _ from 'lodash';
-import { ICustomItemAction } from '../../../interfaces/agendaProps';
+import throttle from 'lodash.throttle';
+import { ICustomItemAction } from '../../interfaces/agendaProps';
 import classNames from 'classnames'
 
 
@@ -43,7 +43,7 @@ const TrackView: React.FC<IProps> = ({
     const segmentsRef = useRef<HTMLDivElement>(null)
 
 
-    const throttledDropHover = _.throttle(handleDropHover, 20);
+    const throttledDropHover = throttle(handleDropHover, 20);
 
     const [, drop] = useDrop({
         accept: 'item',
@@ -57,17 +57,13 @@ const TrackView: React.FC<IProps> = ({
 
     drop(containerRef);
 
-    useEffect(() => {
-        if (segmentsRef.current) {
-            segmentsRef.current.addEventListener('mousedown', (evt) => initializeDrawUp(evt));
-        };
-    }, [])
-
     let initialMousePosition: number;
-    const initializeDrawUp = (evt?: undefined | MouseEvent) => {
-        if (evt && segmentsRef.current) {
-            evt.preventDefault();
-            initialMousePosition = evt.clientY - segmentsRef.current.getBoundingClientRect().top;
+    const initializeDrawUp = (event: any) => {
+        if(!enableHover) return;
+        if (event && segmentsRef.current) {
+            if (event.buttons !== 1) return;
+            event.preventDefault();
+            initialMousePosition = event.clientY - segmentsRef.current.getBoundingClientRect().top;
         }
         handleInitializeDrawUp(initialMousePosition);
         window.addEventListener('mousemove', drawUp); //TODO: throttle here
@@ -107,7 +103,7 @@ const TrackView: React.FC<IProps> = ({
 
     return (
         <div className={styles.container} ref={containerRef}>
-            <div className={styles.segmentsContainer} ref={segmentsRef}>
+            <div className={styles.segmentsContainer} onMouseDown={initializeDrawUp} ref={segmentsRef}>
                 {segments}
             </div>
             {agendaItems}

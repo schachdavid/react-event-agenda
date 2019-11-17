@@ -1,6 +1,5 @@
 {
   "name": "react-event-agenda-example",
-  "homepage": "https://.github.io/react-event-agenda",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -16,7 +15,7 @@
   "browserslist": {
     "production": [
       ">0.2%",
-      "not dead"
+      "not op_mini all"
     ],
     "development": [
       "ie 11",

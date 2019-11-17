@@ -20,7 +20,7 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         return this.uiStore.getUiState();
     }
 
-    setUIState(newState: UIState) {
+    updateUIState(newState: UIState) {
         this.uiStore.setUiState(newState);
     }
 
@@ -52,11 +52,13 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         return this.agendaStore.getDayForItem(id);
     }
 
-    getItem(id: string) {
-        return  this.agendaStore.getItem(id);
+    getItem(id: string): IItem | undefined {
+        return this.agendaStore.getItem(id);
     }
 
-
+    getSelectedItems(): Array<IItem> {
+        return this.agendaStore.getSelectedItems();
+    }
 
     getTimeLineStartTime(dateToSet?: Moment) {
         const days = this.getDays();
@@ -93,6 +95,41 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         }
         return;
     }
+
+    pushToSelectHistory(itemId: string) {
+        this.uiStore.getSelectHistory().push(itemId);
+    }
+
+    deleteFromSelectHistory(itemId: string) {
+        this.uiStore.setSelectHistory(this.uiStore.getSelectHistory().filter(
+            id => id !== itemId
+        ));
+    }
+
+    clearSelectHistory() {
+        this.uiStore.setSelectHistory([]);
+    }
+
+
+    selectItemsWithShift(itemId: string) {
+        const selectHistory = this.uiStore.getSelectHistory();
+        const lastSelectedId = selectHistory[selectHistory.length - 1];
+
+        let shouldSelect = false;
+
+        this.agendaStore.getAllItems().forEach(item => {
+            if (shouldSelect) {
+                item.uiState = ItemUIState.Selected;
+            };
+            if (item.id === itemId || item.id === lastSelectedId) {
+                shouldSelect = !shouldSelect;
+                item.uiState = ItemUIState.Selected;
+            }
+        })
+    }
+
+
+
 
 
 
@@ -147,10 +184,6 @@ export class AgendaViewModel implements AgendaViewModelInterface {
     moveItemForced(item: Item, milSecToMove: number) {
         this.moveItemsForced([item], milSecToMove);
     }
-
-
-
-
 
 
     moveItem(trackId: string, id: string, newStart: Moment) {
@@ -271,6 +304,14 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         }
     }
 
+    unselectAll() {
+        this.agendaStore.getSelectedItems().forEach(item => {
+            item.uiState = undefined;
+        })
+        this.updateUIState(UIState.Normal);
+        this.clearSelectHistory();
+    }
+
 
 
 
@@ -289,11 +330,11 @@ export class AgendaViewModel implements AgendaViewModelInterface {
     adjustItemStartTime(itemId: string, newStartTime: Moment) {
         const track = this.agendaStore.getTrackForItem(itemId);
         const items = track && track.items ? track.items : undefined;
-        
+
         if (items) {
             const index = items.findIndex(curItem => curItem.id === itemId);
             const item = items[index];
-            if(index - 1 >= 0 && items[index - 1].end.isAfter(newStartTime)) return;
+            if (index - 1 >= 0 && items[index - 1].end.isAfter(newStartTime)) return;
             if (item && !item.start.isSame(newStartTime)) {
                 item.start = newStartTime;
             }

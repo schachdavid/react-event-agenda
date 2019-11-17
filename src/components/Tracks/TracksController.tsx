@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import TracksView from './TracksView';
-import { useViewModelContext } from '../../../hooks/ViewModelContext';
+import { useViewModelContext } from '../../hooks/ViewModelContext';
 import { observer } from "mobx-react";
-import {AgendaViewModel} from '../../../AgendaViewModel';
-import { IDay } from '../../../models/AgendaStore';
-import { ICustomItemAction } from '../../../interfaces/agendaProps';
-import { DragItem } from '../../../interfaces/dndInterfaces';
+import {AgendaViewModel} from '../../AgendaViewModel';
+import { IDay } from '../../models/AgendaStore';
+import { ICustomItemAction } from '../../interfaces/agendaProps';
+import { DragItem } from '../../interfaces/dndInterfaces';
 import moment, { Moment } from 'moment';
 
 

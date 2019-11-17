@@ -1,6 +1,6 @@
 import { observable, action, toJS } from 'mobx';
 import moment from 'moment';
-import { Item } from './ItemModel';
+import { Item, ItemUIState } from './ItemModel';
 import { Track } from './TrackModel';
 import { Day } from './DayModel';
 import { Agenda, IAgenda } from './AgendaModel';
@@ -101,8 +101,8 @@ class AgendaStore {
 
         if (day && track) {
             const dayStartTime = day.startTime;
-            item.start.set({'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year')})
-            item.end.set({'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year')})
+            item.start.set({ 'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year') })
+            item.end.set({ 'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year') })
             const items = track.items;
             items.push(item);
         }
@@ -181,7 +181,6 @@ class AgendaStore {
         return;
     }
 
-
     getItem(id: string) {
         for (const day of this.agenda.days) {
             for (const track of day.tracks) {
@@ -192,6 +191,29 @@ class AgendaStore {
             }
         }
         return undefined;
+    }
+
+    getAllItems() {
+        let items: Array<Item> = [];
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+
+                items = items.concat(track.items.slice());
+            }
+        }
+        return items;
+    }
+
+
+    getSelectedItems() {
+        let items: Array<Item> = [];
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const selectedOnTrack = track.items.filter((item) => item.uiState === ItemUIState.Selected);
+                items = items.concat(selectedOnTrack);
+            }
+        }
+        return items;
     }
 
 

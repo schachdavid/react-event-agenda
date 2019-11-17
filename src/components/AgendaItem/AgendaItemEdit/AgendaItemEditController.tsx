@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { observer } from "mobx-react";
 import AgendaItemEditView from './AgendaItemEditView';
-import { IItem } from '../../../../models/ItemModel';
-import { useViewModelContext } from '../../../../hooks/ViewModelContext';
+import { IItem } from '../../../models/ItemModel';
+import { useViewModelContext } from '../../../hooks/ViewModelContext';
 
 
 

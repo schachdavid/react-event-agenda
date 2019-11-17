@@ -1,6 +1,6 @@
 import React from 'react';
-import { AgendaViewModel } from '../../../AgendaViewModel';
-import ViewModelContext from '../../../hooks/ViewModelContext';
+import { AgendaViewModel } from '../../AgendaViewModel';
+import ViewModelContext from '../../hooks/ViewModelContext';
 import { MainCommandBar } from '../MainCommandBar/MainCommandBarController';
 import { Tracks } from '../Tracks/TracksController';
 import styles from './Agenda.scss';
@@ -11,15 +11,15 @@ import cssVars from 'css-vars-ponyfill';
 // TODO: to be replaced, icons should be passed via props
 // import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IPalette, createTheme, IIconSubset } from 'office-ui-fabric-react';
-import { ICustomItemAction } from '../../../interfaces/agendaProps';
-import { ColorPaletteContext, defaultPalette } from '../../../hooks/ColorPaletteContext';
+import { ICustomItemAction } from '../../interfaces/agendaProps';
+import { ColorPaletteContext, defaultPalette } from '../../hooks/ColorPaletteContext';
 import classNames from 'classnames';
 
 import { Customizer } from 'office-ui-fabric-react';
 
 import { registerIcons } from '@uifabric/styling';
 
-import {  FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX } from 'react-icons/fi';
+import {  FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiXCircle, FiCheckCircle, FiCircle } from 'react-icons/fi';
 
 
 
@@ -53,7 +53,12 @@ const Agenda: React.FC<IProps> = ({
             'undo': <span className={styles.iconStrokeWidthContainer}><FiCornerUpLeft size={'1.2em'} /></span>,
             'redo': <span className={styles.iconStrokeWidthContainer}><FiCornerUpRight size={'1.2em'} /></span>,
             'edit': <span className={styles.iconStrokeWidthContainer}><FiEdit2 size={'1.2em'}/></span>,
-            'cancel': <span className={styles.iconStrokeWidthContainer}><FiX size={'1.2em'}/></span>
+            'cancel': <span className={styles.iconStrokeWidthContainer}><FiX size={'1.2em'}/></span>,
+            'circleRing': <span className={styles.iconStrokeWidthContainer}><FiCircle size={'1.2em'}/></span>,
+            'SkypeCircleCheck': <span className={styles.iconStrokeWidthContainer}><FiCheckCircle size={'1.2em'}/></span>,
+            'ErrorBadge': <span className={styles.iconStrokeWidthContainer}><FiXCircle size={'1.2em'}/></span>
+
+            
         }
     });
 

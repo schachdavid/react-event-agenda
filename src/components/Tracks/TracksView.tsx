@@ -5,11 +5,11 @@ import { Track } from '../Track/TrackController';
 import classNames from 'classnames';
 import { DayBar } from '../DayBar/DayBarController';
 import { TrackBar } from '../TrackBar/TrackBarController';
-import { ITrack as TrackData, IDay } from '../../../models/AgendaStore';
+import { ITrack as TrackData, IDay } from '../../models/AgendaStore';
 import { TimeLine } from '../TimeLine/TimeLineController';
-import { ICustomItemAction } from '../../../interfaces/agendaProps';
+import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { Moment } from 'moment';
-import { DragItem } from '../../../interfaces/dndInterfaces';
+import { DragItem } from '../../interfaces/dndInterfaces';
 
 
 

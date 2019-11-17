@@ -1,4 +1,4 @@
-import Agenda from './components/main/Agenda/Agenda';
+import Agenda from './components/Agenda/Agenda';
 
 
 export default Agenda;

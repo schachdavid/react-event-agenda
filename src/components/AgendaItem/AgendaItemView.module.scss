@@ -5,6 +5,7 @@
   position: absolute;
 }
 
+
 .shadow {
   width: 100%;
   height: 100%;
@@ -14,24 +15,28 @@
 .main {
   width: 100%;
   height: 100%;
-  background-color: var(--themePrimary);
+  color: var(--themeDarker);
+  box-sizing: border-box;
+}
+
+.mainSelected {
   color: var(--white);
+  // outline: 2px solid var(--themePrimary);
 }
 
 .mainDrag {
   width: 100%;
   height: 100%;
-  color: var(--white);
+  color: var(--themeDarker);
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 .mainHover {
-  color: var(--white);
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 .content {
-  overflow: hidden; 
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   padding: 12px 16px;
@@ -39,15 +44,27 @@
   position: relative;
 }
 
-.textWrap {
-  overflow: hidden; 
+.contentSmall {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  padding: 0 0;
+  padding-left: 16px;
+  padding-right: 5px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.contentSmall {
-
-  font-size: 12px;
+.textWrap {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .title {
@@ -58,7 +75,12 @@
 
 .titleSmall {
   font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 4px;
 }
+
 
 .resizeDot {
   height: 8px;
@@ -76,7 +98,7 @@
 .resizeHandleBarLine {
   height: 1px;
   width: 30px;
-  background-color: var(--white);
+  background-color: var(--themeDarker);
   margin-bottom: 2px;
 }
 
@@ -88,7 +110,6 @@
   display: flex;
   justify-content: center;
 }
-
 
 .resizeHandleBarContainer:hover {
   cursor: ns-resize;
@@ -115,12 +136,8 @@
 .controls {
   position: absolute;
   height: 36px;
-  top:0;
+  top: 0;
   right: 0;
   padding-top: 4px;
   padding-right: 5px;
 }
-
-
-
-

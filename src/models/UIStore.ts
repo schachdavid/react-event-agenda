@@ -3,6 +3,7 @@ import { observable, action } from 'mobx';
 
 export enum UIState {
     Moving,
+    Selecting,
     Resizing,
     Creating,
     Editing,
@@ -11,6 +12,8 @@ export enum UIState {
 
 class UIStore {
     @observable uiState: UIState = UIState.Normal;
+    @observable selectHistory: Array<string> = []; //needed for badge selecting using shift key
+
 
     @action setUiState(newState: UIState) {
         this.uiState = newState;
@@ -19,6 +22,15 @@ class UIStore {
     getUiState() {
         return this.uiState;
     }
+
+    getSelectHistory() {
+        return this.selectHistory;
+    }
+
+    @action setSelectHistory(newSelectHistory: Array<string>) {
+        this.selectHistory = newSelectHistory;
+    }
+
   
 }
 

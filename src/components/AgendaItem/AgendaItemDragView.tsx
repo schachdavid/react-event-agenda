@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDragLayer } from "react-dnd";
 import styles from './AgendaItemView.module.scss';
-import { useColorPaletteContext } from '../../../hooks/ColorPaletteContext';
+import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
 import color from 'color';
 
 
@@ -56,7 +56,7 @@ const AgendaItemDragView: React.FC<IProps> = ({
             zIndex: 200,
             transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`
         }} >
-            <div className={styles.mainDrag} style={{backgroundColor: color(colorPalette.themePrimary).alpha(0.9).toString()}} >
+            <div className={styles.mainDrag} style={{backgroundColor: color(colorPalette.themePrimary).alpha(0.7).toString()}} >
                 {!small ?
                     <div className={styles.content}>
                         <div>
