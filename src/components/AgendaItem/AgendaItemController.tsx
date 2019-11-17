@@ -25,11 +25,6 @@ interface IProps {
 
 const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IProps) => {
     const viewModel = useViewModelContext();
-    const [hovering, setHovering] = useState(false); // TODO: move into mobx state
-
-    const [resizing, setResizing] = useState(false); // TODO: move into mobx state
-
-
 
     const [width, setWidth] = useState(0);
 
@@ -54,7 +49,6 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
             isDragging: monitor.isDragging(),
         }),
         begin: () => {
-            setHovering(false);
             viewModel.updateUIState(UIState.Moving);
             viewModel.pushToHistory();
         },
@@ -77,7 +71,6 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
 
     let initialEndTime = moment(item.end);
     const initResizing = () => {
-        setResizing(true);
         viewModel.updateUIState(UIState.Resizing);
     }
 
@@ -91,7 +84,6 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
     }
 
     const finishResizeEndTime = () => {
-        setResizing(false);
         viewModel.updateUIState(UIState.Normal);
         if (!initialEndTime.isSame(item.end)) {
             initialEndTime = item.end;
@@ -99,21 +91,6 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
         }
     }
 
-    let initialStartTime = moment(item.start);
-    const handleResizeStartTime = (diff: number) => {
-        const minutes = Math.round(diff / intervalPxHeight) * intervalInMin;
-        const newStart: Moment = moment(initialStartTime).add(minutes, 'minutes');
-        if (!newStart.isSame(item.start)) viewModel.adjustItemStartTime(item.id, newStart);
-        setResizing(true);
-    }
-
-    const finishResizeStartTime = () => {
-        setResizing(false);
-        if (!initialStartTime.isSame(item.start)) {
-            initialStartTime = item.start;
-            viewModel.pushToHistory();
-        }
-    }
 
     const handleSelectClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const selectedItems = viewModel.getSelectedItems();
@@ -204,19 +181,14 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
                 topPx={topPx}
                 height={height}
                 small={small}
-                hovering={hovering}
+                enableHover={viewModel.getUIState() === UIState.Normal}
                 dragging={isDragging}
-                resizing={resizing}
                 dragRef={dragMoveRef}
                 initResizing={initResizing}
                 handleResizeEndTime={handleResizeEndTime}
                 finishResizeEndTime={finishResizeEndTime}
-                handleResizeStartTime={handleResizeStartTime}
-                finishResizeStartTime={finishResizeStartTime}
                 editItem={() => editItem()}
                 deleteItem={() => deleteItem()}
-                onMouseEnter={() => { if (!resizing) setHovering(true) }}
-                onMouseLeave={() => { if (!resizing) setHovering(false) }}
                 selected={item.uiState === ItemUIState.Selected}
                 handleSelectClick={handleSelectClick}
                 customActionButtons={customActionButtons}

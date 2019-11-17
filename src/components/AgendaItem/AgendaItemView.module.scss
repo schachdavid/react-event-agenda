@@ -19,6 +19,14 @@
   box-sizing: border-box;
 }
 
+.container:hover .controls, .container:hover .controlsSmall {
+  display: block;
+}
+
+.container:hover .resizeHandleBarContainer {
+  display: flex;
+}
+
 .mainSelected {
   color: var(--white);
   // outline: 2px solid var(--themePrimary);
@@ -82,13 +90,6 @@
 }
 
 
-.resizeDot {
-  height: 8px;
-  width: 8px;
-  background-color: var(--white);
-  border-radius: 50%;
-  border: 2px solid;
-}
 
 .resizeHandleBar {
   margin-bottom: 6px;
@@ -107,8 +108,9 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  display: flex;
   justify-content: center;
+  display: none;
+
 }
 
 .resizeHandleBarContainer:hover {
@@ -140,4 +142,20 @@
   right: 0;
   padding-top: 4px;
   padding-right: 5px;
+  display: none;
 }
+
+.selectIcon {
+  position: absolute;
+  height: 36px;
+  top: 0;
+  right: 0;
+  padding-top: 4px;
+  padding-right: 5px;
+}
+
+.controlsSmall {
+  display: none;
+}
+
+

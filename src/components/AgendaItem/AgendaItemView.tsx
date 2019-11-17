@@ -20,7 +20,7 @@ export interface IProps {
     topPx: number,
     height: number,
     small: boolean,
-    hovering?: boolean,
+    enableHover: boolean,
     selecting: boolean,
     selected: boolean,
     handleSelectClick: (event: any) => void,
@@ -34,8 +34,6 @@ export interface IProps {
     initResizing: () => void,
     handleResizeEndTime: (diff: number) => void,
     finishResizeEndTime: () => void,
-    handleResizeStartTime: (diff: number) => void,
-    finishResizeStartTime: () => void,
     editItem: () => void,
     deleteItem: () => void,
     onMouseEnter?: (e: any) => any,
@@ -51,19 +49,14 @@ const AgendaItemView: React.FC<IProps> = ({
     topPx,
     height,
     small,
-    hovering,
-    onMouseEnter,
-    onMouseLeave,
+    enableHover,
     initResizing,
     handleResizeEndTime,
     finishResizeEndTime,
-    handleResizeStartTime,
-    finishResizeStartTime,
     editItem,
     deleteItem,
     dragging,
     dragRef,
-    resizing,
     selected,
     handleSelectClick,
     selecting,
@@ -73,16 +66,8 @@ const AgendaItemView: React.FC<IProps> = ({
     const colorPalette = useColorPaletteContext();
 
 
-
-    enum Direction {
-        Start,
-        End
-    }
-
     let initialMousePosition: number;
-    let currentDirection: Direction;
-    const initializeResizing = (direction: Direction, e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        currentDirection = direction;
+    const initializeResizing = (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         initResizing();
         document.body.style.cursor = "ns-resize";
         if (e) {
@@ -95,17 +80,15 @@ const AgendaItemView: React.FC<IProps> = ({
 
     const resize = (e: any) => {
         let diff: number = e.clientY - initialMousePosition;
-        if (Direction.End === currentDirection) handleResizeEndTime(diff);
-        else if (Direction.Start === currentDirection) handleResizeStartTime(diff);
+        handleResizeEndTime(diff);
+
     }
 
     const stopResize = () => {
         window.removeEventListener('mousemove', resize); //TODO: throttle here
         window.removeEventListener('mouseup', stopResize);
         document.body.style.cursor = "auto";
-
-        if (Direction.End === currentDirection) finishResizeEndTime();
-        else if (Direction.Start === currentDirection) finishResizeStartTime();
+        finishResizeEndTime();
     }
 
     const hoverColor = selected ? color(colorPalette.themePrimary).darken(0.1).toString() : color(colorPalette.themePrimary).alpha(0.6).toString();
@@ -139,8 +122,8 @@ const AgendaItemView: React.FC<IProps> = ({
 
     const themeSelected = invertTheme(colorPalette);
 
-    const controls = hovering && !resizing && !selecting ?
-        <div className={!small ? styles.controls : null} >
+    const controls = enableHover ?
+        <div className={!small ? styles.controls : styles.controlsSmall} >
             <Stack tokens={{ childrenGap: 2 }} horizontal>
                 <Customizer settings={{ theme: theme }}>
                     {customActionButtons}
@@ -152,7 +135,7 @@ const AgendaItemView: React.FC<IProps> = ({
                         e.stopPropagation();
                         deleteItem();
                     }} />
-                    <IconButton iconProps={{ iconName:"CircleRing" }} onClick={e => {
+                    <IconButton iconProps={{ iconName: "CircleRing" }} onClick={e => {
                         e.stopPropagation();
                         handleSelectClick(e)
                     }} />
@@ -162,7 +145,7 @@ const AgendaItemView: React.FC<IProps> = ({
         : null;
 
     const checkIcon = selecting ?
-        <div className={!small ? styles.controls : null} >
+        <div className={!small ? styles.selectIcon : null} >
             <Stack tokens={{ childrenGap: 2 }} horizontal>
                 <Customizer settings={{ theme: selected ? themeSelected : theme }}><IconButton iconProps={{ iconName: selected ? "SkypeCircleCheck" : "CircleRing" }} onClick={e => {
                     e.stopPropagation();
@@ -174,31 +157,14 @@ const AgendaItemView: React.FC<IProps> = ({
 
 
 
-    const resizeDots = (hovering || resizing) && !selecting ?
-        <div onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-        >
-            {/* <div className={styles.resizeDotTopContainer} onMouseDown={
-                (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.Start, e)}>
-                <div className={styles.resizeDot}  style={{borderColor: hoverColor}}/>
-            </div> */}
-            {/* <div className={styles.resizeDotBottomContainer} onMouseDown={
-                (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.End, e)}>
-                <div className={styles.resizeDot} style={{borderColor: hoverColor}}/>
-            </div> */}
-
-            <div className={styles.resizeHandleBarContainer} onMouseDown={
-                (e?: undefined | React.MouseEvent<HTMLDivElement, MouseEvent>) => initializeResizing(Direction.End, e)}>
-                <div className={styles.resizeHandleBar} >
-                    <div className={styles.resizeHandleBarLine} />
-                    <div className={styles.resizeHandleBarLine} />
-                </div>
+    const resizeHandleBar = enableHover ?
+        <div className={styles.resizeHandleBarContainer} onMouseDown={initializeResizing}>
+            <div className={styles.resizeHandleBar} >
+                <div className={styles.resizeHandleBarLine} />
+                <div className={styles.resizeHandleBarLine} />
             </div>
         </div>
         : null;
-
-
-
 
 
     return (
@@ -210,12 +176,10 @@ const AgendaItemView: React.FC<IProps> = ({
             <div className={classNames(styles.container)} style={{ top: topPx, height: height }} >
                 <div
                     ref={dragRef}
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
                     onClick={selecting ? handleSelectClick : editItem}
-                    style={{ backgroundColor: hovering ? hoverColor : normalColor }}
+                    style={{ backgroundColor: enableHover ? hoverColor : normalColor }}
                     className={classNames(styles.main, {
-                        [styles.mainHover]: hovering || resizing,
+                        [styles.mainHover]: enableHover,
                         [styles.mainSelected]: selected,
                     })} >
 
@@ -243,7 +207,7 @@ const AgendaItemView: React.FC<IProps> = ({
                         </div>
                     }
                 </div>
-                {resizeDots}
+                {resizeHandleBar}
             </div>
 
 
