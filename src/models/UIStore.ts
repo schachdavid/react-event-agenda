@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { Store } from 'mmlpx';
 
 
 export enum UIState {
@@ -10,6 +11,8 @@ export enum UIState {
     Normal
 }
 
+
+@Store
 class UIStore {
     @observable uiState: UIState = UIState.Normal;
     @observable selectHistory: Array<string> = []; //needed for badge selecting using shift key

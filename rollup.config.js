@@ -39,7 +39,11 @@ export default {
       rollupCommonJSResolveHack: true,
       clean: true
     }),
-    commonjs(),
+    commonjs({
+      namedExports: {
+        'uuid': [ 'v4' ]
+      }
+    }),
     sourcemaps()
   ]
 }

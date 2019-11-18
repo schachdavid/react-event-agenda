@@ -4,7 +4,9 @@ import { Item, ItemUIState } from './ItemModel';
 import { Track } from './TrackModel';
 import { Day } from './DayModel';
 import { Agenda, IAgenda } from './AgendaModel';
+import { Store } from 'mmlpx';
 
+@Store
 class AgendaStore {
     @observable agenda: Agenda = new Agenda({
         id: "1",

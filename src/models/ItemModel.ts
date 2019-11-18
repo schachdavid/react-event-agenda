@@ -51,6 +51,7 @@ export class Item {
         this._speaker = obj.speaker!;
         this._start = moment(obj.start);
         this._end = moment(obj.end);
+        this.uiState = obj.uiState;
     }
 
     /**
@@ -140,6 +141,7 @@ export class Item {
             speaker: this._speaker,
             start: this._start,
             end: this._end,
+            uiState: this._uiState
         }
     }
 

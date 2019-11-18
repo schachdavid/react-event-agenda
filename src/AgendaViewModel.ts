@@ -3,17 +3,25 @@ import AgendaViewModelInterface from './interfaces/AgendaViewModelInterface';
 import moment, { Moment, Duration } from 'moment';
 import UIStore, { UIState } from './models/UIStore';
 import { ItemUIState } from './models/ItemModel';
+import { inject, getSnapshot, applySnapshot, ViewModel } from 'mmlpx'
+import { action } from 'mobx';
 
 
 
 
+@ViewModel
 export class AgendaViewModel implements AgendaViewModelInterface {
-    agendaStore: AgendaStore;
+    @inject(AgendaStore) agendaStore: AgendaStore;
     uiStore: UIStore;
+
+    pointer: number = -1;
+    stack: any[] = [];
+
 
     constructor() {
         this.agendaStore = new AgendaStore();
         this.uiStore = new UIStore();
+        this.pushToHistory();
     }
 
     getUIState() {
@@ -312,19 +320,45 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         this.clearSelectHistory();
     }
 
+    // @action undo() {
+    //     if (this.pointer > 0) {
+    //         this.pointer--;
+    //         this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
+    //     }
+    // }
+
+    // @action redo() {
+    //     if (this.pointer < this.agendaHistory.length - 1) {
+    //         this.pointer++;
+    //         this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
+    //     }
+    // }
 
 
 
+    @action
     undo() {
-        this.agendaStore.undo();
+        // this.agendaStore.undo();
+        if (this.pointer > 0) {
+            this.pointer--;
+            applySnapshot(this.stack[this.pointer])
+        }
     }
 
+    @action
     redo() {
-        this.agendaStore.redo();
+        // this.agendaStore.redo();
+        if (this.pointer < this.stack.length - 1) {
+            this.pointer++;
+            applySnapshot((this.stack[this.pointer]));
+        }
     }
 
     pushToHistory() {
-        this.agendaStore.pushToHistory()
+        // this.agendaStore.pushToHistory()
+        this.pointer++;
+        this.stack.splice(this.pointer, this.stack.length);
+        this.stack.push(getSnapshot());
     }
 
     adjustItemStartTime(itemId: string, newStartTime: Moment) {
