@@ -39,7 +39,11 @@ export default {
       rollupCommonJSResolveHack: true,
       clean: true
     }),
-    commonjs(),
+    commonjs({
+      namedExports: {
+        'json-mobx': [ 'json' ]
+      }
+    }),
     sourcemaps()
   ]
 }

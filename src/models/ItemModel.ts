@@ -1,5 +1,6 @@
 import moment, { Moment } from 'moment';
 import { observable } from 'mobx';
+import { json } from 'json-mobx';
 
 
 
@@ -21,12 +22,12 @@ export interface IItem {
 
 
 export class Item {
-    @observable private _id: string;
-    @observable private _title: string;
-    @observable private _speaker: string;
-    @observable private _start: Moment;
-    @observable private _end: Moment;
-    @observable private _uiState?: ItemUIState = undefined;
+    @json @observable private _id: string;
+    @json @observable private _title: string;
+    @json @observable private _speaker: string;
+    @json @observable private _start: Moment;
+    @json @observable private _end: Moment;
+    @json @observable private _uiState?: ItemUIState = undefined;
 
     /**
      * Getter uiState
@@ -42,9 +43,8 @@ export class Item {
      */
 	public set uiState(value: ItemUIState | undefined) {
 		this._uiState = value;
-	}
-
-
+    }
+    
     constructor(obj: IItem) {
         this._id = obj.id!;
         this._title = obj.title!;
@@ -52,6 +52,9 @@ export class Item {
         this._start = moment(obj.start);
         this._end = moment(obj.end);
     }
+
+
+
 
     /**
      * Getter id

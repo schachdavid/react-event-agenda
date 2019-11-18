@@ -1,5 +1,6 @@
 import { observable, IObservableArray } from 'mobx';
 import { Item, IItem } from './ItemModel';
+import { json } from 'json-mobx';
 
 
 export interface ITrack {
@@ -9,14 +10,14 @@ export interface ITrack {
 }
 
 export class Track {
-    @observable private _name: string;
-    @observable private _items: IObservableArray<Item>;
-    @observable private _id: string;
+    @json @observable private _name: string;
+    @json private _items = json.arrayOf(Item);
+    @json @observable private _id: string;
 
 
     constructor(obj: ITrack) {
         this._name = obj.name;
-        this._items = observable(obj.items.map((item) => Item.fromJSON(item)));
+        this._items = json.arrayOf(obj.items.map((item) => Item.fromJSON(item)));
         this._id = obj.id;
     }
 

@@ -29,6 +29,7 @@
     "classnames": "^2.2.6",
     "color": "^3.1.2",
     "css-vars-ponyfill": "^2.1.2",
+    "json-mobx": "^0.7.0",
     "lodash.throttle": "^4.1.1",
     "mobx": "^4.3.1",
     "mobx-react": "^6.1.3",
