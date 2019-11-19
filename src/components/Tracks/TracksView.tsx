@@ -9,7 +9,7 @@ import { ITrack as TrackData, IDay } from '../../models/AgendaStore';
 import { TimeLine } from '../TimeLine/TimeLineController';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { Moment } from 'moment';
-import { DragItem } from '../../interfaces/dndInterfaces';
+import { DragObject } from '../../interfaces/dndInterfaces';
 
 
 
@@ -18,12 +18,12 @@ export interface IProps {
     days: Array<IDay>;
     singleTracks: boolean;
     customItemActions?: Array<ICustomItemAction>,
-    moveDragItem: (trackId: string, newStart: Moment, dragItem: DragItem) => void
+    moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void
 
 
 }
 
-const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragItem, singleTracks, customItemActions }: IProps) => {
+const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragObject, singleTracks, customItemActions }: IProps) => {
 
     const [width, setWidth] = useState(0);
 
@@ -57,7 +57,7 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragItem, s
         });
 
         trackViews = tracks.map((track: TrackData) => {
-            return <Track key={track.id} track={track} customItemActions={customItemActions} moveDragItem={moveDragItem}></Track>
+            return <Track key={track.id} track={track} customItemActions={customItemActions} moveDragObject={moveDragObject}></Track>
         });
     } else {
         const tracks: Array<TrackData> = days[0].tracks;

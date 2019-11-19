@@ -1,52 +1,40 @@
 import React from 'react';
-import { useDragLayer } from "react-dnd";
-import styles from './AgendaItemView.module.scss';
+import styles from '../AgendaItem/AgendaItemView.module.scss';
 import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
 import color from 'color';
+import { observer } from 'mobx-react';
+import classNames from 'classnames';
 
 
 
 export interface IProps {
     height: number,
-    id: string,
     width: number,
     start: string,
     end: string,
     title?: string,
     speaker?: string,
     small?: boolean,
+    offsetX: number,
+    offsetY: number
 
 }
 
-const AgendaItemDragView: React.FC<IProps> = ({
+const DraggedAgendaItemView: React.FC<IProps> = ({
     height,
-    id,
     width,
     start,
     end,
     title,
     speaker,
-    small }) => {
+    small,
+    offsetX,
+    offsetY }) => {
 
-    const {
-        isDragging,
-        dragObject,
-        currentOffset,
-    } = useDragLayer(monitor => ({
-        isDragging: monitor.isDragging(),
-        dragObject: monitor.getItem(),
-        currentOffset: monitor.getSourceClientOffset()
-    }))
+
 
     const colorPalette = useColorPaletteContext();
 
-    if (!isDragging || !currentOffset || !dragObject) {
-        return null;
-    }
-
-    const currentDraggedItemIds: Array<string> = dragObject.itemIds;
-    
-    if (currentDraggedItemIds  && !currentDraggedItemIds.includes(id)) return null;
 
 
     return (
@@ -59,7 +47,7 @@ const AgendaItemDragView: React.FC<IProps> = ({
             top: 0,
             left: 0,
             zIndex: 200,
-            transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`
+            transform: `translate(${offsetX}px, ${offsetY}px)`
         }} >
             <div className={styles.mainDrag} style={{ backgroundColor: color(colorPalette.themePrimary).alpha(0.7).toString() }} >
                 {!small ?
@@ -67,17 +55,17 @@ const AgendaItemDragView: React.FC<IProps> = ({
                         <div>
                             {start} - {end}
                         </div>
-                        <div className={styles.title}>
-                            {title}
+                        <div className={classNames(styles.title, styles.textWrap)}>
+                            {title ? title : "(No title)"}
                         </div>
-                        <div>
+                        <div className={styles.textWrap}>
                             {speaker}
                         </div>
                     </div>
                     :
-                    <div className={styles.content}>
+                    <div className={classNames(styles.contentSmall, styles.content)}>
                         <div className={styles.titleSmall}>
-                            {title}
+                            {title ? title : "(No title)"}
                         </div>
                     </div>
                 }
@@ -87,5 +75,4 @@ const AgendaItemDragView: React.FC<IProps> = ({
 }
 
 
-export default AgendaItemDragView;
-
+export default observer(DraggedAgendaItemView);

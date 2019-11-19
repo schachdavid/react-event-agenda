@@ -5,7 +5,7 @@ import { AgendaItem } from '../AgendaItem/AgendaItemController';
 import { IItem } from '../../models/ItemModel';
 import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
-import { DragItem } from '../../interfaces/dndInterfaces'
+import { DragObject } from '../../interfaces/dndInterfaces'
 import uuid from 'uuid';
 import throttle from 'lodash.throttle';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
@@ -18,7 +18,7 @@ export interface IProps {
     numberOfSegments: number,
     numberOfSmallSegments: number,
     smallSegmentHeight: number,
-    handleDropHover: (hoverClientY: number, dragItem: DragItem) => void,
+    handleDropHover: (hoverClientY: number, dragObject: DragObject) => void,
     handleInitializeDrawUp: (initialMousePosition: number) => void,
     handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void,
     customItemActions?: Array<ICustomItemAction>,
@@ -47,11 +47,11 @@ const TrackView: React.FC<IProps> = ({
 
     const [, drop] = useDrop({
         accept: 'item',
-        hover(item: DragItem, monitor: DropTargetMonitor) {
+        hover(dragObject: DragObject, monitor: DropTargetMonitor) {
             const hoverBoundingRect = containerRef.current!.getBoundingClientRect();
             const clientOffset = monitor.getSourceClientOffset();
             const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-            throttledDropHover(hoverClientY, item);
+            throttledDropHover(hoverClientY, dragObject);
         },
     })
 
@@ -85,7 +85,7 @@ const TrackView: React.FC<IProps> = ({
     }
 
 
-    let smallSegments: Array<any> = [];
+    let smallSegments: Array<JSX.Element> = [];
 
     for (let i: number = 0; i < numberOfSmallSegments; i++) {
         smallSegments.push(<div key={uuid()} className={classNames(enableHover ? styles.smallSegmentHover : '', styles.smallSegment)} style={{ height: smallSegmentHeight + 'px', borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : '' }}>
@@ -93,7 +93,7 @@ const TrackView: React.FC<IProps> = ({
         </div>)
     }
 
-    let segments: Array<any> = [];
+    let segments: Array<JSX.Element> = [];
 
     for (let i: number = 0; i < numberOfSegments; i++) {
         segments.push(<div key={uuid()} className={styles.segment}>

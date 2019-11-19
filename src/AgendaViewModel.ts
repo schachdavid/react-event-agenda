@@ -1,5 +1,5 @@
 import AgendaStore, { IItem, Item } from './models/AgendaStore';
-import AgendaViewModelInterface from './interfaces/AgendaViewModelInterface';
+import { IAgendaViewModel } from './interfaces/IAgendaViewModel';
 import moment, { Moment, Duration } from 'moment';
 import UIStore, { UIState } from './models/UIStore';
 import { ItemUIState } from './models/ItemModel';
@@ -7,7 +7,7 @@ import { ItemUIState } from './models/ItemModel';
 
 
 
-export class AgendaViewModel implements AgendaViewModelInterface {
+export class AgendaViewModel implements IAgendaViewModel {
     agendaStore: AgendaStore;
     uiStore: UIStore;
 
@@ -56,9 +56,10 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         return this.agendaStore.getItem(id);
     }
 
-    getSelectedItems(): Array<IItem> {
-        return this.agendaStore.getSelectedItems();
+    getItems(filter?: {uiState?: ItemUIState}, itemIds?: Array<string>) {
+        return this.agendaStore.getItems(filter, itemIds);
     }
+
 
     getTimeLineStartTime(dateToSet?: Moment) {
         const days = this.getDays();
@@ -117,7 +118,7 @@ export class AgendaViewModel implements AgendaViewModelInterface {
 
         let shouldSelect = false;
 
-        this.agendaStore.getAllItems().forEach(item => {
+        this.agendaStore.getItems().forEach(item => {
             if (shouldSelect) {
                 item.uiState = ItemUIState.Selected;
             };
@@ -126,6 +127,7 @@ export class AgendaViewModel implements AgendaViewModelInterface {
                 item.uiState = ItemUIState.Selected;
             }
         })
+        this.agendaStore.overWriteCurrentHistoryEntry();
     }
 
 
@@ -140,7 +142,7 @@ export class AgendaViewModel implements AgendaViewModelInterface {
 
     addItem(item: IItem, trackId: string, suppressPushToHistory?: boolean) {
         this.agendaStore.addItem(new Item(item), trackId);
-        this.agendaStore.getTrackById(trackId)!.sortItems();
+        this.agendaStore.getTrack(trackId)!.sortItems();
         if (!suppressPushToHistory) {
             this.pushToHistory();
         }
@@ -168,6 +170,9 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         const item = this.agendaStore.getItem(id);
         if (item) {
             item.uiState = newUIState;
+            if (newUIState == ItemUIState.Selected) {
+                this.agendaStore.overWriteCurrentHistoryEntry();
+            }
         }
     }
 
@@ -214,7 +219,7 @@ export class AgendaViewModel implements AgendaViewModelInterface {
         if (item && (curTrack!.id !== trackId)) {
             this.agendaStore.deleteItem(id);
             this.agendaStore.addItem(item, trackId);
-            curTrack = this.agendaStore.getTrackById(trackId);
+            curTrack = this.agendaStore.getTrack(trackId);
             if (curTrack) {
                 items = curTrack.items;
             }
@@ -305,27 +310,36 @@ export class AgendaViewModel implements AgendaViewModelInterface {
     }
 
     unselectAll() {
-        this.agendaStore.getSelectedItems().forEach(item => {
+        this.agendaStore.getItems({uiState: ItemUIState.Selected}).forEach(item => {
             item.uiState = undefined;
         })
+        this.agendaStore.overWriteCurrentHistoryEntry();
         this.updateUIState(UIState.Normal);
         this.clearSelectHistory();
     }
 
-
-
-
-    undo() {
+    undo(keepItemUIState?: boolean) {
         this.agendaStore.undo();
+        if (!keepItemUIState) {
+            this.agendaStore.getItems().forEach(item => {
+                item.uiState = undefined;
+            })
+        }
     }
 
-    redo() {
+    redo(keepItemUIState?: boolean) {
         this.agendaStore.redo();
+        if (!keepItemUIState) {
+            this.agendaStore.getItems().forEach(item => {
+                item.uiState = undefined;
+            })
+        }
     }
 
     pushToHistory() {
         this.agendaStore.pushToHistory()
     }
+
 
     adjustItemStartTime(itemId: string, newStartTime: Moment) {
         const track = this.agendaStore.getTrackForItem(itemId);

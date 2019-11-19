@@ -96,7 +96,7 @@ class AgendaStore {
     }
 
     @action addItem(item: Item, trackId: string) {
-        const track = this.getTrackById(trackId);
+        const track = this.getTrack(trackId);
         const day = this.getDayForTrack(trackId);
 
         if (day && track) {
@@ -119,9 +119,6 @@ class AgendaStore {
         }
     }
 
-
-
-
     getDays() {
         return this.agenda.days;
     }
@@ -130,8 +127,6 @@ class AgendaStore {
         return this.agenda;
     }
 
-
-    //TODO: backwards referencing??
     getDayForTrack(trackId: string) {
         let days = this.agenda.days;
         for (let indexDays: number = 0; indexDays < days.length; indexDays++) {
@@ -144,7 +139,7 @@ class AgendaStore {
         return undefined;
     }
 
-    getTrackById(id: string) {
+    getTrack(id: string) {
         let days = this.agenda.days;
         for (let indexDays: number = 0; indexDays < days.length; indexDays++) {
             let tracks = days[indexDays].tracks;
@@ -168,7 +163,6 @@ class AgendaStore {
         return;
     }
 
-    //TODO: backwards referencing??
     getDayForItem(id: string) {
         for (const day of this.agenda.days) {
             for (const track of day.tracks) {
@@ -193,29 +187,22 @@ class AgendaStore {
         return undefined;
     }
 
-    getAllItems() {
+    getItems(filter?: {uiState?: ItemUIState}, itemIDs?: Array<string>) {
         let items: Array<Item> = [];
         for (const day of this.agenda.days) {
             for (const track of day.tracks) {
-
-                items = items.concat(track.items.slice());
+                let itemsOnTrack = track.items.slice();
+                if(filter) {
+                    itemsOnTrack = itemsOnTrack.filter((item) => item.uiState === filter.uiState);
+                }
+                if(itemIDs) {
+                    itemsOnTrack = itemsOnTrack.filter((item) => itemIDs.includes(item.id));
+                }
+                items = items.concat(itemsOnTrack);
             }
         }
         return items;
     }
-
-
-    getSelectedItems() {
-        let items: Array<Item> = [];
-        for (const day of this.agenda.days) {
-            for (const track of day.tracks) {
-                const selectedOnTrack = track.items.filter((item) => item.uiState === ItemUIState.Selected);
-                items = items.concat(selectedOnTrack);
-            }
-        }
-        return items;
-    }
-
 
     /**
      *  Gets the item with the given Id and all following items on the same track 
@@ -248,7 +235,6 @@ class AgendaStore {
         }
     }
 
-
     getIntervalPxHeight() {
         return this.intervalPxHeight;
     }
@@ -267,7 +253,9 @@ class AgendaStore {
         this.agendaHistory.push(toJS(this.agenda));
     }
 
-
+    overWriteCurrentHistoryEntry() {
+        this.agendaHistory[this.pointer] = toJS(this.agenda);
+    }
 
     @action undo() {
         if (this.pointer > 0) {

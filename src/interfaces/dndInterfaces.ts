@@ -1,5 +1,7 @@
-export interface DragItem {
-    id: string
+
+export interface DragObject {
+    clickedItemId: string,
+    itemIds: Array<string>,
     type: string
   }
   

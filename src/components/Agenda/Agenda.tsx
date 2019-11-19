@@ -19,7 +19,8 @@ import { Customizer } from 'office-ui-fabric-react';
 
 import { registerIcons } from '@uifabric/styling';
 
-import {  FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiXCircle, FiCheckCircle, FiCircle } from 'react-icons/fi';
+import { FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiXCircle, FiCheckCircle, FiCircle } from 'react-icons/fi';
+import { DraggedAgendaItems } from '../DraggedAgendaItems/DraggedAgendaItemsController';
 
 
 
@@ -52,24 +53,24 @@ const Agenda: React.FC<IProps> = ({
             'settings': <span className={styles.iconStrokeWidthContainer}><FiSettings size={'1.2em'} /></span>,
             'undo': <span className={styles.iconStrokeWidthContainer}><FiCornerUpLeft size={'1.2em'} /></span>,
             'redo': <span className={styles.iconStrokeWidthContainer}><FiCornerUpRight size={'1.2em'} /></span>,
-            'edit': <span className={styles.iconStrokeWidthContainer}><FiEdit2 size={'1.2em'}/></span>,
-            'cancel': <span className={styles.iconStrokeWidthContainer}><FiX size={'1.2em'}/></span>,
-            'circleRing': <span className={styles.iconStrokeWidthContainer}><FiCircle size={'1.2em'}/></span>,
-            'SkypeCircleCheck': <span className={styles.iconStrokeWidthContainer}><FiCheckCircle size={'1.2em'}/></span>,
-            'ErrorBadge': <span className={styles.iconStrokeWidthContainer}><FiXCircle size={'1.2em'}/></span>
+            'edit': <span className={styles.iconStrokeWidthContainer}><FiEdit2 size={'1.2em'} /></span>,
+            'cancel': <span className={styles.iconStrokeWidthContainer}><FiX size={'1.2em'} /></span>,
+            'circleRing': <span className={styles.iconStrokeWidthContainer}><FiCircle size={'1.2em'} /></span>,
+            'SkypeCircleCheck': <span className={styles.iconStrokeWidthContainer}><FiCheckCircle size={'1.2em'} /></span>,
+            'ErrorBadge': <span className={styles.iconStrokeWidthContainer}><FiXCircle size={'1.2em'} /></span>
 
-            
+
         }
     });
 
     if (icons) registerIcons(icons);
 
     if (customItemActions) customItemActions.forEach((item) => {
-        if(item.iconToRender) {
+        if (item.iconToRender) {
             let iconsToRegister = {};
             iconsToRegister[item.iconName] = item.iconToRender
             console.log(iconsToRegister);
-            
+
             registerIcons({ icons: iconsToRegister });
         }
     });
@@ -100,6 +101,7 @@ const Agenda: React.FC<IProps> = ({
                             <MainCommandBar></MainCommandBar>
                             <Tracks customItemActions={customItemActions}>
                             </Tracks>
+                            <DraggedAgendaItems/>
                         </DndProvider>
                     </ViewModelContext.Provider>
                 </ColorPaletteContext.Provider>

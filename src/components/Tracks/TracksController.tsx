@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import {AgendaViewModel} from '../../AgendaViewModel';
 import { IDay } from '../../models/AgendaStore';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
-import { DragItem } from '../../interfaces/dndInterfaces';
+import { DragObject } from '../../interfaces/dndInterfaces';
 import moment, { Moment } from 'moment';
 
 
@@ -24,15 +24,15 @@ const TracksController: React.FC<IProps> = ({customItemActions}: IProps) => {
     const days: Array<IDay> = viewModel.getDays();
 
 
-    const moveDragItem = (trackId: string, newStart: Moment, dragItem: DragItem) => {
-      
-        if (dragItem.id === lastMovedItemId && lastMovedNewStart.isSame(newStart)) {
+    const moveDragObject = (trackId: string, newStart: Moment, dragObject: DragObject) => {
+        if (dragObject.itemIds[0] === lastMovedItemId && lastMovedNewStart.isSame(newStart)) {
             return;
         };
-        viewModel.undo();
-        setLastMovedItemId(dragItem.id);
+        if (dragObject.itemIds.length > 1) return;
+        viewModel.undo(true);
+        setLastMovedItemId(dragObject.itemIds[0]);
         setLastMovedNewStart(newStart);
-        viewModel.moveItem(trackId, dragItem.id, newStart);
+        viewModel.moveItem(trackId, dragObject.itemIds[0], newStart);
         viewModel.pushToHistory();
     }
 
@@ -48,7 +48,7 @@ const TracksController: React.FC<IProps> = ({customItemActions}: IProps) => {
         days={days}
         singleTracks={singleTracks}
         customItemActions={customItemActions}
-        moveDragItem={moveDragItem}
+        moveDragObject={moveDragObject}
     />
 }
 

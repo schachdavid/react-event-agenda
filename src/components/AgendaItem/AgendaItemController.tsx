@@ -5,13 +5,14 @@ import { observer } from "mobx-react";
 import { IItem, ItemUIState } from '../../models/ItemModel';
 import { useViewModelContext } from '../../hooks/ViewModelContext';
 import moment, { Moment } from 'moment';
-import AgendaItemDragView from './AgendaItemDragView';
+// import AgendaItemDragView from './AgendaItemDragView';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import { AgendaItemEdit } from './AgendaItemEdit/AgendaItemEditController';
 import { IconButton } from 'office-ui-fabric-react';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { UIState } from '../../models/UIStore';
+import { DragObject } from '../../interfaces/dndInterfaces';
 
 
 
@@ -42,18 +43,31 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
         return;
     }, []);
 
+
+    const defaultDragObject: DragObject = { clickedItemId: item.id, itemIds: [item.id], type: "item" };
+
     const [{ isDragging }, dragMoveRef, previewMove] = useDrag({
-        item: { type: "item", id: item.id },
-        isDragging: monitor => monitor.getItem().id === item.id,
+        item: defaultDragObject,
+        isDragging: monitor => {
+            const dragObject: DragObject = monitor.getItem();
+            if (!dragObject) return false;
+            const itemIds: Array<string> = dragObject.itemIds;
+            return itemIds.includes(item.id)
+        },
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         }),
         begin: () => {
-            viewModel.updateUIState(UIState.Moving);
+            if (viewModel.getUIState() !== UIState.Selecting) viewModel.updateUIState(UIState.Moving);
             viewModel.pushToHistory();
+            if(item.uiState === ItemUIState.Selected) { 
+                const itemIds = viewModel.getItems({uiState: ItemUIState.Selected}).map(item => item.id); 
+                return {clickedItemId: item.id, itemIds: itemIds, type: "item"};
+            }
+            return {clickedItemId: item.id, itemIds: [item.id], type: "item"};
         },
         end: () => {
-            viewModel.updateUIState(UIState.Normal);
+            if (viewModel.getUIState() === UIState.Moving) viewModel.updateUIState(UIState.Normal);
         }
     })
 
@@ -93,7 +107,7 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
 
 
     const handleSelectClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const selectedItems = viewModel.getSelectedItems();
+        const selectedItems = viewModel.getItems({uiState: ItemUIState.Selected});
         if (item.uiState !== ItemUIState.Selected) {
             if (selectedItems.length == 0) {
                 viewModel.updateUIState(UIState.Selecting);
@@ -108,9 +122,8 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
             }
         }
         else {
-            if (selectedItems.length == 1) { 
-                viewModel.updateUIState(UIState.Normal) 
-                viewModel.clearSelectHistory();
+            if (selectedItems.length == 1) {
+                viewModel.unselectAll();
             };
             viewModel.updateItemUIState(item.id, undefined);
             viewModel.deleteFromSelectHistory(item.id);
@@ -161,7 +174,7 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
     return <>
         {agendaItemEdit}
         <div>
-            <AgendaItemDragView
+            {/* <AgendaItemDragView
                 id={item.id}
                 height={height}
                 width={width}
@@ -170,7 +183,7 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
                 title={item.title}
                 speaker={item.speaker}
                 small={small}
-            />
+            /> */}
             <div ref={refWidthContainer} style={{ width: '100%' }}></div>
 
             <AgendaItemView

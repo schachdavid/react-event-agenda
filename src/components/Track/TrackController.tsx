@@ -6,7 +6,7 @@ import { ITrack as TrackData, IItem } from '../../models/AgendaStore';
 import moment, { Duration, Moment } from 'moment';
 import uuid from 'uuid';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
-import { DragItem } from '../../interfaces/dndInterfaces';
+import { DragObject } from '../../interfaces/dndInterfaces';
 import { UIState } from '../../models/UIStore';
 import { ItemUIState } from '../../models/ItemModel';
 
@@ -15,15 +15,11 @@ import { ItemUIState } from '../../models/ItemModel';
 interface IProps {
     track: TrackData,
     customItemActions?: Array<ICustomItemAction>,
-    moveDragItem: (trackId: string, newStart: Moment, dragItem: DragItem) => void
-
-
+    moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void
 }
 
 
-const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragItem }: IProps) => {
-
-
+const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragObject }: IProps) => {
     const viewModel = useViewModelContext();
 
     const items: Array<IItem> = track.items;
@@ -37,8 +33,6 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
     const endTimeTmp = viewModel.getTimeLineEndTime(day ? day.startTime : undefined);
     const endTime = endTimeTmp ? endTimeTmp : moment();
 
-
-
     const duration: Duration = endTime ? moment.duration(endTime.diff(startTime)) : moment.duration();
 
     const minutes = duration.asMinutes();
@@ -49,10 +43,10 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragI
 
     const enableHover = viewModel.getUIState() === UIState.Normal;    
 
-    const handleDropHover = (hoverClientY: number, dragItem: DragItem) => {
+    const handleDropHover = (hoverClientY: number, dragObject: DragObject) => {
         const minutesStart = Math.round(hoverClientY / intervalPxHeight) * intervalInMin;
         const newStart = moment(startTime).add(minutesStart, 'minutes');
-        moveDragItem(track.id, newStart, dragItem);
+        moveDragObject(track.id, newStart, dragObject);
     }
 
 

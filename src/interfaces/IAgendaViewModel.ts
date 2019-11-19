@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 import { IItem } from "../models/ItemModel";
 
-export default interface AgendaViewModelI {
+export interface IAgendaViewModel {
     
      /**
      * Get all agenda items.
@@ -39,12 +39,12 @@ export default interface AgendaViewModelI {
     /**
      * Undo the last thing that happened on agenda item data level.
      */
-    undo():void;
+    undo(keepItemUIState?: boolean):void;
 
     /**
      * Redo the last thing that happened on agenda item data level.
      */
-    redo():void;
+    redo(keepItemUIState?: boolean):void;
 
 
     /**
