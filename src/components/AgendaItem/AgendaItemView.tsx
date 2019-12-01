@@ -91,7 +91,7 @@ const AgendaItemView: React.FC<IProps> = ({
         finishResizeEndTime();
     }
 
-    const hoverColor = selected ? color(colorPalette.themePrimary).darken(0.1).toString() : color(colorPalette.themePrimary).alpha(0.6).toString();
+    // const hoverColor = selected ? color(colorPalette.themePrimary).darken(0.1).toString() : color(colorPalette.themePrimary).alpha(0.6).toString();
     const normalColor = selected ? colorPalette.themePrimary : color(colorPalette.themePrimary).alpha(0.5).toString();
 
     const newColorPalette = Object.assign({}, colorPalette);
@@ -124,18 +124,19 @@ const AgendaItemView: React.FC<IProps> = ({
 
     const controls = enableHover ?
         <div className={!small ? styles.controls : styles.controlsSmall} >
-            <Stack tokens={{ childrenGap: 2 }} horizontal>
+            <Stack tokens={{ childrenGap: 2, maxWidth: '50%'  }} horizontal>
                 <Customizer settings={{ theme: theme }}>
+                    <IconButton iconProps={{ iconName: "Delete" }} onClick={e => {
+                        e.stopPropagation();
+                        deleteItem();
+                    }} />
+
                     {customActionButtons}
                     <IconButton iconProps={{ iconName: "Edit" }} onClick={e => {
                         e.stopPropagation();
                         editItem();
                     }} />
-                    <IconButton iconProps={{ iconName: "Delete" }} onClick={e => {
-                        e.stopPropagation();
-                        deleteItem();
-                    }} />
-                    <IconButton iconProps={{ iconName: "CircleRing" }} onClick={e => {
+                    <IconButton iconProps={{ iconName: "Checkbox" }} onClick={e => {
                         e.stopPropagation();
                         handleSelectClick(e)
                     }} />
@@ -147,7 +148,7 @@ const AgendaItemView: React.FC<IProps> = ({
     const checkIcon = selecting ?
         <div className={!small ? styles.selectIcon : null} >
             <Stack tokens={{ childrenGap: 2 }} horizontal>
-                <Customizer settings={{ theme: selected ? themeSelected : theme }}><IconButton iconProps={{ iconName: selected ? "SkypeCircleCheck" : "CircleRing" }} onClick={e => {
+                <Customizer settings={{ theme: selected ? themeSelected : theme }}><IconButton iconProps={{ iconName: selected ? "CheckboxCompositeReversed" : "Checkbox" }} onClick={e => {
                     e.stopPropagation();
                     handleSelectClick(e)
                 }} /></Customizer>
@@ -177,7 +178,7 @@ const AgendaItemView: React.FC<IProps> = ({
                 <div
                     ref={dragRef}
                     onClick={selecting ? handleSelectClick : editItem}
-                    style={{ backgroundColor: enableHover ? hoverColor : normalColor }}
+                    style={{ backgroundColor: normalColor }}
                     className={classNames(styles.main, {
                         [styles.mainHover]: enableHover,
                         [styles.mainSelected]: selected,

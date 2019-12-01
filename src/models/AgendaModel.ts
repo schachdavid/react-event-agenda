@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import { Day, IDay } from './DayModel';
+import { Day, IDay, IDayJSON } from './DayModel';
 
 
 
@@ -8,12 +8,18 @@ export interface IAgenda {
     days: Array<IDay>
 }
 
+export interface IAgendaJSON {
+    id: string,
+    days: Array<IDayJSON>
+}
+
+
 export class Agenda {
     @observable private _id: string;
     @observable private _days: Array<Day>;
 
 
-    constructor(obj: IAgenda) {
+    constructor(obj: IAgendaJSON) {
         this._id = obj.id;
         this._days = obj.days.map((day) => Day.fromJSON(day));
     }
@@ -52,14 +58,14 @@ export class Agenda {
     }
 
 
-    toJSON(): IAgenda {
+    toJSON(): IAgendaJSON {
         return {
             id: this._id,
             days: this._days.map((day) => day.toJSON())
         }
     }
 
-    static fromJSON(obj: IAgenda) {
+    static fromJSON(obj: IAgendaJSON) {
         return new this(obj);
     }
 

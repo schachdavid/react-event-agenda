@@ -9,7 +9,10 @@ import { DragObject } from '../../interfaces/dndInterfaces'
 import uuid from 'uuid';
 import throttle from 'lodash.throttle';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
-import classNames from 'classnames'
+import classNames from 'classnames';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+
+
 
 
 
@@ -59,7 +62,7 @@ const TrackView: React.FC<IProps> = ({
 
     let initialMousePosition: number;
     const initializeDrawUp = (event: any) => {
-        if(!enableHover) return;
+        if (!enableHover) return;
         if (event && segmentsRef.current) {
             if (event.buttons !== 1) return;
             event.preventDefault();
@@ -88,8 +91,15 @@ const TrackView: React.FC<IProps> = ({
     let smallSegments: Array<JSX.Element> = [];
 
     for (let i: number = 0; i < numberOfSmallSegments; i++) {
-        smallSegments.push(<div key={uuid()} className={classNames(enableHover ? styles.smallSegmentHover : '', styles.smallSegment)} style={{ height: smallSegmentHeight + 'px', borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : '' }}>
-            <div />
+        smallSegments.push(<div key={uuid()} className={classNames(styles.smallSegment)} style={{ height: smallSegmentHeight + 'px', borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : '' }}>
+            {enableHover ?
+                <div className={styles.smallSegmentHoverContainer}>
+                    < Icon iconName="ChevronUp" className={styles.chevronIcon}/>
+                    <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
+                    <Icon iconName="ChevronDown" className={styles.chevronIcon}/>
+                </div>
+
+                : null}
         </div>)
     }
 

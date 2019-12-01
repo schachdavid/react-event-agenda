@@ -18,6 +18,14 @@ export interface IItem {
     readonly uiState?: ItemUIState
 }
 
+export interface IItemJSON {
+    id: string,
+    title?: string,
+    speaker?: string,
+    start: string,
+    end: string,
+    uiState?: ItemUIState
+}
 
 
 export class Item {
@@ -45,7 +53,7 @@ export class Item {
 	}
 
 
-    constructor(obj: IItem) {
+    constructor(obj: IItem | IItemJSON) {
         this._id = obj.id!;
         this._title = obj.title!;
         this._speaker = obj.speaker!;
@@ -134,18 +142,18 @@ export class Item {
         this._end = value;
     }
 
-    toJSON(): IItem {
+    toJSON(): IItemJSON {
         return {
             id: this._id,
             title: this._title,
             speaker: this._speaker,
-            start: this._start,
-            end: this._end,
+            start: this._start.toJSON(),
+            end: this._end.toJSON(),
             uiState: this._uiState
         }
     }
 
-    static fromJSON(obj: IItem) {
+    static fromJSON(obj: IItemJSON) {
         return new this(obj);
     }
 }

@@ -29,7 +29,6 @@
 
 .mainSelected {
   color: var(--white);
-  // outline: 2px solid var(--themePrimary);
 }
 
 .mainDrag {
@@ -39,7 +38,7 @@
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
 }
 
-.mainHover {
+.main:hover.mainHover {
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -157,5 +156,4 @@
 .controlsSmall {
   display: none;
 }
-
 

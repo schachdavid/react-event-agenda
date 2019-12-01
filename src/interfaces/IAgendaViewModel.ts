@@ -2,7 +2,7 @@ import { Moment } from "moment";
 import { IItem } from "../models/ItemModel";
 
 export interface IAgendaViewModel {
-    
+   
      /**
      * Get all agenda items.
      */
@@ -34,7 +34,7 @@ export interface IAgendaViewModel {
      /**
      * Tries to move the item to the given start time on the given track.
      */
-    moveItem(trackId: string, id: string, newStart: Moment):void;
+    moveItems(trackId: string, clickedItemId: string, newStart: Moment, itemIds: Array<string>):void;
 
     /**
      * Undo the last thing that happened on agenda item data level.

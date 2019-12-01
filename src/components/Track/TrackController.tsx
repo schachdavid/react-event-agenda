@@ -11,7 +11,6 @@ import { UIState } from '../../models/UIStore';
 import { ItemUIState } from '../../models/ItemModel';
 
 
-
 interface IProps {
     track: TrackData,
     customItemActions?: Array<ICustomItemAction>,
@@ -28,12 +27,12 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragO
     const intervalInMin = viewModel.getIntervalInMin();
     const segmentFactor = viewModel.getSegmentFactor();
     const day = viewModel.getDayForTrack(track.id);
-    const startTimeTmp = viewModel.getTimeLineStartTime(day ? day.startTime : undefined);
-    const startTime = startTimeTmp ? startTimeTmp : moment();
-    const endTimeTmp = viewModel.getTimeLineEndTime(day ? day.startTime : undefined);
-    const endTime = endTimeTmp ? endTimeTmp : moment();
+    const startTimeLineTmp = viewModel.getTimeLineStartTime(day ? day.startTime : undefined);
+    const startTimeLine = startTimeLineTmp ? startTimeLineTmp : moment();
+    const endTimeLineTmp = viewModel.getTimeLineEndTime(day ? day.startTime : undefined);
+    const endTimeLine = endTimeLineTmp ? endTimeLineTmp : moment();
 
-    const duration: Duration = endTime ? moment.duration(endTime.diff(startTime)) : moment.duration();
+    const duration: Duration = endTimeLine ? moment.duration(endTimeLine.diff(startTimeLine)) : moment.duration();
 
     const minutes = duration.asMinutes();
 
@@ -41,11 +40,28 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragO
 
     const smallSegmentHeight = intervalPxHeight;
 
-    const enableHover = viewModel.getUIState() === UIState.Normal;    
+    const enableHover = viewModel.getUIState() === UIState.Normal;
+
+
 
     const handleDropHover = (hoverClientY: number, dragObject: DragObject) => {
-        const minutesStart = Math.round(hoverClientY / intervalPxHeight) * intervalInMin;
-        const newStart = moment(startTime).add(minutesStart, 'minutes');
+        if (dragObject.itemIds.length !== 0 || dragObject.itemIds[0] !== dragObject.clickedItemId) {
+            //calc new hoverClientY if multiple items are being dragged
+            const items = viewModel.getItems(undefined, dragObject.itemIds);
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.id === dragObject.clickedItemId) break;
+                const itemDuration: number = moment.duration(item.end.diff(item.start)).asMinutes();
+                const height = itemDuration / intervalInMin * intervalPxHeight;
+                hoverClientY = hoverClientY - height;
+            }
+        }
+        let newStart: Moment;
+        if (hoverClientY < 0) newStart = moment(startTimeLine)
+        else {
+            const minutesStart = Math.round(hoverClientY / intervalPxHeight) * intervalInMin;
+            newStart = moment(startTimeLine).add(minutesStart, 'minutes');
+        }
         moveDragObject(track.id, newStart, dragObject);
     }
 
@@ -59,10 +75,9 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragO
         viewModel.updateUIState(UIState.Creating);
         drawUpItemId = uuid();
         const minutesStart = Math.floor(initialMousePosition / intervalPxHeight) * intervalInMin;
-        const itemStart = moment(startTime).add(minutesStart, 'minutes');
+        const itemStart = moment(startTimeLine).add(minutesStart, 'minutes');
         const itemEnd = moment(itemStart).add(intervalInMin, 'minutes');
         viewModel.addItem({ id: drawUpItemId, start: itemStart, end: itemEnd }, track.id, true);
-        viewModel.pushToHistory();
     }
 
     const handleDrawUp = (initialMousePosition: number, currentMousePosition: number) => {
@@ -77,14 +92,12 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragO
             minutesStart = Math.round(currentMousePosition / intervalPxHeight) * intervalInMin;
             if (minutesEnd == minutesStart) minutesStart -= intervalInMin;
         }
-        const newEnd = moment(startTime).add(minutesEnd, 'minutes');
-        const newStart = moment(startTime).add(minutesStart, 'minutes');
+        const newEnd = moment(startTimeLine).add(minutesEnd, 'minutes');
+        const newStart = moment(startTimeLine).add(minutesStart, 'minutes');
         const item = viewModel.getItem(drawUpItemId);
-        if (item && (!item.start.isSame(newStart) || !item.end.isSame(newEnd))){
-            // viewModel.undo();
+        if (item && (!item.start.isSame(newStart) || !item.end.isSame(newEnd))) {
             viewModel.adjustItemStartTime(drawUpItemId, newStart);
             viewModel.adjustItemEndTime(drawUpItemId, newEnd);
-            // viewModel.pushToHistory();
         }
     }
 

@@ -1,10 +1,16 @@
 import { observable, IObservableArray } from 'mobx';
-import { Item, IItem } from './ItemModel';
+import { Item, IItem, IItemJSON } from './ItemModel';
 
 
 export interface ITrack {
     name: string,
     items: Array<IItem>,
+    id: string
+}
+
+export interface ITrackJSON {
+    name: string,
+    items: Array<IItemJSON>,
     id: string
 }
 
@@ -14,7 +20,7 @@ export class Track {
     @observable private _id: string;
 
 
-    constructor(obj: ITrack) {
+    constructor(obj: ITrackJSON) {
         this._name = obj.name;
         this._items = observable(obj.items.map((item) => Item.fromJSON(item)));
         this._id = obj.id;
@@ -92,7 +98,7 @@ export class Track {
         }
     }
 
-    static fromJSON(obj: ITrack) {
+    static fromJSON(obj: ITrackJSON) {
         return new this(obj);
     }
 

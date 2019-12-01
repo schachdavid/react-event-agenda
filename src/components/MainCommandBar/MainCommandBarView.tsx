@@ -27,11 +27,12 @@ const MainCommandBarView: React.FC<IProps> = ({ undo, redo, selecting, numberOfS
             ariaLabel: 'Unselect all',
             iconProps: {
                 iconName: 'ErrorBadge',
-        
+
             },
             iconOnly: true,
             onClick: unselectAll
         }] : [
+
             {
                 key: 'undo',
                 text: 'Undo',
@@ -82,14 +83,20 @@ const MainCommandBarView: React.FC<IProps> = ({ undo, redo, selecting, numberOfS
     return (
         <div className={styles.container}>
             {selecting ? <>
-                <CommandBar items={items} farItems={farItems} />
+                <CommandBar items={items} farItems={farItems}  className={styles.commandBar} />
                 <div className={styles.numberOfItemsText}><span className={styles.numberOfItems}>{numberOfSelectedItems}</span>  Item{numberOfSelectedItems > 1 ? 's' : ''} selected</div>
             </>
 
                 :
-                <Customizer settings={{ theme: invertTheme(Object.assign({}, colorPalette)) }}>
-                    <CommandBar items={items} farItems={farItems} />
-                </Customizer>}
+                <>
+                    <div className={styles.logo}>
+                        AgendaBuilder
+                    </div>
+                    <Customizer settings={{ theme: invertTheme(Object.assign({}, colorPalette)) }}>
+                        <CommandBar items={items} farItems={farItems} className={styles.commandBar} />
+                    </Customizer>
+                </>
+            }
         </div>
     );
 }

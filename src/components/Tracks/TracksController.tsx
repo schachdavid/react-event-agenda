@@ -7,6 +7,7 @@ import { IDay } from '../../models/AgendaStore';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { DragObject } from '../../interfaces/dndInterfaces';
 import moment, { Moment } from 'moment';
+import { arraysMatch } from '../../util';
 
 
 
@@ -18,22 +19,21 @@ interface IProps {
 
 const TracksController: React.FC<IProps> = ({customItemActions}: IProps) => {
     const viewModel: AgendaViewModel = useViewModelContext();
-    const [lastMovedItemId, setLastMovedItemId] = useState("");
+    const [lastMovedItemIds, setLastMovedItemId] = useState([""]);
     const [lastMovedNewStart, setLastMovedNewStart] = useState(moment());
 
     const days: Array<IDay> = viewModel.getDays();
 
 
     const moveDragObject = (trackId: string, newStart: Moment, dragObject: DragObject) => {
-        if (dragObject.itemIds[0] === lastMovedItemId && lastMovedNewStart.isSame(newStart)) {
+        if (arraysMatch(lastMovedItemIds, dragObject.itemIds) && lastMovedNewStart.isSame(newStart)) {
             return;
         };
-        if (dragObject.itemIds.length > 1) return;
-        viewModel.undo(true);
-        setLastMovedItemId(dragObject.itemIds[0]);
+        viewModel.undo(true, true);
+        setLastMovedItemId(dragObject.itemIds);
         setLastMovedNewStart(newStart);
-        viewModel.moveItem(trackId, dragObject.itemIds[0], newStart);
-        viewModel.pushToHistory();
+        viewModel.moveItems(trackId, dragObject.clickedItemId, newStart, dragObject.itemIds);
+        viewModel.pushToHistory(true);
     }
 
 

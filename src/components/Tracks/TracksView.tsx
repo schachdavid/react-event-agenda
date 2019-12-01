@@ -85,6 +85,9 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragObject,
                 <div className={styles.flex} ref={refTracksContainer}>
                     {trackViews}
                 </div>
+                {/* <div style={{position: 'fixed', bottom: 0, left: 0, width:'100%'}} onDragEnter={document.scroll}>
+
+                </div> */}
             </div>
 
             {trackBarViews ?

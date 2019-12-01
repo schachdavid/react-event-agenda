@@ -1,8 +1,14 @@
 import AgendaStore, { IItem, Item } from './models/AgendaStore';
 import { IAgendaViewModel } from './interfaces/IAgendaViewModel';
-import moment, { Moment, Duration } from 'moment';
+import moment, { Moment } from 'moment';
 import UIStore, { UIState } from './models/UIStore';
 import { ItemUIState } from './models/ItemModel';
+import uuid from 'uuid';
+import { IAgendaJSON, Agenda } from './models/AgendaModel';
+import debounce from 'lodash/debounce';
+import { Cancelable } from 'lodash';
+
+
 
 
 
@@ -10,11 +16,39 @@ import { ItemUIState } from './models/ItemModel';
 export class AgendaViewModel implements IAgendaViewModel {
     agendaStore: AgendaStore;
     uiStore: UIStore;
+    handleDataChange: ((() => void) & Cancelable) | undefined;
 
-    constructor() {
-        this.agendaStore = new AgendaStore();
+    constructor(data: IAgendaJSON, handleDataChange?: (data: IAgendaJSON) => void) {
+        this.agendaStore = new AgendaStore(data);
         this.uiStore = new UIStore();
+        this.handleDataChange = handleDataChange ? debounce(() => handleDataChange(this.getData()), 500) : undefined;
     }
+
+    setData(data: IAgendaJSON) {
+        data.days.forEach(day => {
+            day.tracks.forEach(track => {
+                track.items.forEach(item => {
+                    item.uiState = undefined;
+                })
+            })  
+        });
+        this.agendaStore.setAgenda(Agenda.fromJSON(data));
+        this.agendaStore.overWriteCurrentHistoryEntry();
+    }
+
+    getData() {
+        const data = this.agendaStore.agenda.toJSON();
+        data.days.forEach(day => {
+            day.tracks.forEach(track => {
+                track.items.forEach(item => {
+                    item.uiState = undefined;
+                })
+            })  
+        });
+        return data;
+    }
+
+
 
     getUIState() {
         return this.uiStore.getUiState();
@@ -56,7 +90,7 @@ export class AgendaViewModel implements IAgendaViewModel {
         return this.agendaStore.getItem(id);
     }
 
-    getItems(filter?: {uiState?: ItemUIState}, itemIds?: Array<string>) {
+    getItems(filter?: { uiState?: ItemUIState }, itemIds?: Array<string>) {
         return this.agendaStore.getItems(filter, itemIds);
     }
 
@@ -131,10 +165,6 @@ export class AgendaViewModel implements IAgendaViewModel {
     }
 
 
-
-
-
-
     deleteItem(id: string, suppressPushToHistory?: boolean) {
         this.agendaStore.deleteItem(id);
         if (!suppressPushToHistory) this.pushToHistory();
@@ -169,10 +199,12 @@ export class AgendaViewModel implements IAgendaViewModel {
     updateItemUIState(id: string, newUIState: ItemUIState | undefined) {
         const item = this.agendaStore.getItem(id);
         if (item) {
+            const oldState =  item.uiState ;
             item.uiState = newUIState;
-            if (newUIState == ItemUIState.Selected) {
-                this.agendaStore.overWriteCurrentHistoryEntry();
+            if (newUIState === ItemUIState.Selected ||  oldState === ItemUIState.Selected ||  oldState === ItemUIState.Editing) {
+                this.agendaStore.overWriteCurrentHistoryEntry();                
             }
+            
         }
     }
 
@@ -191,117 +223,131 @@ export class AgendaViewModel implements IAgendaViewModel {
     }
 
 
-    moveItem(trackId: string, id: string, newStart: Moment) {
+    moveItems(trackId: string, clickedId: string, newStart: Moment, itemIds: Array<string>) {
+        // TODO: check if items are still on the tracks start and end time
+        const itemsToMove = this.agendaStore.getItems(undefined, itemIds);
+        let totalDuration = 0;
 
-        let curTrack = this.agendaStore.getTrackForItem(id);
+
+        itemsToMove.forEach(item => {
+            let track = this.agendaStore.getTrackForItem(item.id);
+            if (!track) return;
+            let items = track.items;
+            if (!items) return;
+            const itemIndex = track.items.findIndex(curItem => curItem.id === item.id);
+
+            //check if currently the item is between two others which are not currently moved and if so cut it out
+            if (itemIndex + 1 < items.length &&
+                items[itemIndex + 1].start.isSame(item.end) &&
+                !itemIds.includes(items[itemIndex + 1].id) &&
+                itemIndex - 1 >= 0 &&
+                items[itemIndex - 1].end.isSame(item.start) &&
+                !itemIds.includes(items[itemIndex - 1].id) &&
+                !(itemsToMove.length <= 1 && item.start.isSame(newStart))
+            ) {
+                this.moveItemsForced(items.slice(itemIndex + 1), (item.start.diff(item.end)));
+            }
+
+            //check if the track has changed and if so move the item there
+            if (item && (track.id !== trackId)) {
+                this.agendaStore.deleteItem(item.id);
+                this.agendaStore.addItem(item, trackId);
+            }
+
+            //add item duration to total duration of itemsToMove
+            
+            totalDuration = totalDuration + item.end.diff(item.start);
+        })
+
+        let curTrack = this.agendaStore.getTrackForItem(clickedId);
 
         if (!curTrack) return;
 
         let items = curTrack.items;
-        const itemIndex = curTrack.items.findIndex(item => item.id === id);
-
-        // const items = this.agendaStore.getItemAndFollowingItems(id);
         if (!items) return;
 
-        const item = items[itemIndex];
+        const timeLineStart = this.getTimeLineStartTime(items[0].start);
 
 
-        //check if currently the item is between to others and needs to be cut out
-        if (itemIndex + 1 < items.length &&
-            items[itemIndex + 1].start.isSame(item.end) &&
-            itemIndex - 1 >= 0 &&
-            items[itemIndex - 1].end.isSame(item.start) &&
-            !item.start.isSame(newStart)) {
-            this.moveItemsForced(items.slice(itemIndex + 1), (item.start.diff(item.end)));
-        }
+        const movedItemsDummy = new Item({ id: uuid(), start: moment(newStart), end: moment(newStart).add(totalDuration) })
 
-        //check if the track has changed
-        if (item && (curTrack!.id !== trackId)) {
-            this.agendaStore.deleteItem(id);
-            this.agendaStore.addItem(item, trackId);
-            curTrack = this.agendaStore.getTrack(trackId);
-            if (curTrack) {
-                items = curTrack.items;
-            }
-        } else if (item && item.start.isSame(newStart)) return;
 
 
         //collision checking:
-        if (item && curTrack) {
-            const itemDuration: Duration = moment.duration(item!.end.diff(item!.start));
-            const newEnd = moment(newStart).add(itemDuration);
-            const movedItem = new Item(item.toJSON());
-            movedItem.start = newStart;
-            movedItem.end = newEnd;
-
+        if (movedItemsDummy && curTrack) {
             //1. find first colliding item
             const overlappingItemIndex = items.findIndex((curItem: Item) => {
-                return (curItem.start.isSameOrAfter(movedItem.start) && curItem.start.isBefore(movedItem.end) ||
-                    curItem.end.isAfter(movedItem.start) && curItem.end.isSameOrBefore(movedItem.end) ||
-                    movedItem.start.isSameOrAfter(curItem.start) && movedItem.start.isBefore(curItem.end) ||
-                    movedItem.end.isAfter(curItem.start) && movedItem.end.isSameOrBefore(curItem.end)) && movedItem.id !== curItem.id
+                return ((curItem.start.isSameOrAfter(movedItemsDummy.start) && curItem.start.isBefore(movedItemsDummy.end) ||
+                    curItem.end.isAfter(movedItemsDummy.start) && curItem.end.isSameOrBefore(movedItemsDummy.end) ||
+                    movedItemsDummy.start.isSameOrAfter(curItem.start) && movedItemsDummy.start.isBefore(curItem.end) ||
+                    movedItemsDummy.end.isAfter(curItem.start) && movedItemsDummy.end.isSameOrBefore(curItem.end))
+                ) && !itemIds.includes(curItem.id)
             })
 
-            const overlappingItem = items[overlappingItemIndex];
-
-            if (overlappingItem) {
+            if (overlappingItemIndex !== -1) {
+                const overlappingItem = items[overlappingItemIndex];
                 //2. check if the colliding item's start or end time is closer
-                const movedItemMiddle = moment(movedItem.start).add(movedItem.end.diff(movedItem.start) / 2);
+                const movedItemMiddle = moment(movedItemsDummy.start).add(movedItemsDummy.end.diff(movedItemsDummy.start) / 2);
                 const overlappingItemMiddle = moment(overlappingItem.start).add(overlappingItem.end.diff(overlappingItem.start) / 2);
 
-                if (movedItemMiddle.isSameOrAfter(overlappingItemMiddle)) {
-                    //3. move item there
-                    item.start = moment(overlappingItem.end);
-                    item.end = moment(item.start).add(itemDuration);
+                if (movedItemMiddle.isSameOrAfter(overlappingItemMiddle) || moment(overlappingItem.start).subtract(totalDuration).isBefore(timeLineStart)) {
+                    //3. move items there
+                    movedItemsDummy.start = moment(overlappingItem.end);
+                    movedItemsDummy.end = moment(movedItemsDummy.start).add(totalDuration);
                     //4. move all items after that accordingly
                     if (overlappingItemIndex + 1 < items.length) {
-                        let nextOverlappingItem = items[overlappingItemIndex + 1];
-                        //edge case nextOverlapping Item is the item to move
-                        let shouldMove = true;
-                        if (nextOverlappingItem === item) {
-                            if (overlappingItemIndex + 2 < items.length) {
-                                nextOverlappingItem = items[overlappingItemIndex + 2];
-                            } else {
-                                shouldMove = false;
-                            }
+                        //find the item which is the next and nearest but not being moved currently
+                        let nextItem = items[overlappingItemIndex + 1];
+                        let shouldMove = !itemIds.includes(nextItem.id);
+
+                        for (let iOffset = + 2; overlappingItemIndex + iOffset < items.length && itemIds.includes(nextItem.id); iOffset--) {
+                            nextItem = items[overlappingItemIndex + iOffset];
+                            shouldMove = true;
+                            if (overlappingItemIndex + iOffset >= items.length - 1) shouldMove = false;
                         }
-                        if (shouldMove && item.end.isAfter(nextOverlappingItem.start)) {
-                            const moveMilSec = item.end.diff(nextOverlappingItem.start)
-                            const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => curItem.id !== item.id)
+                        if (shouldMove && movedItemsDummy.end.isAfter(nextItem.start)) {
+                            const moveMilSec = movedItemsDummy.end.diff(nextItem.start)
+                            const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => !itemIds.includes(curItem.id))
                             this.moveItemsForced(otherItemsToMove, moveMilSec);
                         }
                     }
                 } else {
-                    //3. move item there
-                    item.end = moment(overlappingItem.start);
-                    item.start = moment(item.end).subtract(itemDuration)
+                    //3. move items there
+                    movedItemsDummy.end = moment(overlappingItem.start);
+                    movedItemsDummy.start = moment(movedItemsDummy.end).subtract(totalDuration)
                     //4. move all items after that accordingly
                     if (overlappingItemIndex - 1 >= 0) {
-                        let previousOverlappingItem = items[overlappingItemIndex - 1];
-                        //edge case perviousOverlapping Item is the item to move
-                        let shouldMove = true;
-                        if (previousOverlappingItem === item) {
-                            if (overlappingItemIndex - 2 >= 0) {
-                                previousOverlappingItem = items[overlappingItemIndex - 2];
-                            } else {
-                                shouldMove = false;
-                            }
+                        //find the item which is the previous and nearest but not being moved currently
+                        let previousItem = items[overlappingItemIndex - 1];
+                        let shouldMove = !itemIds.includes(previousItem.id);
+                        for (let iOffset = -2; overlappingItemIndex + iOffset >= 0 && itemIds.includes(previousItem.id); iOffset--) {
+                            previousItem = items[overlappingItemIndex + iOffset];
+                            shouldMove = true;
+                            if (overlappingItemIndex + iOffset <= 0) shouldMove = false;
                         }
-                        if (shouldMove && item.start.isBefore(previousOverlappingItem.end)) {
-                            const moveMilSec = previousOverlappingItem.end.diff(item.start);
-                            const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => curItem.id !== item.id);
-                            this.moveItemForced(item, moveMilSec);
+                        if (shouldMove && movedItemsDummy.start.isBefore(previousItem.end)) {
+                            const moveMilSec = previousItem.end.diff(movedItemsDummy.start);
+                            const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => !itemIds.includes(curItem.id));
+                            // this.moveItemForced(item, moveMilSec);
+                            movedItemsDummy.end.add(moveMilSec);
+                            movedItemsDummy.start.add(moveMilSec);
                             this.moveItemsForced(otherItemsToMove, moveMilSec);
                         }
                     }
-
-
                 }
             } else {
-                item!.start = moment(newStart);
-                item!.end = moment(newEnd);
+                movedItemsDummy.start = moment(newStart);
+                movedItemsDummy.end = moment(newStart).add(totalDuration);
             }
 
+            //insert the actual items at the dummy's position
+            let startTimeToInsert = moment(movedItemsDummy.start);
+            itemsToMove.forEach(item => {
+                const itemDuration = item.end.diff(item.start);
+                item.start = moment(startTimeToInsert);
+                item.end = moment(item.start).add(itemDuration);
+                startTimeToInsert.add(itemDuration);
+            });
         }
 
         if (curTrack) {
@@ -309,8 +355,10 @@ export class AgendaViewModel implements IAgendaViewModel {
         }
     }
 
+    
+
     unselectAll() {
-        this.agendaStore.getItems({uiState: ItemUIState.Selected}).forEach(item => {
+        this.agendaStore.getItems({ uiState: ItemUIState.Selected }).forEach(item => {
             item.uiState = undefined;
         })
         this.agendaStore.overWriteCurrentHistoryEntry();
@@ -318,26 +366,29 @@ export class AgendaViewModel implements IAgendaViewModel {
         this.clearSelectHistory();
     }
 
-    undo(keepItemUIState?: boolean) {
+    undo(keepItemUIState?: boolean, suppressDataChangeHandling?: boolean) {
         this.agendaStore.undo();
         if (!keepItemUIState) {
             this.agendaStore.getItems().forEach(item => {
                 item.uiState = undefined;
             })
         }
+        if(this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
-    redo(keepItemUIState?: boolean) {
+    redo(keepItemUIState?: boolean, suppressDataChangeHandling?: boolean) {
         this.agendaStore.redo();
         if (!keepItemUIState) {
             this.agendaStore.getItems().forEach(item => {
                 item.uiState = undefined;
             })
         }
+        if(this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
-    pushToHistory() {
-        this.agendaStore.pushToHistory()
+    pushToHistory(suppressDataChangeHandling?: boolean) {
+        this.agendaStore.pushToHistory();
+        if(this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
 

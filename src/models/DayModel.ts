@@ -1,12 +1,19 @@
 import moment, { Moment } from 'moment';
 import { observable } from 'mobx';
-import { Track, ITrack } from './TrackModel';
+import { Track, ITrack, ITrackJSON } from './TrackModel';
 
 export interface IDay {
     startTime: Moment,
     endTime: Moment,
     id: string,
     tracks: Array<ITrack>
+}
+
+export interface IDayJSON {
+    startTime: string,
+    endTime: string,
+    id: string,
+    tracks: Array<ITrackJSON>
 }
 
 
@@ -17,7 +24,7 @@ export class Day {
     @observable private _tracks: Array<Track>;
 
 
-    constructor(obj: IDay) {
+    constructor(obj: IDayJSON) {
         this._startTime = moment(obj.startTime);
         this._endTime = moment(obj.endTime);
         this._id = obj.id;
@@ -88,16 +95,16 @@ export class Day {
         this._tracks = value;
     }
 
-    toJSON(): IDay {
+    toJSON(): IDayJSON {
         return {
             id: this._id,
-            startTime: this._startTime,
-            endTime: this._endTime,
+            startTime: this._startTime.toJSON(),
+            endTime: this._endTime.toJSON(),
             tracks: this._tracks.map((track) => track.toJSON())
         }
     }
 
-    static fromJSON(obj: IDay) {
+    static fromJSON(obj: IDayJSON) {
         return new this(obj);
     }
 

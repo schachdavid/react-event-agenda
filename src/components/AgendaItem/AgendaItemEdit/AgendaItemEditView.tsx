@@ -22,10 +22,8 @@ export interface IProps {
 }
 
 const AgendaItemEditView: React.FC<IProps> = ({
-    start,
     setTitle,
     title,
-    end,
     speaker,
     setSpeaker,
     topPx,
@@ -92,8 +90,8 @@ const AgendaItemEditView: React.FC<IProps> = ({
         <div className={styles.container} ref={containerRef} style={{ top: topPx }} >
             <div className={styles.main}>
                 <div className={styles.content}>
-                    <div>
-                        {start} - {end}
+                    <div className={styles.editTitle}>
+                        Edit Item
                     </div>
                     <form onSubmit={() => save()}>
                         {titleTextField}

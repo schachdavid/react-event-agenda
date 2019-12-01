@@ -34,7 +34,6 @@ const DraggedAgendaItemsController: React.FC<IProps> = ({ }) => {
 
     const currentDraggedItemIds: Array<string> = dragObject.itemIds;
     const items = viewModel.getItems(undefined, currentDraggedItemIds);
-    debugger;
 
     const clickedIndex = items.findIndex(item => item.id === dragObject.clickedItemId);
 
@@ -82,6 +81,7 @@ const DraggedAgendaItemsController: React.FC<IProps> = ({ }) => {
                 title={item.title}
                 speaker={item.speaker}
                 small={small}
+                key={item.id}
             />
         )
     })

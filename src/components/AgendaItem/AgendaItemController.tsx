@@ -22,8 +22,6 @@ interface IProps {
 }
 
 
-
-
 const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IProps) => {
     const viewModel = useViewModelContext();
 
@@ -59,14 +57,16 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
         }),
         begin: () => {
             if (viewModel.getUIState() !== UIState.Selecting) viewModel.updateUIState(UIState.Moving);
-            viewModel.pushToHistory();
-            if(item.uiState === ItemUIState.Selected) { 
-                const itemIds = viewModel.getItems({uiState: ItemUIState.Selected}).map(item => item.id); 
-                return {clickedItemId: item.id, itemIds: itemIds, type: "item"};
+            viewModel.pushToHistory(true);
+            if (item.uiState === ItemUIState.Selected) {
+                const itemIds = viewModel.getItems({ uiState: ItemUIState.Selected }).map(item => item.id);
+                return { clickedItemId: item.id, itemIds: itemIds, type: "item" };
             }
-            return {clickedItemId: item.id, itemIds: [item.id], type: "item"};
+            if(viewModel.handleDataChange) viewModel.handleDataChange.cancel();
+            return { clickedItemId: item.id, itemIds: [item.id], type: "item" };
         },
         end: () => {
+            if(viewModel.handleDataChange) viewModel.handleDataChange();
             if (viewModel.getUIState() === UIState.Moving) viewModel.updateUIState(UIState.Normal);
         }
     })
@@ -105,9 +105,8 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
         }
     }
 
-
     const handleSelectClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const selectedItems = viewModel.getItems({uiState: ItemUIState.Selected});
+        const selectedItems = viewModel.getItems({ uiState: ItemUIState.Selected });
         if (item.uiState !== ItemUIState.Selected) {
             if (selectedItems.length == 0) {
                 viewModel.updateUIState(UIState.Selecting);
@@ -131,8 +130,6 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
 
     }
 
-
-
     const intervalPxHeight = viewModel.getIntervalPxHeight();
     const intervalInMin = viewModel.getIntervalInMin();
     const day = viewModel.getDayForItem(item.id);
@@ -149,8 +146,6 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
 
     const small = height == intervalPxHeight ? true : false;
 
-
-
     const agendaItemEdit = item.uiState !== undefined && (item.uiState === ItemUIState.Editing) ?
         <AgendaItemEdit
             item={item}
@@ -158,7 +153,6 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
             topPx={topPx}
             cancel={() => viewModel.updateItemUIState(item.id, undefined)} />
         : null;
-
 
     const customActionButtons = customItemActions ? customItemActions.map((customAction =>
         <IconButton
@@ -170,20 +164,9 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
             }} />
     )) : undefined;
 
-
     return <>
         {agendaItemEdit}
         <div>
-            {/* <AgendaItemDragView
-                id={item.id}
-                height={height}
-                width={width}
-                start={item.start.format("HH:mm")}
-                end={item.end.format("HH:mm")}
-                title={item.title}
-                speaker={item.speaker}
-                small={small}
-            /> */}
             <div ref={refWidthContainer} style={{ width: '100%' }}></div>
 
             <AgendaItemView

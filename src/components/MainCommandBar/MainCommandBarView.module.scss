@@ -1,7 +1,9 @@
 .container {
-  box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
   z-index: 99;
   position: relative;
+  border-bottom: 1px solid var(--neutralTertiary);
+  display: flex;
+  flex-direction: row;
 }
 
 .numberOfItemsText {
@@ -15,14 +17,29 @@
   align-items: center;
 }
 
-
 .numberOfItems {
   background-color: var(--themePrimary);
   color: var(--white);
   padding: 0 8px;
   margin-right: 8px;
   margin-left: 15px;
-
   border-radius: 10px;
 }
+
+.commandBar{
+  width: 100%;
+}
+
+.logo {
+  color: var(--white);
+  background-color: var(--themePrimary);
+  font-size: 16px;
+  flex-shrink: 0;
+  padding-left: 20px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+}
+
+
 
