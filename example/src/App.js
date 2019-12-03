@@ -30,6 +30,86 @@ export default class App extends Component {
               ]
             }
           ]
+        },
+        {
+          "id": "49982ca2-95b7-4c5e-b0c2-b65736e",
+          "startTime": "2013-02-09T07:00:00.000Z",
+          "endTime": "2013-02-09T16:30:00.000Z",
+          "tracks": [
+            {
+              "id": "dba5df09-95b7-43aa-0a696417",
+              "name": "",
+              "items": [
+                {
+                  "id": "5331f2cf-4b0b-40fe-9d61-61e3694f3",
+                  "title": "Welcome",
+                  "speaker": "Host Company",
+                  "start": "2013-02-09T09:00:00.000Z",
+                  "end": "2013-02-09T10:00:00.000Z"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "49982ca2-95b7--b0c2-b65736e",
+          "startTime": "2013-02-10T07:00:00.000Z",
+          "endTime": "2013-02-10T16:30:00.000Z",
+          "tracks": [
+            {
+              "id": "dba5df09-95b7--0a696417",
+              "name": "",
+              "items": [
+                {
+                  "id": "5331f2cf-4b0b--9d61-61e3694f3",
+                  "title": "Welcome",
+                  "speaker": "Host Company",
+                  "start": "2013-02-10T09:00:00.000Z",
+                  "end": "2013-02-10T10:00:00.000Z"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "49982ca2---b0c2-b65736e",
+          "startTime": "2013-02-11T07:00:00.000Z",
+          "endTime": "2013-02-11T16:30:00.000Z",
+          "tracks": [
+            {
+              "id": "dba5df09--0a696417",
+              "name": "",
+              "items": [
+                {
+                  "id": "5331f2cf-4b0b--61e3694f3",
+                  "title": "Welcome",
+                  "speaker": "Host Company",
+                  "start": "2013-02-11T09:00:00.000Z",
+                  "end": "2013-02-11T10:00:00.000Z"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "49982ca2--b65736e",
+          "startTime": "2013-02-12T07:00:00.000Z",
+          "endTime": "2013-02-12T16:30:00.000Z",
+          "tracks": [
+            {
+              "id": "dba5df09-",
+              "name": "",
+              "items": [
+                {
+                  "id": "5331f2cf--61e3694f3",
+                  "title": "Welcome",
+                  "speaker": "Host Company",
+                  "start": "2013-02-12T09:00:00.000Z",
+                  "end": "2013-02-12T10:00:00.000Z"
+                }
+              ]
+            }
+          ]
         }
       ]
     });

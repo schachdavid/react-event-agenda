@@ -1,7 +1,7 @@
 import React from 'react';
 import { AgendaViewModel } from '../../AgendaViewModel';
 import ViewModelContext from '../../hooks/ViewModelContext';
-import { MainCommandBar } from '../MainCommandBar/MainCommandBarController';
+import { MainCommandBar } from '../CommandBar/CommandBarController';
 import { Tracks } from '../Tracks/TracksController';
 import styles from './Agenda.scss';
 import { DndProvider } from 'react-dnd'
@@ -10,7 +10,7 @@ import cssVars from 'css-vars-ponyfill';
 
 // TODO: to be replaced, icons should be passed via props
 // import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
-import { IPalette, createTheme, IIconSubset } from 'office-ui-fabric-react';
+import { IPalette, createTheme, IIconSubset, ICommandBarItemProps } from 'office-ui-fabric-react';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { ColorPaletteContext, defaultPalette } from '../../hooks/ColorPaletteContext';
 import classNames from 'classnames';
@@ -33,6 +33,9 @@ import { DraggedAgendaItems } from '../DraggedAgendaItems/DraggedAgendaItemsCont
 interface IProps {
     agendaViewModel: AgendaViewModel,
     customItemActions?: Array<ICustomItemAction>,
+    customAgendaActions?: ICommandBarItemProps[],
+    customAgendaActionsFar?: any[],
+    customItemSelectionActionsFar?: ICommandBarItemProps[],
     colorPalette?: Partial<IPalette>,
     className?: string,
     style?: React.CSSProperties,
@@ -42,6 +45,9 @@ interface IProps {
 const Agenda: React.FC<IProps> = ({
     agendaViewModel,
     customItemActions,
+    customAgendaActions,
+    customAgendaActionsFar,
+    customItemSelectionActionsFar,
     colorPalette,
     className,
     style,
@@ -70,8 +76,6 @@ const Agenda: React.FC<IProps> = ({
         if (item.iconToRender) {
             let iconsToRegister = {};
             iconsToRegister[item.iconName] = item.iconToRender
-            console.log(iconsToRegister);
-
             registerIcons({ icons: iconsToRegister });
         }
     });
@@ -99,7 +103,11 @@ const Agenda: React.FC<IProps> = ({
                 <ColorPaletteContext.Provider value={colorPalette ? colorPalette : defaultPalette}>
                     <ViewModelContext.Provider value={agendaViewModel}>
                         <DndProvider backend={HTML5Backend} debugMode={true}>
-                            <MainCommandBar></MainCommandBar>
+                            <MainCommandBar 
+                            customAgendaActionsFar={customAgendaActionsFar}
+                            customAgendaActions={customAgendaActions}
+                            customItemSelectionActionsFar={customItemSelectionActionsFar}
+                            />
                             <Tracks customItemActions={customItemActions}>
                             </Tracks>
                             <DraggedAgendaItems/>

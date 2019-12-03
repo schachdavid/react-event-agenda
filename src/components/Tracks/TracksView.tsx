@@ -10,6 +10,8 @@ import { TimeLine } from '../TimeLine/TimeLineController';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { Moment } from 'moment';
 import { DragObject } from '../../interfaces/dndInterfaces';
+import { Stack, IconButton, IIconProps, IButtonStyles } from 'office-ui-fabric-react';
+import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
 
 
 
@@ -26,24 +28,23 @@ export interface IProps {
 const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragObject, singleTracks, customItemActions }: IProps) => {
 
     const [width, setWidth] = useState(0);
+    const palette = useColorPaletteContext();
 
     const refTracksContainer = useCallback(node => {
         if (node !== null) {
             setWidth(node.clientWidth - 1);
-            handleWidthChange(node.clientWidth - 1);
-
             const handleResize = () => {
                 if (node.clientWidth != width) {
                     setWidth(node.clientWidth);
-                    handleWidthChange(node.clientWidth)
                 }
             }
-
             window.addEventListener('resize', handleResize);
             return () => { window.removeEventListener('resize', handleResize) };
         }
         return;
     }, []);
+
+    handleWidthChange(width);
 
 
     let trackViews;
@@ -67,12 +68,33 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragObject,
     }
 
 
+    const leftArrowIcon: IIconProps = { iconName: 'ChevronLeft', };
+    const rightArrowIcon: IIconProps = { iconName: 'ChevronRight' };
+
+    const arrowStyles: IButtonStyles = {
+        root: {
+            height: '43px',
+            width: '24px'
+        },
+        icon: {
+            color: palette.neutralPrimary,
+            fontSize: '14px'
+        }
+    }
+
+
+
 
     return (
         <div className={styles.container}>
             {dayBarViews ?
                 <div className={styles.flex}>
-                    <div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}></div>
+                    <div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}>
+                        <Stack tokens={{ childrenGap: 0 }} horizontal>
+                            <IconButton styles={arrowStyles} iconProps={leftArrowIcon} title="Paginate Days Left" ariaLabel="Paginate Days Left" disabled={false} />
+                            <IconButton styles={arrowStyles} iconProps={rightArrowIcon} title="Paginate Days Right" ariaLabel="Paginate Days Right" disabled={false} />
+                        </Stack>
+                    </div>
                     <div className={classNames(styles.flex, styles.borderBottom)} style={{ width: width }}>
                         {dayBarViews}
                     </div>

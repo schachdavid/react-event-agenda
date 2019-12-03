@@ -34,7 +34,6 @@ export const invertTheme = (palette: Partial<IPalette>) => {
 
 
 export const arraysMatch = (arr1: Array<string | number | boolean>, arr2: Array<string | number | boolean>) =>  {
-
 	// Check if the arrays are the same length
 	if (arr1.length !== arr2.length) return false;
 
@@ -45,5 +44,4 @@ export const arraysMatch = (arr1: Array<string | number | boolean>, arr2: Array<
 
 	// Otherwise, return true
 	return true;
-
 };

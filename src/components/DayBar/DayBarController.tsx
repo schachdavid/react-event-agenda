@@ -13,7 +13,6 @@ interface IProps {
 
 
 const DayBarController: React.FC<IProps> = ({ day }: IProps) => {
-    // const viewModel = useViewModelContext();
 
     const dayName: string = day.startTime.format("ddd, MMM D");;
 

@@ -3,17 +3,19 @@ import { observable } from 'mobx';
 import { Track, ITrack, ITrackJSON } from './TrackModel';
 
 export interface IDay {
-    startTime: Moment,
-    endTime: Moment,
-    id: string,
-    tracks: Array<ITrack>
+    readonly startTime: Moment,
+    readonly endTime: Moment,
+    readonly id: string,
+    readonly tracks: Array<ITrack>,
+    readonly uiHidden: boolean
 }
 
 export interface IDayJSON {
     startTime: string,
     endTime: string,
     id: string,
-    tracks: Array<ITrackJSON>
+    tracks: Array<ITrackJSON>,
+    uiHidden: boolean
 }
 
 
@@ -22,6 +24,8 @@ export class Day {
     @observable private _endTime: Moment;
     @observable private _id: string;
     @observable private _tracks: Array<Track>;
+    @observable private _uiHidden: boolean;
+
 
 
     constructor(obj: IDayJSON) {
@@ -29,13 +33,14 @@ export class Day {
         this._endTime = moment(obj.endTime);
         this._id = obj.id;
         this._tracks = obj.tracks.map((track) => Track.fromJSON(track));
+        this._uiHidden = obj.uiHidden;
     }
 
     /**
      * Getter startTime
      * @return {Moment}
      */
-     public get startTime(): Moment {
+    public get startTime(): Moment {
         return this._startTime;
     }
 
@@ -67,7 +72,7 @@ export class Day {
      * Getter id
      * @return {string}
      */
-      public get id(): string {
+    public get id(): string {
         return this._id;
     }
 
@@ -83,7 +88,7 @@ export class Day {
      * Getter tracks
      * @return {Array<Track>}
      */
-      public get tracks(): Array<Track> {
+    public get tracks(): Array<Track> {
         return this._tracks;
     }
 
@@ -95,12 +100,29 @@ export class Day {
         this._tracks = value;
     }
 
+    /**
+     * Getter uiHidden
+     * @return {boolean}
+     */
+    public get uiHidden(): boolean {
+        return this._uiHidden;
+    }
+
+    /**
+     * Setter uiHidden
+     * @param {boolean} value
+     */
+    public set uiHidden(value: boolean) {
+        this._uiHidden = value;
+    }
+
     toJSON(): IDayJSON {
         return {
             id: this._id,
             startTime: this._startTime.toJSON(),
             endTime: this._endTime.toJSON(),
-            tracks: this._tracks.map((track) => track.toJSON())
+            tracks: this._tracks.map((track) => track.toJSON()),
+            uiHidden: this.uiHidden
         }
     }
 

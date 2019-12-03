@@ -7,87 +7,10 @@ import { Agenda, IAgenda, IAgendaJSON } from './AgendaModel';
 
 class AgendaStore {
     @observable agenda: Agenda;
-    //  new Agenda({
-    //     id: "1",
-    //     days: [
-    //         new Day({
-    //             startTime: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
-    //             endTime: moment('2013-02-08 17:30', 'YYYY-MM-DD H:mm'),
-    //             id: "1",
-    //             tracks: [
-    //                 new Track({
-    //                     name: "",
-    //                     id: "1",
-    //                     items: [
-    //                         new Item({
-    //                             id: "1",
-    //                             start: moment('2013-02-08 8:00', 'YYYY-MM-DD H:mm'),
-    //                             end: moment('2013-02-08 8:15', 'YYYY-MM-DD H:mm'),
-    //                             title: "Introduction",
-    //                             speaker: "Team Lead",
-    //                         }),
-    //                         new Item({
-    //                             id: "2",
-    //                             start: moment('2013-02-08 8:15', 'YYYY-MM-DD H:mm'),
-    //                             end: moment('2013-02-08 9:00', 'YYYY-MM-DD H:mm'),
-    //                             title: "Review Q1 - Team A",
-    //                             speaker: "Team A Lead"
-
-    //                         }),
-    //                         new Item({
-    //                             id: "3",
-    //                             start: moment('2013-02-08 9:00', 'YYYY-MM-DD H:mm'),
-    //                             end: moment('2013-02-08 9:30', 'YYYY-MM-DD H:mm'),
-    //                             title: "Review Q1 - Team B",
-    //                             speaker: "Team B Lead"
-    //                         }),
-    //                     ]
-    //                 })
-    //             ]
-    //         }),
-    //         new Day({
-    //             startTime: moment('2013-02-09 7:00', 'YYYY-MM-DD H:mm'),
-    //             endTime: moment('2013-02-09 16:30', 'YYYY-MM-DD H:mm'),
-    //             id: "2",
-    //             tracks: [
-    //                 new Track({
-    //                     name: "",
-    //                     id: "2",
-    //                     items: [
-    //                         new Item({
-    //                             id: "10",
-    //                             start: moment('2013-02-09 8:00', 'YYYY-MM-DD H:mm'),
-    //                             end: moment('2013-02-09 8:45', 'YYYY-MM-DD H:mm'),
-    //                             title: "Breakfast"
-    //                         }),
-    //                         new Item({
-    //                             id: "11",
-    //                             start: moment('2013-02-09 8:45', 'YYYY-MM-DD H:mm'),
-    //                             end: moment('2013-02-09 9:30', 'YYYY-MM-DD H:mm'),
-    //                             title: "Presentation \"Design Thinking in 2018\"",
-    //                             speaker: "Dr. Germione Hanger"
-    //                         }),
-    //                         new Item({
-    //                             id: "12",
-    //                             start: moment('2013-02-09 9:30', 'YYYY-MM-DD H:mm'),
-    //                             end: moment('2013-02-09 9:45', 'YYYY-MM-DD H:mm'),
-    //                             title: "Coffee Break",
-    //                         })
-    //                     ]
-    //                 })
-    //             ]
-    //         })
-    //     ]
-    // });
-
+    // TODO: move to ui store
     @observable intervalPxHeight: number = 50;
     @observable intervalInMin: number = 15;
     @observable segmentFactor: number = 4;
-
-
-
-
-
 
     agendaHistory: Array<IAgendaJSON> = [];
     pointer: number = -1;
@@ -121,8 +44,20 @@ class AgendaStore {
         }
     }
 
-    getDays() {
-        return this.agenda.days;
+    getDays(filter?: { uiHidden?: boolean },) {
+        let days = this.agenda.days;
+        if (filter) {
+            days = days.filter((day) => {
+                const uiHidden = day.uiHidden ? day.uiHidden : false;
+                return uiHidden === filter.uiHidden;
+            });
+        }
+        return days;
+    }
+
+
+    getDay(id: string) {
+        return this.agenda.days.find((day) => day.id === id);
     }
 
     getAgenda(): IAgenda {

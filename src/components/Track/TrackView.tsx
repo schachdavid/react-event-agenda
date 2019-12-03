@@ -7,7 +7,7 @@ import { useDrop, DropTargetMonitor } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { DragObject } from '../../interfaces/dndInterfaces'
 import uuid from 'uuid';
-import throttle from 'lodash.throttle';
+import throttle from 'lodash/throttle';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import classNames from 'classnames';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';

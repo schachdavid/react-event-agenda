@@ -74,9 +74,12 @@ export class AgendaViewModel implements IAgendaViewModel {
         return this.agendaStore.getSegmentFactor();
     }
 
-    getDays() {
-        return this.agendaStore.getAgenda().days;
+
+
+    getDays(filter?: { uiHidden?: boolean },) {
+        return this.agendaStore.getDays(filter);
     }
+ 
 
     getDayForTrack(trackId: string) {
         return this.agendaStore.getDayForTrack(trackId);
@@ -84,6 +87,13 @@ export class AgendaViewModel implements IAgendaViewModel {
 
     getDayForItem(id: string) {
         return this.agendaStore.getDayForItem(id);
+    }
+
+    setDayUiHidden(id: string, value: boolean) {
+        const day = this.agendaStore.getDay(id);
+        if (day) {
+            day.uiHidden = value;
+        }
     }
 
     getItem(id: string): IItem | undefined {
