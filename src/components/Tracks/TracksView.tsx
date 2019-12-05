@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { observer } from "mobx-react";
 import styles from './TracksView.module.scss';
 import { Track } from '../Track/TrackController';
@@ -17,25 +17,33 @@ import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
 
 export interface IProps {
     handleWidthChange: (newWidth: number) => void;
+    width: number;
     days: Array<IDay>;
     singleTracks: boolean;
     customItemActions?: Array<ICustomItemAction>,
-    moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void
-
-
+    moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void,
+    paginateRight: () => void,
+    paginateLeft: () => void
 }
 
-const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragObject, singleTracks, customItemActions }: IProps) => {
+const TracksView: React.FC<IProps> = ({
+    days,
+    handleWidthChange,
+    width,
+    moveDragObject,
+    singleTracks,
+    customItemActions,
+    paginateRight,
+    paginateLeft }: IProps) => {
 
-    const [width, setWidth] = useState(0);
     const palette = useColorPaletteContext();
 
     const refTracksContainer = useCallback(node => {
         if (node !== null) {
-            setWidth(node.clientWidth - 1);
+            handleWidthChange(node.clientWidth - 1);
             const handleResize = () => {
-                if (node.clientWidth != width) {
-                    setWidth(node.clientWidth);
+                if (node.clientWidth !== width) {
+                    handleWidthChange(node.clientWidth);
                 }
             }
             window.addEventListener('resize', handleResize);
@@ -44,7 +52,7 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragObject,
         return;
     }, []);
 
-    handleWidthChange(width);
+    // handleWidthChange(width);
 
 
     let trackViews;
@@ -91,8 +99,22 @@ const TracksView: React.FC<IProps> = ({ days, handleWidthChange, moveDragObject,
                 <div className={styles.flex}>
                     <div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}>
                         <Stack tokens={{ childrenGap: 0 }} horizontal>
-                            <IconButton styles={arrowStyles} iconProps={leftArrowIcon} title="Paginate Days Left" ariaLabel="Paginate Days Left" disabled={false} />
-                            <IconButton styles={arrowStyles} iconProps={rightArrowIcon} title="Paginate Days Right" ariaLabel="Paginate Days Right" disabled={false} />
+                            <IconButton
+                                styles={arrowStyles}
+                                iconProps={leftArrowIcon}
+                                title="Paginate Days Left"
+                                ariaLabel="Paginate Days Left"
+                                disabled={false} 
+                                onClick={paginateLeft}
+                                />
+                            <IconButton
+                                styles={arrowStyles}
+                                iconProps={rightArrowIcon}
+                                title="Paginate Days Right"
+                                ariaLabel="Paginate Days Right"
+                                disabled={false}
+                                onClick={paginateRight}
+                            />
                         </Stack>
                     </div>
                     <div className={classNames(styles.flex, styles.borderBottom)} style={{ width: width }}>

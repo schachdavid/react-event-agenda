@@ -7,6 +7,8 @@ import uuid from 'uuid';
 import { IAgendaJSON, Agenda } from './models/AgendaModel';
 import debounce from 'lodash/debounce';
 import { Cancelable } from 'lodash';
+import findLastIndex from 'lodash/findLastIndex'
+
 
 
 
@@ -30,7 +32,7 @@ export class AgendaViewModel implements IAgendaViewModel {
                 track.items.forEach(item => {
                     item.uiState = undefined;
                 })
-            })  
+            })
         });
         this.agendaStore.setAgenda(Agenda.fromJSON(data));
         this.agendaStore.overWriteCurrentHistoryEntry();
@@ -39,11 +41,12 @@ export class AgendaViewModel implements IAgendaViewModel {
     getData() {
         const data = this.agendaStore.agenda.toJSON();
         data.days.forEach(day => {
+            // delete day.uiHidden; //TODO: delete also item.uiState try in add-in
             day.tracks.forEach(track => {
                 track.items.forEach(item => {
                     item.uiState = undefined;
                 })
-            })  
+            })
         });
         return data;
     }
@@ -76,10 +79,10 @@ export class AgendaViewModel implements IAgendaViewModel {
 
 
 
-    getDays(filter?: { uiHidden?: boolean },) {
+    getDays(filter?: { uiHidden?: boolean }, ) {
         return this.agendaStore.getDays(filter);
     }
- 
+
 
     getDayForTrack(trackId: string) {
         return this.agendaStore.getDayForTrack(trackId);
@@ -139,6 +142,14 @@ export class AgendaViewModel implements IAgendaViewModel {
             return moment.max(endTimes);
         }
         return;
+    }
+
+    getTotalTracksWidth() {
+        return this.uiStore.getTotalTracksWidth()
+    }
+
+    setTotalTracksWidth(value: number) {
+        this.uiStore.setTotalTracksWidth(value);
     }
 
     pushToSelectHistory(itemId: string) {
@@ -209,12 +220,12 @@ export class AgendaViewModel implements IAgendaViewModel {
     updateItemUIState(id: string, newUIState: ItemUIState | undefined) {
         const item = this.agendaStore.getItem(id);
         if (item) {
-            const oldState =  item.uiState ;
+            const oldState = item.uiState;
             item.uiState = newUIState;
-            if (newUIState === ItemUIState.Selected ||  oldState === ItemUIState.Selected ||  oldState === ItemUIState.Editing) {
-                this.agendaStore.overWriteCurrentHistoryEntry();                
+            if (newUIState === ItemUIState.Selected || oldState === ItemUIState.Selected || oldState === ItemUIState.Editing) {
+                this.agendaStore.overWriteCurrentHistoryEntry();
             }
-            
+
         }
     }
 
@@ -265,7 +276,7 @@ export class AgendaViewModel implements IAgendaViewModel {
             }
 
             //add item duration to total duration of itemsToMove
-            
+
             totalDuration = totalDuration + item.end.diff(item.start);
         })
 
@@ -365,7 +376,7 @@ export class AgendaViewModel implements IAgendaViewModel {
         }
     }
 
-    
+
 
     unselectAll() {
         this.agendaStore.getItems({ uiState: ItemUIState.Selected }).forEach(item => {
@@ -383,7 +394,7 @@ export class AgendaViewModel implements IAgendaViewModel {
                 item.uiState = undefined;
             })
         }
-        if(this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
+        if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
     redo(keepItemUIState?: boolean, suppressDataChangeHandling?: boolean) {
@@ -393,12 +404,16 @@ export class AgendaViewModel implements IAgendaViewModel {
                 item.uiState = undefined;
             })
         }
-        if(this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
+        if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
     pushToHistory(suppressDataChangeHandling?: boolean) {
         this.agendaStore.pushToHistory();
-        if(this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
+        if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
+    }
+
+    overWriteCurrentHistoryEntry() {
+        this.agendaStore.overWriteCurrentHistoryEntry();
     }
 
 
@@ -434,16 +449,41 @@ export class AgendaViewModel implements IAgendaViewModel {
 
     }
 
+    paginateRight(displayableTracks: number) {
+        const allDays = this.agendaStore.getDays();
+        const lastVisibleIndex = findLastIndex(allDays, day => !day.uiHidden);
+        if (allDays.length - 1 > lastVisibleIndex || lastVisibleIndex === -1) {
+            const firstVisibleIndex = allDays.findIndex(day => !day.uiHidden);
+            for (let i = firstVisibleIndex; i <= lastVisibleIndex; i++) {
+                allDays[i].uiHidden = true;
+            }
+            let revealedDays = 0;
+            for (let i = lastVisibleIndex + 1; i < allDays.length && revealedDays < displayableTracks; i++) {
+                allDays[i].uiHidden = false;
+                revealedDays++;
+            }
+        }
+        // this.agendaStore.overWriteCurrentHistoryEntry();
+    }
 
-
-
-
-
-
-
-
-
-
-
+    paginateLeft(displayableTracks: number) {
+        const allDays = this.agendaStore.getDays();
+        const firstVisibleIndex = allDays.findIndex(day => !day.uiHidden);
+        if (firstVisibleIndex > 0) {
+            const lastVisibleIndex = findLastIndex(allDays, day => !day.uiHidden);
+            for (let i = firstVisibleIndex; i <= lastVisibleIndex; i++) {
+                allDays[i].uiHidden = true;
+            }
+            let revealedDays = 0;
+            let newFirstVisibleIndex = firstVisibleIndex - displayableTracks;
+            if (newFirstVisibleIndex < 0) newFirstVisibleIndex = 0;
+            for (let i = newFirstVisibleIndex; i < allDays.length && revealedDays < displayableTracks; i++) {
+                allDays[i].uiHidden = false;
+                revealedDays++;
+            }
+        }
+        // this.agendaStore.overWriteCurrentHistoryEntry();
+    }
+    
 }
 

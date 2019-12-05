@@ -13,14 +13,16 @@ export enum UIState {
 class UIStore {
     @observable uiState: UIState = UIState.Normal;
     @observable selectHistory: Array<string> = []; //needed for badge selecting using shift key
+    @observable totalTracksWidth: number = 0;
+    @observable trackWidth: number = 0;
 
-
-    @action setUiState(newState: UIState) {
-        this.uiState = newState;
-    }
 
     getUiState() {
         return this.uiState;
+    }
+
+    @action setUiState(newState: UIState) {
+        this.uiState = newState;
     }
 
     getSelectHistory() {
@@ -29,6 +31,14 @@ class UIStore {
 
     @action setSelectHistory(newSelectHistory: Array<string>) {
         this.selectHistory = newSelectHistory;
+    }
+
+    getTotalTracksWidth() {
+        return this.totalTracksWidth;
+    }
+
+    @action setTotalTracksWidth(value: number) {
+        this.totalTracksWidth = value;
     }
 
   

@@ -15,7 +15,7 @@ export interface IDayJSON {
     endTime: string,
     id: string,
     tracks: Array<ITrackJSON>,
-    uiHidden: boolean
+    uiHidden?: boolean
 }
 
 
@@ -33,7 +33,7 @@ export class Day {
         this._endTime = moment(obj.endTime);
         this._id = obj.id;
         this._tracks = obj.tracks.map((track) => Track.fromJSON(track));
-        this._uiHidden = obj.uiHidden;
+        this._uiHidden = obj.uiHidden ? obj.uiHidden : false;
     }
 
     /**

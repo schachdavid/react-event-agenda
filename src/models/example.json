@@ -14,26 +14,7 @@
                             "id": "5331f2cf-4b0b-40fe-9d61-60221e3694f3",
                             "title": "Welcome",
                             "speaker": "Host Company",
-                            "start": "2013-02-08T09:00:00.000Z",
-                            "end": "2013-02-08T10:00:00.000Z"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "49982ca2-95b7-4c5e-b0c2-bbee",
-            "startTime": "2013-02-08T07:00:00.000Z",
-            "endTime": "2013-02-08T16:30:00.000Z",
-            "tracks": [
-                {
-                    "id": "dba5df09-95b7-43aa-bae8-8d66417",
-                    "name": "",
-                    "items": [
-                        {
-                            "id": "5331f2cf-4b0b-40fe-9d61-94f3",
-                            "title": "Welcome",
-                            "speaker": "Host Company",
+                            "description": "Some Description",
                             "start": "2013-02-08T09:00:00.000Z",
                             "end": "2013-02-08T10:00:00.000Z"
                         }

@@ -23,9 +23,9 @@ const TracksController: React.FC<IProps> = ({ customItemActions }: IProps) => {
     const [lastMovedItemIds, setLastMovedItemId] = useState([""]);
     const [lastMovedNewStart, setLastMovedNewStart] = useState(moment());
 
+
     const days: Array<IDay> = viewModel.getDays({ uiHidden: false });
-
-
+    
     const moveDragObject = (trackId: string, newStart: Moment, dragObject: DragObject) => {
         if (arraysMatch(lastMovedItemIds, dragObject.itemIds) && lastMovedNewStart.isSame(newStart)) {
             return;
@@ -61,32 +61,51 @@ const TracksController: React.FC<IProps> = ({ customItemActions }: IProps) => {
         return daysToReveal;
     }
 
+    const getDisplayableTracks = (width: number) => {
+        let displayableTracks = Math.floor(width / 200);
+        if (displayableTracks === 0) displayableTracks = 1;
+        return displayableTracks;        
+    }
+
 
     const handleWidthChange = (newWidth: number) => {
-        console.log("handle resizing, new width: ", newWidth);
-        if(newWidth === 474) debugger;
         const days: Array<IDay> = viewModel.getDays({ uiHidden: false }); //TODO figure out why I need to do this and not use the days directly
-        let currentlyDisplayableTracks = Math.floor(newWidth / 200);
-        if (currentlyDisplayableTracks === 0) currentlyDisplayableTracks = 1;
-        if (days.length > currentlyDisplayableTracks) {
-            const numberOfDaysToHide = days.length - currentlyDisplayableTracks;
+        const displayableTracks = getDisplayableTracks(newWidth);
+        if (days.length > displayableTracks) {
+            const numberOfDaysToHide = days.length - displayableTracks;
             for(let i = 0; i<numberOfDaysToHide; i++) {
                 viewModel.setDayUiHidden(days[days.length - 1 - i].id, true);
             }
-        } else if (days.length < currentlyDisplayableTracks) {
-            const daysToReveal = getDaysToReveal(currentlyDisplayableTracks - days.length);
+        } else if (days.length < displayableTracks) {
+            const daysToReveal = getDaysToReveal(displayableTracks - days.length);
             if (daysToReveal.length > 0) daysToReveal.forEach(day => viewModel.setDayUiHidden(day.id, false));
         }
+        viewModel.setTotalTracksWidth(newWidth);
+        viewModel.overWriteCurrentHistoryEntry();
+    }
+
+    const paginateRight = () => {
+        const displayableTracks = getDisplayableTracks(viewModel.getTotalTracksWidth());
+        viewModel.paginateRight(displayableTracks);
+    }
+
+    const paginateLeft = () => {
+        const displayableTracks = getDisplayableTracks(viewModel.getTotalTracksWidth());
+        viewModel.paginateLeft(displayableTracks);
     }
 
     const singleTracks: boolean = true;
 
     return <TracksView
         handleWidthChange={handleWidthChange}
+        width={viewModel.getTotalTracksWidth()}
         days={days}
         singleTracks={singleTracks}
         customItemActions={customItemActions}
         moveDragObject={moveDragObject}
+        paginateRight={paginateRight}
+        paginateLeft={paginateLeft}
+
     />
 }
 

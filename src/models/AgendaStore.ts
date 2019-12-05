@@ -48,7 +48,7 @@ class AgendaStore {
         let days = this.agenda.days;
         if (filter) {
             days = days.filter((day) => {
-                const uiHidden = day.uiHidden ? day.uiHidden : false;
+                const uiHidden = day.uiHidden !== undefined ? day.uiHidden : false;
                 return uiHidden === filter.uiHidden;
             });
         }
@@ -187,6 +187,7 @@ class AgendaStore {
     pushToHistory() {
         this.pointer++;
         this.agendaHistory.splice(this.pointer, this.agendaHistory.length);
+        console.log("pushed: ",this.agenda.days.filter(day => !day.uiHidden));
         this.agendaHistory.push(toJS(this.agenda).toJSON());
     }
 
@@ -197,7 +198,11 @@ class AgendaStore {
     @action undo() {
         if (this.pointer > 0) {
             this.pointer--;
+            console.log("-----------------------------");
+            console.log("before: ",this.agenda.days.filter(day => !day.uiHidden));
+
             this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
+            console.log("after: ",this.agenda.days.filter(day => !day.uiHidden));
         }
     }
 
