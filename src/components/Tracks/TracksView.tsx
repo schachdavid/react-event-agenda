@@ -12,6 +12,7 @@ import { Moment } from 'moment';
 import { DragObject } from '../../interfaces/dndInterfaces';
 import { Stack, IconButton, IIconProps, IButtonStyles } from 'office-ui-fabric-react';
 import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
+import { useDrop } from 'react-dnd';
 
 
 
@@ -23,7 +24,9 @@ export interface IProps {
     customItemActions?: Array<ICustomItemAction>,
     moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void,
     paginateRight: () => void,
-    paginateLeft: () => void
+    canPaginateRight: boolean,
+    paginateLeft: () => void,
+    canPaginateLeft: boolean
 }
 
 const TracksView: React.FC<IProps> = ({
@@ -34,7 +37,9 @@ const TracksView: React.FC<IProps> = ({
     singleTracks,
     customItemActions,
     paginateRight,
-    paginateLeft }: IProps) => {
+    canPaginateRight,
+    paginateLeft,
+    canPaginateLeft }: IProps) => {
 
     const palette = useColorPaletteContext();
 
@@ -52,7 +57,22 @@ const TracksView: React.FC<IProps> = ({
         return;
     }, []);
 
-    // handleWidthChange(width);
+
+    const [, leftDrop] = useDrop({
+        accept: 'item',
+        hover() {
+            if(canPaginateLeft) paginateLeft();
+            
+        },
+    })
+    const [, rightDrop] = useDrop({
+        accept: 'item',
+        hover() {
+            if(canPaginateRight) paginateRight();
+        },
+    })
+
+
 
 
     let trackViews;
@@ -75,12 +95,12 @@ const TracksView: React.FC<IProps> = ({
         });
     }
 
-
     const leftArrowIcon: IIconProps = { iconName: 'ChevronLeft', };
     const rightArrowIcon: IIconProps = { iconName: 'ChevronRight' };
 
-    const arrowStyles: IButtonStyles = {
+    const arrowStyle: IButtonStyles = {
         root: {
+            visibility: (!canPaginateLeft && !canPaginateRight) ? 'hidden' : 'visible',
             height: '43px',
             width: '24px'
         },
@@ -90,31 +110,33 @@ const TracksView: React.FC<IProps> = ({
         }
     }
 
-
-
-
     return (
         <div className={styles.container}>
             {dayBarViews ?
                 <div className={styles.flex}>
                     <div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}>
                         <Stack tokens={{ childrenGap: 0 }} horizontal>
+                        <div ref={leftDrop}>
                             <IconButton
-                                styles={arrowStyles}
+                                styles={arrowStyle}
                                 iconProps={leftArrowIcon}
                                 title="Paginate Days Left"
                                 ariaLabel="Paginate Days Left"
-                                disabled={false} 
+                                disabled={!canPaginateLeft}
                                 onClick={paginateLeft}
                                 />
+                        </div>
+                        <div ref={rightDrop}>
                             <IconButton
-                                styles={arrowStyles}
+                                styles={arrowStyle}
                                 iconProps={rightArrowIcon}
                                 title="Paginate Days Right"
                                 ariaLabel="Paginate Days Right"
-                                disabled={false}
+                                disabled={!canPaginateRight}
                                 onClick={paginateRight}
                             />
+                        </div>
+
                         </Stack>
                     </div>
                     <div className={classNames(styles.flex, styles.borderBottom)} style={{ width: width }}>

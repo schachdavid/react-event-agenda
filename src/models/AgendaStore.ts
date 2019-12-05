@@ -184,6 +184,11 @@ class AgendaStore {
         return this.segmentFactor;
     }
 
+    
+    overWriteCurrentHistoryEntry() {
+        this.agendaHistory[this.pointer] = toJS(this.agenda).toJSON();
+    }
+
     pushToHistory() {
         this.pointer++;
         this.agendaHistory.splice(this.pointer, this.agendaHistory.length);
@@ -191,16 +196,9 @@ class AgendaStore {
         this.agendaHistory.push(toJS(this.agenda).toJSON());
     }
 
-    overWriteCurrentHistoryEntry() {
-        this.agendaHistory[this.pointer] = toJS(this.agenda).toJSON();
-    }
-
     @action undo() {
         if (this.pointer > 0) {
             this.pointer--;
-            console.log("-----------------------------");
-            console.log("before: ",this.agenda.days.filter(day => !day.uiHidden));
-
             this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
             console.log("after: ",this.agenda.days.filter(day => !day.uiHidden));
         }

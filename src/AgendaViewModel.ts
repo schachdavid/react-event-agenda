@@ -1,4 +1,4 @@
-import AgendaStore, { IItem, Item } from './models/AgendaStore';
+import AgendaStore, { IItem, Item, Day } from './models/AgendaStore';
 import { IAgendaViewModel } from './interfaces/IAgendaViewModel';
 import moment, { Moment } from 'moment';
 import UIStore, { UIState } from './models/UIStore';
@@ -8,10 +8,6 @@ import { IAgendaJSON, Agenda } from './models/AgendaModel';
 import debounce from 'lodash/debounce';
 import { Cancelable } from 'lodash';
 import findLastIndex from 'lodash/findLastIndex'
-
-
-
-
 
 
 
@@ -390,20 +386,24 @@ export class AgendaViewModel implements IAgendaViewModel {
     undo(keepItemUIState?: boolean, suppressDataChangeHandling?: boolean) {
         this.agendaStore.undo();
         if (!keepItemUIState) {
+            //case this method is not called during moving of items
             this.agendaStore.getItems().forEach(item => {
                 item.uiState = undefined;
-            })
-        }
+            });
+            if(this.canPaginateRight()) this.applyTotalTrackWidthToTrackVisibility();
+        } 
         if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
     redo(keepItemUIState?: boolean, suppressDataChangeHandling?: boolean) {
         this.agendaStore.redo();
         if (!keepItemUIState) {
+            //case this method is not called during moving of items
             this.agendaStore.getItems().forEach(item => {
                 item.uiState = undefined;
             })
-        }
+            if(this.canPaginateRight()) this.applyTotalTrackWidthToTrackVisibility();
+        } 
         if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
@@ -449,7 +449,15 @@ export class AgendaViewModel implements IAgendaViewModel {
 
     }
 
-    paginateRight(displayableTracks: number) {
+    canPaginateRight(){
+        const allDays = this.agendaStore.getDays();
+        const lastUiHidden =  allDays[allDays.length - 1].uiHidden;
+        if(lastUiHidden) return true;
+        else return false;
+    }
+
+    paginateRight() {
+        const displayableTracks = this.getNumberOfDisplayableTracks();
         const allDays = this.agendaStore.getDays();
         const lastVisibleIndex = findLastIndex(allDays, day => !day.uiHidden);
         if (allDays.length - 1 > lastVisibleIndex || lastVisibleIndex === -1) {
@@ -463,10 +471,19 @@ export class AgendaViewModel implements IAgendaViewModel {
                 revealedDays++;
             }
         }
-        // this.agendaStore.overWriteCurrentHistoryEntry();
+        this.agendaStore.overWriteCurrentHistoryEntry();
     }
 
-    paginateLeft(displayableTracks: number) {
+    canPaginateLeft(){
+        const allDays = this.agendaStore.getDays();
+        const firstUiHidden =  allDays[0].uiHidden;
+        if(firstUiHidden) return true;
+        else return false;
+    }
+
+
+    paginateLeft() {
+        const displayableTracks = this.getNumberOfDisplayableTracks();
         const allDays = this.agendaStore.getDays();
         const firstVisibleIndex = allDays.findIndex(day => !day.uiHidden);
         if (firstVisibleIndex > 0) {
@@ -482,8 +499,56 @@ export class AgendaViewModel implements IAgendaViewModel {
                 revealedDays++;
             }
         }
-        // this.agendaStore.overWriteCurrentHistoryEntry();
+        this.agendaStore.overWriteCurrentHistoryEntry();
     }
-    
+
+    getDaysToReveal(numberToReveal: number) {
+        const allDays = this.getDays();
+        const daysToReveal: Array<Day> = [];
+
+        const lastVisibleIndex = findLastIndex(allDays, day => !day.uiHidden);
+        if (lastVisibleIndex !== -1) {
+            for (let i = lastVisibleIndex + 1; i < allDays.length; i++) {
+                daysToReveal.push(allDays[i]);
+                numberToReveal--;
+                if (numberToReveal === 0) return daysToReveal;
+            }
+        } else {
+            return daysToReveal;
+        }
+
+        const firstVisibleIndex = allDays.findIndex(day => !day.uiHidden);
+        for (let i = firstVisibleIndex - 1; i >= 0; i--) {
+            daysToReveal.push(allDays[i]);
+            numberToReveal--;
+            if (numberToReveal === 0) return daysToReveal;
+        }
+        return daysToReveal;
+    }
+
+    getNumberOfDisplayableTracks() {
+        let displayableTracks = Math.floor(this.getTotalTracksWidth() / 200);
+        if (displayableTracks === 0) displayableTracks = 1;
+        return displayableTracks;
+    }
+
+    applyTotalTrackWidthToTrackVisibility() {
+        const days: Array<Day> = this.getDays({ uiHidden: false });
+        const displayableTracks = this.getNumberOfDisplayableTracks();
+        if (days.length > displayableTracks) {
+            const numberOfDaysToHide = days.length - displayableTracks;
+            for (let i = 0; i < numberOfDaysToHide; i++) {
+                this.setDayUiHidden(days[days.length - 1 - i].id, true);
+            }
+        } else if (days.length < displayableTracks) {
+            const daysToReveal = this.getDaysToReveal(displayableTracks - days.length);
+            if (daysToReveal.length > 0) daysToReveal.forEach(day => this.setDayUiHidden(day.id, false));
+        }
+        this.overWriteCurrentHistoryEntry();
+    }
+
+
+
+
 }
 
