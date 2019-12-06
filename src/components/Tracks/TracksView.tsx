@@ -17,7 +17,8 @@ import { useDrop } from 'react-dnd';
 
 
 export interface IProps {
-    handleWidthChange: (newWidth: number) => void;
+    handleTracksContainerWidthChange: (newWidth: number) => void;
+    handleTrackWidthChange: (newWidth: number) => void;
     width: number;
     days: Array<IDay>;
     singleTracks: boolean;
@@ -31,7 +32,8 @@ export interface IProps {
 
 const TracksView: React.FC<IProps> = ({
     days,
-    handleWidthChange,
+    handleTracksContainerWidthChange,
+    handleTrackWidthChange,
     width,
     moveDragObject,
     singleTracks,
@@ -45,14 +47,28 @@ const TracksView: React.FC<IProps> = ({
 
     const refTracksContainer = useCallback(node => {
         if (node !== null) {
-            handleWidthChange(node.clientWidth - 1);
-            const handleResize = () => {
+            handleTracksContainerWidthChange(node.clientWidth - 1);
+            const handleResizeTracksContainer = () => {
                 if (node.clientWidth !== width) {
-                    handleWidthChange(node.clientWidth);
+                    handleTracksContainerWidthChange(node.clientWidth);
                 }
             }
-            window.addEventListener('resize', handleResize);
-            return () => { window.removeEventListener('resize', handleResize) };
+            window.addEventListener('resize', handleResizeTracksContainer);
+            return () => { window.removeEventListener('resize', handleResizeTracksContainer) };
+        }
+        return;
+    }, []);
+
+    const refFirstTrack = useCallback(node => {
+        if (node !== null) {
+            handleTrackWidthChange(node.clientWidth - 1);
+            const handleResizeFirstTrack = () => {
+                if (node.clientWidth !== width) {
+                    handleTrackWidthChange(node.clientWidth);
+                }
+            }
+            window.addEventListener('resize', handleResizeFirstTrack);
+            return () => { window.removeEventListener('resize', handleResizeFirstTrack) };
         }
         return;
     }, []);
@@ -93,6 +109,10 @@ const TracksView: React.FC<IProps> = ({
         trackBarViews = tracks.map((track: TrackData) => {
             return <TrackBar key={track.id}></TrackBar>
         });
+    }
+
+    if(trackViews !== undefined && trackViews.length > 0) {
+        trackViews[0] = <div ref={refFirstTrack} className={styles.firstTrackContainer}>{trackViews[0]}</div>
     }
 
     const leftArrowIcon: IIconProps = { iconName: 'ChevronLeft', };

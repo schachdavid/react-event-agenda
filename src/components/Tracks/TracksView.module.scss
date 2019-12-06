@@ -11,6 +11,12 @@
     overflow-y:scroll;    
 }
 
+.firstTrackContainer {
+    flex-grow: 1;
+    max-width: 380px;
+    min-width: 190px;
+}
+
 .flex {
     width: 100%;
     display: flex;

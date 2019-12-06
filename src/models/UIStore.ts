@@ -41,6 +41,15 @@ class UIStore {
         this.totalTracksWidth = value;
     }
 
+    getTrackWidth() {
+        return this.trackWidth;
+    }
+
+    @action setTrackWidth(value: number) {
+        this.trackWidth = value;
+    }
+
+
   
 }
 

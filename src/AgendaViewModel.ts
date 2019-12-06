@@ -148,6 +148,14 @@ export class AgendaViewModel implements IAgendaViewModel {
         this.uiStore.setTotalTracksWidth(value);
     }
 
+    getTrackWidth() {
+        return this.uiStore.getTrackWidth()
+    }
+
+    setTrackWidth(value: number) {
+        this.uiStore.setTrackWidth(value);
+    }
+
     pushToSelectHistory(itemId: string) {
         this.uiStore.getSelectHistory().push(itemId);
     }

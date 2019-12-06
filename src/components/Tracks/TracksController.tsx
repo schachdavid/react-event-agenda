@@ -33,10 +33,15 @@ const TracksController: React.FC<IProps> = ({ customItemActions }: IProps) => {
         viewModel.pushToHistory(true);
     }
 
-    const handleWidthChange = (newWidth: number) => {
+    const handleTracksContainerWidthChange = (newWidth: number) => {
         viewModel.setTotalTracksWidth(newWidth);
         viewModel.applyTotalTrackWidthToTrackVisibility();
     }
+
+    const handleTrackWidthChange = (newWidth: number) => {
+        viewModel.setTrackWidth(newWidth);
+    }
+
 
     const paginateRight = () => {
         viewModel.paginateRight();
@@ -49,7 +54,8 @@ const TracksController: React.FC<IProps> = ({ customItemActions }: IProps) => {
     const singleTracks: boolean = true;
 
     return <TracksView
-        handleWidthChange={handleWidthChange}
+        handleTracksContainerWidthChange={handleTracksContainerWidthChange}
+        handleTrackWidthChange={handleTrackWidthChange}
         width={viewModel.getTotalTracksWidth()}
         days={days}
         singleTracks={singleTracks}

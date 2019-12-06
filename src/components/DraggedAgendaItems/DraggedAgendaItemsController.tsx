@@ -73,7 +73,7 @@ const DraggedAgendaItemsController: React.FC<IProps> = ({ }) => {
         renderedItems.push(
             <DraggedAgendaItemView
                 height={heights[index]}
-                width={400}
+                width={viewModel.getTrackWidth()}
                 start={item.start.format("HH:mm")}
                 end={item.end.format("HH:mm")}
                 offsetX={currentOffset.x}
