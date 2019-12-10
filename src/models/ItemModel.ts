@@ -13,6 +13,7 @@ export interface IItem {
     readonly id: string,
     readonly title?: string,
     readonly speaker?: string,
+    readonly description?: string,
     readonly start: Moment,
     readonly end: Moment,
     readonly uiState?: ItemUIState
@@ -22,6 +23,7 @@ export interface IItemJSON {
     id: string,
     title?: string,
     speaker?: string,
+    description?: string,
     start: string,
     end: string,
     uiState?: ItemUIState
@@ -32,6 +34,7 @@ export class Item {
     @observable private _id: string;
     @observable private _title: string;
     @observable private _speaker: string;
+    @observable private _description: string;
     @observable private _start: Moment;
     @observable private _end: Moment;
     @observable private _uiState?: ItemUIState = undefined;
@@ -111,6 +114,22 @@ export class Item {
     }
 
     /**
+     * Getter description
+     * @return {string}
+     */
+	public get description(): string {
+		return this._description;
+	}
+
+    /**
+     * Setter description
+     * @param {string} value
+     */
+	public set description(value: string) {
+		this._description = value;
+	}
+
+    /**
      * Getter start
      * @return {Moment}
      */
@@ -147,6 +166,7 @@ export class Item {
             id: this._id,
             title: this._title,
             speaker: this._speaker,
+            description: this._description,
             start: this._start.toJSON(),
             end: this._end.toJSON(),
             uiState: this._uiState

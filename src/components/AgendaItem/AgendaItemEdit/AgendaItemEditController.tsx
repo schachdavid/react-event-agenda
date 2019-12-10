@@ -20,9 +20,7 @@ const AgendaItemEditController: React.FC<IProps> = ({ item, height, topPx, cance
     const viewModel = useViewModelContext();
     const [title, setTitle] = useState(item.title);
     const [speaker, setSpeaker] = useState(item.speaker);
-
-    
-
+    const [description, setDescription] = useState(item.description);
 
     return <AgendaItemEditView
             start={item.start.format("HH:mm")}
@@ -31,10 +29,12 @@ const AgendaItemEditController: React.FC<IProps> = ({ item, height, topPx, cance
             setTitle={setTitle}
             speaker={speaker}
             setSpeaker={setSpeaker}
+            description={description}
+            setDescription={setDescription}
             height={height}
             topPx={topPx}
             save={() =>{ 
-                    viewModel.updateItem(item.id, {title: title, speaker: speaker});
+                    viewModel.updateItem(item.id, {title: title, speaker: speaker, description: description});
                     cancel();
                 }}
             cancelEditing={cancel} />

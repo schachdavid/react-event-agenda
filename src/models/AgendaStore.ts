@@ -44,7 +44,7 @@ class AgendaStore {
         }
     }
 
-    getDays(filter?: { uiHidden?: boolean },) {
+    getDays(filter?: { uiHidden?: boolean }, ) {
         let days = this.agenda.days;
         if (filter) {
             days = days.filter((day) => {
@@ -58,6 +58,14 @@ class AgendaStore {
 
     getDay(id: string) {
         return this.agenda.days.find((day) => day.id === id);
+    }
+
+    @action deleteDay(id: string) {
+        const daysTmp = this.agenda.days.filter((day) => day.id !== id)
+        if (daysTmp.length !== this.agenda.days.length) {
+            this.agenda.days = daysTmp;
+            return;
+        }
     }
 
     getAgenda(): IAgenda {
@@ -184,7 +192,7 @@ class AgendaStore {
         return this.segmentFactor;
     }
 
-    
+
     overWriteCurrentHistoryEntry() {
         this.agendaHistory[this.pointer] = toJS(this.agenda).toJSON();
     }
@@ -192,7 +200,6 @@ class AgendaStore {
     pushToHistory() {
         this.pointer++;
         this.agendaHistory.splice(this.pointer, this.agendaHistory.length);
-        console.log("pushed: ",this.agenda.days.filter(day => !day.uiHidden));
         this.agendaHistory.push(toJS(this.agenda).toJSON());
     }
 
@@ -200,8 +207,12 @@ class AgendaStore {
         if (this.pointer > 0) {
             this.pointer--;
             this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
-            console.log("after: ",this.agenda.days.filter(day => !day.uiHidden));
         }
+    }
+
+    canUndo() {
+        if (this.pointer > 0) return true;
+        return false;
     }
 
     @action redo() {
@@ -210,6 +221,12 @@ class AgendaStore {
             this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));
         }
     }
+
+    canRedo() {
+        if (this.pointer < this.agendaHistory.length - 1) return true;
+        return false;
+    }
+
 
 }
 

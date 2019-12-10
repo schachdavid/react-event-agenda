@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Agenda, { AgendaViewModel } from 'react-event-agenda'
 import { IoMdInformationCircleOutline } from 'react-icons/io';
-import { initializeIcons } from '@uifabric/icons';
 
 
 export default class App extends Component {
@@ -113,7 +112,6 @@ export default class App extends Component {
         }
       ]
     });
-    initializeIcons();
   }
 
   customItemActions = [

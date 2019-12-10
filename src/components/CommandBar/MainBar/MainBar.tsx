@@ -10,11 +10,13 @@ import { useColorPaletteContext } from '../../../hooks/ColorPaletteContext';
 export interface IProps {
     undo: () => void,
     redo: () => void,
+    canUndo: boolean,
+    canRedo: boolean,
     customAgendaActions?: ICommandBarItemProps[],
     customAgendaActionsFar?: ICommandBarItemProps[],
 }
 
-const CommandBarView: React.FC<IProps> = ({ undo, redo, customAgendaActions, customAgendaActionsFar }: IProps) => {
+const CommandBarView: React.FC<IProps> = ({ undo, redo, canUndo, canRedo, customAgendaActions, customAgendaActionsFar }: IProps) => {
     const colorPalette = useColorPaletteContext();
 
     let items: ICommandBarItemProps[] = [
@@ -27,7 +29,8 @@ const CommandBarView: React.FC<IProps> = ({ undo, redo, customAgendaActions, cus
                 iconName: 'Undo'
             },
             iconOnly: true,
-            onClick: undo
+            onClick: undo,
+            disabled: !canUndo
         },
         {
             key: 'redo',
@@ -37,24 +40,25 @@ const CommandBarView: React.FC<IProps> = ({ undo, redo, customAgendaActions, cus
                 iconName: 'redo'
             },
             iconOnly: true,
-            onClick: redo
+            onClick: redo,
+            disabled: !canRedo
         }
     ]
 
-    if(customAgendaActions) items = items.concat(customAgendaActions)
+    if (customAgendaActions) items = items.concat(customAgendaActions)
 
 
     let farItems: ICommandBarItemProps[] = [];
 
-    if(customAgendaActionsFar) farItems = farItems.concat(customAgendaActionsFar)
+    if (customAgendaActionsFar) farItems = farItems.concat(customAgendaActionsFar)
 
 
 
     return (
         <>
-            <div className={styles.logo}>
+            {/* <div className={styles.logo}>
                 AgendaBuilder
-                    </div>
+                    </div> */}
             <Customizer settings={{ theme: invertTheme(Object.assign({}, colorPalette)) }}>
                 <CommandBar items={items} farItems={farItems} className={styles.commandBar} />
             </Customizer>

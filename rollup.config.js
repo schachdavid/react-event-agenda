@@ -7,6 +7,7 @@ import resolve from 'rollup-plugin-node-resolve'
 import url from 'rollup-plugin-url'
 import svgr from '@svgr/rollup'
 import sourcemaps from 'rollup-plugin-sourcemaps';
+import autoprefixer from 'autoprefixer'
 
 import pkg from './package.json'
 
@@ -31,7 +32,8 @@ export default {
     resolve({browser: true}),
     external(),
     postcss({
-      modules: true
+      modules: true,
+      plugins: [autoprefixer()]
     }),
     url(),
     svgr(),

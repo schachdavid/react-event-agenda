@@ -79,6 +79,10 @@ export class AgendaViewModel implements IAgendaViewModel {
         return this.agendaStore.getDays(filter);
     }
 
+    deleteDay(id: string) {
+        this.agendaStore.deleteDay(id);
+    }
+
 
     getDayForTrack(trackId: string) {
         return this.agendaStore.getDayForTrack(trackId);
@@ -203,7 +207,7 @@ export class AgendaViewModel implements IAgendaViewModel {
         }
     }
 
-    updateItem(id: string, newProps: { title?: string, speaker?: string }, suppressPushToHistory?: boolean) {
+    updateItem(id: string, newProps: { title?: string, speaker?: string, description?: string }, suppressPushToHistory?: boolean) {
         const item = this.agendaStore.getItem(id);
         if (item) {
             let changed = false;
@@ -213,6 +217,10 @@ export class AgendaViewModel implements IAgendaViewModel {
             }
             if (newProps.speaker !== undefined && newProps.speaker !== item.speaker) {
                 item.speaker = newProps.speaker;
+                changed = true;
+            }
+            if (newProps.description !== undefined && newProps.description !== item.description) {
+                item.description = newProps.description;
                 changed = true;
             }
             if (!suppressPushToHistory && changed) {
@@ -403,6 +411,10 @@ export class AgendaViewModel implements IAgendaViewModel {
         if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
+    canUndo() {
+        return this.agendaStore.canUndo()
+    }
+
     redo(keepItemUIState?: boolean, suppressDataChangeHandling?: boolean) {
         this.agendaStore.redo();
         if (!keepItemUIState) {
@@ -414,6 +426,11 @@ export class AgendaViewModel implements IAgendaViewModel {
         } 
         if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
+
+    canRedo() {
+        return this.agendaStore.canRedo()
+    }
+
 
     pushToHistory(suppressDataChangeHandling?: boolean) {
         this.agendaStore.pushToHistory();
@@ -447,8 +464,8 @@ export class AgendaViewModel implements IAgendaViewModel {
             const item = items[0];
             if (newEndTime.isSameOrBefore(item.start)) return;
             const nextItem = items[1];
-            if (nextItem && nextItem.start.isSameOrBefore(item.end)) {
-                this.moveItemsForced(items.slice(1), newEndTime.diff(item.end))
+            if (nextItem && (nextItem.start.isBefore(newEndTime) || nextItem.start.isSame(item.end))) {
+                this.moveItemsForced(items.slice(1), newEndTime.diff(nextItem.start))
             }
             if (!item.end.isSame(newEndTime)) {
                 item.end = newEndTime;
@@ -555,8 +572,17 @@ export class AgendaViewModel implements IAgendaViewModel {
         this.overWriteCurrentHistoryEntry();
     }
 
-
-
-
+    addDaysToAllDates(numberOfDays: number) {
+        for (const day of this.agendaStore.agenda.days) {
+            day.startTime = moment(day.startTime).add(numberOfDays, 'days');
+            day.endTime = moment(day.endTime).add(numberOfDays);
+            for (const track of day.tracks) {
+                for(const item of track.items) {
+                    item.start = moment(item.start).add(numberOfDays, 'days');
+                    item.end = moment(item.end).add(numberOfDays, 'days');
+                }
+            }
+        }
+    }
 }
 

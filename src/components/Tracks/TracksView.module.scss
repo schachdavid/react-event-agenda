@@ -25,6 +25,7 @@
 .barPlaceHolderFront {
     flex: 0 0 49px;    
     border-right: 1px solid var(--neutralTertiary);
+    user-select: none;
 }
 
 .borderBottom {
@@ -36,6 +37,7 @@
 }
 
 .barPlaceHolderEnd {
+    user-select: none;
     flex: 1;   
 }
 

@@ -32,6 +32,8 @@ const CommandBarController: React.FC<IProps> = ({ customAgendaActions,
         selecting={viewModel.getUIState() === UIState.Selecting}
         undo={() => viewModel.undo()}
         redo={() => viewModel.redo()}
+        canUndo={ viewModel.getUIState() !== UIState.Moving ? viewModel.canUndo() : true}
+        canRedo={ viewModel.getUIState() !== UIState.Moving ? viewModel.canRedo() : false}
         unselectAll={() => viewModel.unselectAll()}
         deleteAllSelected={deleteAllSelected}
         customAgendaActions={customAgendaActions}

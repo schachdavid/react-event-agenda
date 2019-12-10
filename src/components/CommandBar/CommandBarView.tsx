@@ -9,6 +9,8 @@ import { ICommandBarItemProps } from 'office-ui-fabric-react';
 export interface IProps {
     undo: () => void,
     redo: () => void,
+    canUndo: boolean,
+    canRedo: boolean,
     unselectAll: () => void,
     deleteAllSelected: () => void,
     selecting: boolean,
@@ -20,6 +22,8 @@ export interface IProps {
 
 const CommandBarView: React.FC<IProps> = ({ 
     undo, 
+    canUndo,
+    canRedo,
     redo, 
     selecting, 
     numberOfSelectedItems, 
@@ -42,6 +46,8 @@ const CommandBarView: React.FC<IProps> = ({
                 <MainBar
                     redo={redo}
                     undo={undo}
+                    canUndo={canUndo}
+                    canRedo={canRedo}
                     customAgendaActions={customAgendaActions}
                     customAgendaActionsFar={customAgendaActionsFar}
                 />

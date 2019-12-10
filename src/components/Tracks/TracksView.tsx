@@ -12,7 +12,7 @@ import { Moment } from 'moment';
 import { DragObject } from '../../interfaces/dndInterfaces';
 import { Stack, IconButton, IIconProps, IButtonStyles } from 'office-ui-fabric-react';
 import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
-import { useDrop } from 'react-dnd';
+// import { useDrop } from 'react-dnd';
 
 
 
@@ -48,6 +48,7 @@ const TracksView: React.FC<IProps> = ({
     const refTracksContainer = useCallback(node => {
         if (node !== null) {
             handleTracksContainerWidthChange(node.clientWidth - 1);
+
             const handleResizeTracksContainer = () => {
                 if (node.clientWidth !== width) {
                     handleTracksContainerWidthChange(node.clientWidth);
@@ -71,27 +72,29 @@ const TracksView: React.FC<IProps> = ({
             return () => { window.removeEventListener('resize', handleResizeFirstTrack) };
         }
         return;
-    }, []);
+    }, [days]);
 
 
-    const [, leftDrop] = useDrop({
-        accept: 'item',
-        hover() {
-            if(canPaginateLeft) paginateLeft();
+
+
+    // const [, leftDrop] = useDrop({
+    //     accept: 'item',
+    //     hover() {
+    //         if(canPaginateLeft) paginateLeft();
             
-        },
-    })
-    const [, rightDrop] = useDrop({
-        accept: 'item',
-        hover() {
-            if(canPaginateRight) paginateRight();
-        },
-    })
+    //     },
+    // })
+    // const [, rightDrop] = useDrop({
+    //     accept: 'item',
+    //     hover() {
+    //         if(canPaginateRight) paginateRight();
+    //     },
+    // })
 
 
 
 
-    let trackViews;
+    let trackViews: JSX.Element[]= [];
     let dayBarViews;
     let trackBarViews;
 
@@ -111,8 +114,9 @@ const TracksView: React.FC<IProps> = ({
         });
     }
 
+
     if(trackViews !== undefined && trackViews.length > 0) {
-        trackViews[0] = <div ref={refFirstTrack} className={styles.firstTrackContainer}>{trackViews[0]}</div>
+        trackViews[0] = <div ref={refFirstTrack} key={"0"} className={styles.firstTrackContainer}>{trackViews[0]}</div>
     }
 
     const leftArrowIcon: IIconProps = { iconName: 'ChevronLeft', };
@@ -136,7 +140,9 @@ const TracksView: React.FC<IProps> = ({
                 <div className={styles.flex}>
                     <div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}>
                         <Stack tokens={{ childrenGap: 0 }} horizontal>
-                        <div ref={leftDrop}>
+                        <div 
+                        // ref={leftDrop}
+                        >
                             <IconButton
                                 styles={arrowStyle}
                                 iconProps={leftArrowIcon}
@@ -146,7 +152,9 @@ const TracksView: React.FC<IProps> = ({
                                 onClick={paginateLeft}
                                 />
                         </div>
-                        <div ref={rightDrop}>
+                        <div 
+                        // ref={rightDrop}
+                        >
                             <IconButton
                                 styles={arrowStyle}
                                 iconProps={rightArrowIcon}

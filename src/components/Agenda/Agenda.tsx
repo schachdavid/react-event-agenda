@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AgendaViewModel } from '../../AgendaViewModel';
 import ViewModelContext from '../../hooks/ViewModelContext';
 import { MainCommandBar } from '../CommandBar/CommandBarController';
@@ -21,6 +21,7 @@ import { registerIcons } from '@uifabric/styling';
 
 import { FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiCheckSquare, FiSquare, FiXCircle, FiPlusCircle } from 'react-icons/fi';
 import { DraggedAgendaItems } from '../DraggedAgendaItems/DraggedAgendaItemsController';
+import ShortKeyHandler from '../ShortKeyHandler/ShortKeyHandler';
 
 
 
@@ -52,6 +53,14 @@ const Agenda: React.FC<IProps> = ({
     className,
     style,
     icons }: IProps) => {
+
+    useEffect(() => {
+        if (agendaViewModel.handleDataChange) {
+            window.addEventListener('beforeunload', agendaViewModel.handleDataChange.flush);
+            return () => { agendaViewModel.handleDataChange ? window.removeEventListener('beforeunload', agendaViewModel.handleDataChange.flush) : undefined };
+        }
+        return;
+    }, []);
 
     registerIcons({
         icons: {
@@ -103,14 +112,15 @@ const Agenda: React.FC<IProps> = ({
                 <ColorPaletteContext.Provider value={colorPalette ? colorPalette : defaultPalette}>
                     <ViewModelContext.Provider value={agendaViewModel}>
                         <DndProvider backend={HTML5Backend} debugMode={true}>
-                            <MainCommandBar 
-                            customAgendaActionsFar={customAgendaActionsFar}
-                            customAgendaActions={customAgendaActions}
-                            customItemSelectionActionsFar={customItemSelectionActionsFar}
+                            <ShortKeyHandler/>
+                            <MainCommandBar
+                                customAgendaActionsFar={customAgendaActionsFar}
+                                customAgendaActions={customAgendaActions}
+                                customItemSelectionActionsFar={customItemSelectionActionsFar}
                             />
                             <Tracks customItemActions={customItemActions}>
                             </Tracks>
-                            <DraggedAgendaItems/>
+                            <DraggedAgendaItems />
                         </DndProvider>
                     </ViewModelContext.Provider>
                 </ColorPaletteContext.Provider>

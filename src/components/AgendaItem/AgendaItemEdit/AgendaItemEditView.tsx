@@ -15,6 +15,8 @@ export interface IProps {
     setTitle?: (newTitle: string) => void,
     speaker?: string,
     setSpeaker?: (newSpeaker: string) => void,
+    description?: string,
+    setDescription?: (newDescription: string) => void,
     topPx: number,
     height: number,
     save: () => void,
@@ -26,37 +28,39 @@ const AgendaItemEditView: React.FC<IProps> = ({
     title,
     speaker,
     setSpeaker,
+    description,
+    setDescription,
     topPx,
     save,
     cancelEditing }: IProps) => {
 
-        useEffect(() => {
-            document.addEventListener("keydown", handleKeyPress, false);
-            return () => {
-              document.removeEventListener("keydown", handleKeyPress, false);
-            };
-          }, []);
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyPress, false);
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress, false);
+        };
+    }, []);
 
-        const firstInputRef = useCallback(node => {
-            if (node) {
-                node.focus();
-            }
-            return;
-        }, []);
+    const firstInputRef = useCallback(node => {
+        if (node) {
+            node.focus();
+        }
+        return;
+    }, []);
 
-        const containerRef = useCallback((node: HTMLElement | null) => {
-            if (node) {
-                node.scrollIntoView({block: "nearest", behavior: "smooth"});
-            }
-            return;
-        }, []);
+    const containerRef = useCallback((node: HTMLElement | null) => {
+        if (node) {
+            node.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+        return;
+    }, []);
 
 
-        
-        
+
+
 
     const handleKeyPress = (event: any) => {
-        if(event.keyCode === 27) {  
+        if (event.keyCode === 27) {
             event.preventDefault();
             event.stopPropagation();
             cancelEditing();
@@ -72,7 +76,7 @@ const AgendaItemEditView: React.FC<IProps> = ({
         ;
 
 
-    
+
     let firstInputReferenced = false;
 
     const getRef = () => {
@@ -81,9 +85,11 @@ const AgendaItemEditView: React.FC<IProps> = ({
         return firstInputRef;
     }
 
-    const titleTextField = setTitle ? <TextField componentRef={getRef()} placeholder="Add title" value={title} onChange={(e:any) => setTitle(e.target.value)} underlined /> : null;
+    const titleTextField = setTitle ? <TextField componentRef={getRef()} placeholder="Add title" value={title} onChange={(e: any) => setTitle(e.target.value)} underlined /> : null;
 
-    const speakerTextField = setSpeaker ? <TextField componentRef={getRef()} placeholder="Add speakers" value={speaker}  onChange={(e:any) => setSpeaker(e.target.value)} underlined /> : null;
+    const speakerTextField = setSpeaker ? <TextField componentRef={getRef()} placeholder="Add speakers" value={speaker} onChange={(e: any) => setSpeaker(e.target.value)} underlined /> : null;
+
+    const descriptionTextField = setDescription ? <TextField placeholder="Add additional Description" multiline resizable={false} value={description} onChange={(e: any) => setDescription(e.target.value)} underlined /> : null;
 
 
     return (
@@ -96,11 +102,11 @@ const AgendaItemEditView: React.FC<IProps> = ({
                     <form onSubmit={() => save()}>
                         {titleTextField}
                         {speakerTextField}
-                        <TextField placeholder="Add additional Description" multiline resizable={false} underlined />
+                        {descriptionTextField}
                         <PrimaryButton type="submit" text="Save" allowDisabledFocus className={styles.saveButton} onClick={save} />
                         {controls}
                     </form>
-             
+
                 </div>
             </div>
             <div className={styles.background} onClick={cancelEditing}>
