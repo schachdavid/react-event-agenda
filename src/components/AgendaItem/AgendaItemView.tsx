@@ -4,7 +4,7 @@ import styles from './AgendaItemView.module.scss';
 import classNames from 'classnames';
 import { IconButton, createTheme } from 'office-ui-fabric-react';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Customizer } from 'office-ui-fabric-react';
+import { Customizer, TooltipHost } from 'office-ui-fabric-react';
 import color from 'color';
 import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
 import { invertTheme } from '../../util';
@@ -117,32 +117,51 @@ const AgendaItemView: React.FC<IProps> = ({
     newColorPalette.neutralDark = whiteTmp;
 
     const theme = createTheme({
-        palette: newColorPalette
+        palette: newColorPalette,
+        defaultFontStyle: { fontFamily: 'Open Sans' },
     });
 
     const themeSelected = invertTheme(colorPalette);
 
     const controls = enableHover ?
         <div className={!small ? styles.controls : styles.controlsSmall} >
-            <Stack tokens={{ childrenGap: 2, maxWidth: '50%'  }} horizontal>
+            <Stack tokens={{ childrenGap: 2, maxWidth: '50%' }} horizontal>
                 <Customizer settings={{ theme: theme }}>
-                    <IconButton iconProps={{ iconName: "Delete" }} onClick={e => {
-                        e.stopPropagation();
-                        deleteItem();
-                    }} />
+                    <TooltipHost
+                        content="Delete"
+                        id={"Delete"}
+                    >
+                        <IconButton ariaLabel={"Delete Item"} text={"Delete"} iconProps={{ iconName: "Delete" }} onClick={e => {
+                            e.stopPropagation();
+                            deleteItem();
+                        }} />
+                    </TooltipHost>
+
 
                     {customActionButtons}
-                    <IconButton iconProps={{ iconName: "Edit" }} onClick={e => {
-                        e.stopPropagation();
-                        editItem();
-                    }} />
-                    <IconButton iconProps={{ iconName: "Checkbox" }} onClick={e => {
-                        e.stopPropagation();
-                        handleSelectClick(e)
-                    }} />
+                    <TooltipHost
+                        content="Edit"
+                        id={"Edit"}
+                    >
+                        <IconButton ariaLabel={"Edit Item"} text={"Edit"} iconProps={{ iconName: "Edit" }} onClick={e => {
+                            e.stopPropagation();
+                            editItem();
+                        }} />
+                    </TooltipHost>
+
+                    <TooltipHost
+                        content="Select"
+                        id={"Select"}
+                    >
+                        <IconButton ariaLabel={"Select Item"} text={"Select"} iconProps={{ iconName: "Checkbox" }} onClick={e => {
+                            e.stopPropagation();
+                            handleSelectClick(e)
+                        }} />
+                    </TooltipHost>
+
                 </Customizer>
             </Stack>
-        </div>
+        </div >
         : null;
 
     const checkIcon = selecting ?

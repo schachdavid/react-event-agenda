@@ -106,7 +106,8 @@ const Agenda: React.FC<IProps> = ({
         <div style={style} className={classNames(styles.mainComponent, className)}>
             <Customizer settings={{
                 theme: createTheme({
-                    palette: palette
+                    palette: palette,
+                    defaultFontStyle: { fontFamily: 'Open Sans'},
                 })
             }}>
                 <ColorPaletteContext.Provider value={colorPalette ? colorPalette : defaultPalette}>

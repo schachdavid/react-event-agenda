@@ -26,7 +26,8 @@ export const invertTheme = (palette: Partial<IPalette>) => {
   newPalette.neutralDark = whiteTmp;
 
   const theme = createTheme({
-    palette: newPalette
+    palette: newPalette,
+    defaultFontStyle: { fontFamily: 'Open Sans'},
   });
 
   return theme;

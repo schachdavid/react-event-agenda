@@ -255,11 +255,25 @@ export class AgendaViewModel implements IAgendaViewModel {
         this.moveItemsForced([item], milSecToMove);
     }
 
+    private findFirstCollidingIndex(items: Array<Item>, item: Item, exceptItemIds: Array<String>) {
+        return items.findIndex((curItem: Item) => {
+            return ((curItem.start.isSameOrAfter(item.start) && curItem.start.isBefore(item.end) ||
+                curItem.end.isAfter(item.start) && curItem.end.isSameOrBefore(item.end) ||
+                item.start.isSameOrAfter(curItem.start) && item.start.isBefore(curItem.end) ||
+                item.end.isAfter(curItem.start) && item.end.isSameOrBefore(curItem.end))
+            ) && !exceptItemIds.includes(curItem.id)
+        })
+
+    }
+
 
     moveItems(trackId: string, clickedId: string, newStart: Moment, itemIds: Array<string>) {
         // TODO: check if items are still on the tracks start and end time
         const itemsToMove = this.agendaStore.getItems(undefined, itemIds);
         let totalDuration = 0;
+
+        // console.log(newStart.format("HH:mm"));
+
 
 
         itemsToMove.forEach(item => {
@@ -288,46 +302,36 @@ export class AgendaViewModel implements IAgendaViewModel {
             }
 
             //add item duration to total duration of itemsToMove
-
             totalDuration = totalDuration + item.end.diff(item.start);
         })
 
         let curTrack = this.agendaStore.getTrackForItem(clickedId);
-
         if (!curTrack) return;
 
         let items = curTrack.items;
         if (!items) return;
 
         const timeLineStart = this.getTimeLineStartTime(items[0].start);
-
-
         const movedItemsDummy = new Item({ id: uuid(), start: moment(newStart), end: moment(newStart).add(totalDuration) })
-
-
 
         //collision checking:
         if (movedItemsDummy && curTrack) {
             //1. find first colliding item
-            const overlappingItemIndex = items.findIndex((curItem: Item) => {
-                return ((curItem.start.isSameOrAfter(movedItemsDummy.start) && curItem.start.isBefore(movedItemsDummy.end) ||
-                    curItem.end.isAfter(movedItemsDummy.start) && curItem.end.isSameOrBefore(movedItemsDummy.end) ||
-                    movedItemsDummy.start.isSameOrAfter(curItem.start) && movedItemsDummy.start.isBefore(curItem.end) ||
-                    movedItemsDummy.end.isAfter(curItem.start) && movedItemsDummy.end.isSameOrBefore(curItem.end))
-                ) && !itemIds.includes(curItem.id)
-            })
+            const overlappingItemIndex = this.findFirstCollidingIndex(items, movedItemsDummy, itemIds);
 
             if (overlappingItemIndex !== -1) {
                 const overlappingItem = items[overlappingItemIndex];
+
+
                 //2. check if the colliding item's start or end time is closer
                 const movedItemMiddle = moment(movedItemsDummy.start).add(movedItemsDummy.end.diff(movedItemsDummy.start) / 2);
                 const overlappingItemMiddle = moment(overlappingItem.start).add(overlappingItem.end.diff(overlappingItem.start) / 2);
 
                 if (movedItemMiddle.isSameOrAfter(overlappingItemMiddle) || moment(overlappingItem.start).subtract(totalDuration).isBefore(timeLineStart)) {
-                    //3. move items there
+                    //3. move items after overlapping
                     movedItemsDummy.start = moment(overlappingItem.end);
                     movedItemsDummy.end = moment(movedItemsDummy.start).add(totalDuration);
-                    //4. move all items after that accordingly
+                    //4. adjust all items after that accordingly
                     if (overlappingItemIndex + 1 < items.length) {
                         //find the item which is the next and nearest but not being moved currently
                         let nextItem = items[overlappingItemIndex + 1];
@@ -336,8 +340,9 @@ export class AgendaViewModel implements IAgendaViewModel {
                         for (let iOffset = + 2; overlappingItemIndex + iOffset < items.length && itemIds.includes(nextItem.id); iOffset--) {
                             nextItem = items[overlappingItemIndex + iOffset];
                             shouldMove = true;
-                            if (overlappingItemIndex + iOffset >= items.length - 1) shouldMove = false;
+                            if (overlappingItemIndex + iOffset > items.length - 1) shouldMove = false;
                         }
+
                         if (shouldMove && movedItemsDummy.end.isAfter(nextItem.start)) {
                             const moveMilSec = movedItemsDummy.end.diff(nextItem.start)
                             const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => !itemIds.includes(curItem.id))
@@ -345,10 +350,11 @@ export class AgendaViewModel implements IAgendaViewModel {
                         }
                     }
                 } else {
-                    //3. move items there
+                    //3. move items before overlapping
                     movedItemsDummy.end = moment(overlappingItem.start);
-                    movedItemsDummy.start = moment(movedItemsDummy.end).subtract(totalDuration)
-                    //4. move all items after that accordingly
+                    movedItemsDummy.start = moment(movedItemsDummy.end).subtract(totalDuration);
+                  
+                    //4. adjust all items after that accordingly
                     if (overlappingItemIndex - 1 >= 0) {
                         //find the item which is the previous and nearest but not being moved currently
                         let previousItem = items[overlappingItemIndex - 1];
@@ -356,7 +362,7 @@ export class AgendaViewModel implements IAgendaViewModel {
                         for (let iOffset = -2; overlappingItemIndex + iOffset >= 0 && itemIds.includes(previousItem.id); iOffset--) {
                             previousItem = items[overlappingItemIndex + iOffset];
                             shouldMove = true;
-                            if (overlappingItemIndex + iOffset <= 0) shouldMove = false;
+                            if (overlappingItemIndex + iOffset < 0) shouldMove = false;
                         }
                         if (shouldMove && movedItemsDummy.start.isBefore(previousItem.end)) {
                             const moveMilSec = previousItem.end.diff(movedItemsDummy.start);
@@ -406,8 +412,8 @@ export class AgendaViewModel implements IAgendaViewModel {
             this.agendaStore.getItems().forEach(item => {
                 item.uiState = undefined;
             });
-            if(this.canPaginateRight()) this.applyTotalTrackWidthToTrackVisibility();
-        } 
+            if (this.canPaginateRight()) this.applyTotalTrackWidthToTrackVisibility();
+        }
         if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
@@ -422,8 +428,8 @@ export class AgendaViewModel implements IAgendaViewModel {
             this.agendaStore.getItems().forEach(item => {
                 item.uiState = undefined;
             })
-            if(this.canPaginateRight()) this.applyTotalTrackWidthToTrackVisibility();
-        } 
+            if (this.canPaginateRight()) this.applyTotalTrackWidthToTrackVisibility();
+        }
         if (this.handleDataChange && !suppressDataChangeHandling) this.handleDataChange()
     }
 
@@ -474,10 +480,10 @@ export class AgendaViewModel implements IAgendaViewModel {
 
     }
 
-    canPaginateRight(){
+    canPaginateRight() {
         const allDays = this.agendaStore.getDays();
-        const lastUiHidden =  allDays[allDays.length - 1].uiHidden;
-        if(lastUiHidden) return true;
+        const lastUiHidden = allDays[allDays.length - 1].uiHidden;
+        if (lastUiHidden) return true;
         else return false;
     }
 
@@ -499,10 +505,10 @@ export class AgendaViewModel implements IAgendaViewModel {
         this.agendaStore.overWriteCurrentHistoryEntry();
     }
 
-    canPaginateLeft(){
+    canPaginateLeft() {
         const allDays = this.agendaStore.getDays();
-        const firstUiHidden =  allDays[0].uiHidden;
-        if(firstUiHidden) return true;
+        const firstUiHidden = allDays[0].uiHidden;
+        if (firstUiHidden) return true;
         else return false;
     }
 
@@ -577,7 +583,7 @@ export class AgendaViewModel implements IAgendaViewModel {
             day.startTime = moment(day.startTime).add(numberOfDays, 'days');
             day.endTime = moment(day.endTime).add(numberOfDays);
             for (const track of day.tracks) {
-                for(const item of track.items) {
+                for (const item of track.items) {
                     item.start = moment(item.start).add(numberOfDays, 'days');
                     item.end = moment(item.end).add(numberOfDays, 'days');
                 }
