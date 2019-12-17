@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { observer } from "mobx-react";
 import styles from './TracksView.module.scss';
 import { Track } from '../Track/TrackController';
@@ -45,6 +45,8 @@ const TracksView: React.FC<IProps> = ({
 
     const palette = useColorPaletteContext();
 
+    const refScrollContainer = useRef(null);
+
     const refTracksContainer = useCallback(node => {
         if (node !== null) {
             handleTracksContainerWidthChange(node.clientWidth - 1);
@@ -81,7 +83,7 @@ const TracksView: React.FC<IProps> = ({
     //     accept: 'item',
     //     hover() {
     //         if(canPaginateLeft) paginateLeft();
-            
+
     //     },
     // })
     // const [, rightDrop] = useDrop({
@@ -94,7 +96,7 @@ const TracksView: React.FC<IProps> = ({
 
 
 
-    let trackViews: JSX.Element[]= [];
+    let trackViews: JSX.Element[] = [];
     let dayBarViews;
     let trackBarViews;
 
@@ -105,7 +107,7 @@ const TracksView: React.FC<IProps> = ({
         });
 
         trackViews = tracks.map((track: TrackData) => {
-            return <Track key={track.id} track={track} customItemActions={customItemActions} moveDragObject={moveDragObject}></Track>
+            return <Track key={track.id} track={track} customItemActions={customItemActions} moveDragObject={moveDragObject} refScrollContainer={refScrollContainer}></Track>
         });
     } else {
         const tracks: Array<TrackData> = days[0].tracks;
@@ -115,7 +117,7 @@ const TracksView: React.FC<IProps> = ({
     }
 
 
-    if(trackViews !== undefined && trackViews.length > 0) {
+    if (trackViews !== undefined && trackViews.length > 0) {
         trackViews[0] = <div ref={refFirstTrack} key={"0"} className={styles.firstTrackContainer}>{trackViews[0]}</div>
     }
 
@@ -140,30 +142,30 @@ const TracksView: React.FC<IProps> = ({
                 <div className={styles.flex}>
                     <div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}>
                         <Stack tokens={{ childrenGap: 0 }} horizontal>
-                        <div 
-                        // ref={leftDrop}
-                        >
-                            <IconButton
-                                styles={arrowStyle}
-                                iconProps={leftArrowIcon}
-                                title="Paginate Days Left"
-                                ariaLabel="Paginate Days Left"
-                                disabled={!canPaginateLeft}
-                                onClick={paginateLeft}
+                            <div
+                            // ref={leftDrop}
+                            >
+                                <IconButton
+                                    styles={arrowStyle}
+                                    iconProps={leftArrowIcon}
+                                    title="Paginate Days Left"
+                                    ariaLabel="Paginate Days Left"
+                                    disabled={!canPaginateLeft}
+                                    onClick={paginateLeft}
                                 />
-                        </div>
-                        <div 
-                        // ref={rightDrop}
-                        >
-                            <IconButton
-                                styles={arrowStyle}
-                                iconProps={rightArrowIcon}
-                                title="Paginate Days Right"
-                                ariaLabel="Paginate Days Right"
-                                disabled={!canPaginateRight}
-                                onClick={paginateRight}
-                            />
-                        </div>
+                            </div>
+                            <div
+                            // ref={rightDrop}
+                            >
+                                <IconButton
+                                    styles={arrowStyle}
+                                    iconProps={rightArrowIcon}
+                                    title="Paginate Days Right"
+                                    ariaLabel="Paginate Days Right"
+                                    disabled={!canPaginateRight}
+                                    onClick={paginateRight}
+                                />
+                            </div>
 
                         </Stack>
                     </div>
@@ -174,7 +176,7 @@ const TracksView: React.FC<IProps> = ({
                 </div>
                 : null}
 
-            <div className={styles.tracksContainer} >
+            <div className={styles.scrollContainer} ref={refScrollContainer} id="scrollContainer">
                 <TimeLine />
                 <div className={styles.flex} ref={refTracksContainer}>
                     {trackViews}

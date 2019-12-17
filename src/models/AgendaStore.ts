@@ -4,6 +4,7 @@ import { Item, ItemUIState } from './ItemModel';
 import { Track } from './TrackModel';
 // import { Day } from './DayModel';
 import { Agenda, IAgenda, IAgendaJSON } from './AgendaModel';
+import { Day } from './DayModel';
 
 class AgendaStore {
     @observable agenda: Agenda;
@@ -66,6 +67,10 @@ class AgendaStore {
             this.agenda.days = daysTmp;
             return;
         }
+    }
+
+    @action addDay(day: Day) {
+        this.agenda.days.push(day);
     }
 
     getAgenda(): IAgenda {

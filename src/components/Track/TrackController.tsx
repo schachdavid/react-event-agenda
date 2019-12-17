@@ -14,11 +14,12 @@ import { ItemUIState } from '../../models/ItemModel';
 interface IProps {
     track: TrackData,
     customItemActions?: Array<ICustomItemAction>,
-    moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void
+    moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void,
+    refScrollContainer: any
 }
 
 
-const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragObject }: IProps) => {
+const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragObject, refScrollContainer }: IProps) => {
     const viewModel = useViewModelContext();
 
     const items: Array<IItem> = track.items;
@@ -119,6 +120,7 @@ const TrackController: React.FC<IProps> = ({ track, customItemActions, moveDragO
         finishDrawUp={finishDrawUp}
         customItemActions={customItemActions}
         enableHover={enableHover}
+        refScrollContainer={refScrollContainer}
     />
 }
 

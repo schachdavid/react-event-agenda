@@ -26,7 +26,8 @@ export interface IProps {
     handleDrawUp: (initialMousePosition: number, currentMousePosition: number) => void,
     customItemActions?: Array<ICustomItemAction>,
     finishDrawUp: () => void,
-    enableHover: boolean
+    enableHover: boolean,
+    refScrollContainer: React.RefObject<HTMLDivElement>
 }
 
 const TrackView: React.FC<IProps> = ({
@@ -39,7 +40,8 @@ const TrackView: React.FC<IProps> = ({
     handleDrawUp,
     finishDrawUp,
     customItemActions,
-    enableHover
+    enableHover,
+    refScrollContainer
 }: IProps) => {
     const agendaItems = items.map((item: IItem) => <AgendaItem key={item.id} item={item} customItemActions={customItemActions}></AgendaItem>)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -47,14 +49,38 @@ const TrackView: React.FC<IProps> = ({
 
 
     const throttledDropHover = throttle(handleDropHover, 20);
+    // const throttledScrollDown = throttle(() => refScrollContainer.current!.scrollBy({ top: 20, left: 0 }), 20);
+    // const throttledScrollDown = throttle(() => { 
+    //     refScrollContainer.current!.scrollTop =  refScrollContainer.current!.scrollTop + 1;
+    //  }, 0.1);
+
+    // const throttledScrollUp = throttle(() => refScrollContainer.current!.scrollBy({ top: -20, left: 0 }), 20);
+
+    // const throttledScrollDown = () => window.requestAnimationFrame(() => refScrollContainer.current!.scrollBy({ top: 3, left: 0 }));
+    // const throttledScrollUp = () => window.requestAnimationFrame(() =>refScrollContainer.current!.scrollBy({ top: -3, left: 0 }));
+
+
+
 
     const [, drop] = useDrop({
         accept: 'item',
         hover(dragObject: DragObject, monitor: DropTargetMonitor) {
             const hoverBoundingRect = containerRef.current!.getBoundingClientRect();
-            const clientOffset = monitor.getSourceClientOffset();
-            const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+            const sourceClientOffset = monitor.getSourceClientOffset();
+            const hoverClientY = (sourceClientOffset as XYCoord).y - hoverBoundingRect.top;
             throttledDropHover(hoverClientY, dragObject);
+
+            const clientOffsetY = (monitor.getClientOffset() as XYCoord).y;
+            const scrollContainerBoundingRect = refScrollContainer.current!.getBoundingClientRect();
+            const diffTop = clientOffsetY - scrollContainerBoundingRect.top;
+            if (diffTop >= 0 && diffTop < 20) {
+                // throttledScrollUp();
+
+            }
+            const diffBottom = clientOffsetY - scrollContainerBoundingRect.bottom;
+            if (diffBottom <= 0 && diffBottom > -20) {
+                // throttledScrollDown();
+            }
         },
     })
 
@@ -94,9 +120,9 @@ const TrackView: React.FC<IProps> = ({
         smallSegments.push(<div key={uuid()} className={classNames(styles.smallSegment)} style={{ height: smallSegmentHeight + 'px', borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : '' }}>
             {enableHover ?
                 <div className={styles.smallSegmentHoverContainer}>
-                    < Icon iconName="ChevronUp" className={styles.chevronIcon}/>
+                    < Icon iconName="ChevronUp" className={styles.chevronIcon} />
                     <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
-                    <Icon iconName="ChevronDown" className={styles.chevronIcon}/>
+                    <Icon iconName="ChevronDown" className={styles.chevronIcon} />
                 </div>
 
                 : null}

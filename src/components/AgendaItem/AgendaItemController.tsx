@@ -13,6 +13,7 @@ import { IconButton } from 'office-ui-fabric-react';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { UIState } from '../../models/UIStore';
 import { DragObject } from '../../interfaces/dndInterfaces';
+import { addScrollDragEventListener, removeScrollDragEventListener } from '../../scrolling';
 
 
 
@@ -56,17 +57,21 @@ const AgendaItemController: React.FC<IProps> = ({ item, customItemActions }: IPr
             isDragging: monitor.isDragging(),
         }),
         begin: () => {
+            addScrollDragEventListener();
             if (viewModel.getUIState() !== UIState.Selecting) viewModel.updateUIState(UIState.Moving);
             viewModel.pushToHistory(true);
             if (item.uiState === ItemUIState.Selected) {
                 const itemIds = viewModel.getItems({ uiState: ItemUIState.Selected }).map(item => item.id);
                 return { clickedItemId: item.id, itemIds: itemIds, type: "item" };
             }
-            if(viewModel.handleDataChange) viewModel.handleDataChange.cancel();
+            if (viewModel.handleDataChange) viewModel.handleDataChange.cancel();
+
             return { clickedItemId: item.id, itemIds: [item.id], type: "item" };
+
         },
         end: () => {
-            if(viewModel.handleDataChange) viewModel.handleDataChange();
+            removeScrollDragEventListener();
+            if (viewModel.handleDataChange) viewModel.handleDataChange();
             if (viewModel.getUIState() === UIState.Moving) viewModel.updateUIState(UIState.Normal);
         }
     })

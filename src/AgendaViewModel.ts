@@ -8,6 +8,7 @@ import { IAgendaJSON, Agenda } from './models/AgendaModel';
 import debounce from 'lodash/debounce';
 import { Cancelable } from 'lodash';
 import findLastIndex from 'lodash/findLastIndex'
+import { IDayJSON } from './models/DayModel';
 
 
 
@@ -81,6 +82,11 @@ export class AgendaViewModel implements IAgendaViewModel {
 
     deleteDay(id: string) {
         this.agendaStore.deleteDay(id);
+    }
+
+
+    addDay(day: IDayJSON) {
+        this.agendaStore.addDay(new Day(day));
     }
 
 

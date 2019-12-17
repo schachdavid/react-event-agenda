@@ -7,9 +7,6 @@ import styles from './Agenda.scss';
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import cssVars from 'css-vars-ponyfill';
-
-// TODO: to be replaced, icons should be passed via props
-// import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IPalette, createTheme, IIconSubset, ICommandBarItemProps } from 'office-ui-fabric-react';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { ColorPaletteContext, defaultPalette } from '../../hooks/ColorPaletteContext';
