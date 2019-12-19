@@ -7,7 +7,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Customizer, TooltipHost } from 'office-ui-fabric-react';
 import color from 'color';
 import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';
-import { invertTheme } from '../../util';
+import { invertTheme } from '../../util/util';
 // import { invertTheme } from '../../../util';
 
 

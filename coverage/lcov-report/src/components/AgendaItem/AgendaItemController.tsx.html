@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/components/AgendaItem/AgendaItemController.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/AgendaItem</a> AgendaItemController.tsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/85</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/28</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/79</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState, useEffect, useCallback } from 'react';
+<span class="cstat-no" title="statement not covered" >import AgendaItemView from './AgendaItemView';</span>
+// import { useViewModelContext } from '../../ViewModelContext';
+<span class="cstat-no" title="statement not covered" >import { observer } from "mobx-react";</span>
+<span class="cstat-no" title="statement not covered" >import { IItem, ItemUIState } from '../../models/ItemModel';</span>
+<span class="cstat-no" title="statement not covered" >import { useViewModelContext } from '../../hooks/ViewModelContext';</span>
+<span class="cstat-no" title="statement not covered" >import moment, { Moment } from 'moment';</span>
+// import AgendaItemDragView from './AgendaItemDragView';
+<span class="cstat-no" title="statement not covered" >import { useDrag, DragSourceMonitor } from 'react-dnd';</span>
+<span class="cstat-no" title="statement not covered" >import { getEmptyImage } from 'react-dnd-html5-backend'</span>
+<span class="cstat-no" title="statement not covered" >import { AgendaItemEdit } from './AgendaItemEdit/AgendaItemEditController';</span>
+<span class="cstat-no" title="statement not covered" >import { IconButton } from 'office-ui-fabric-react';</span>
+import { ICustomItemAction } from '../../interfaces/agendaProps';
+<span class="cstat-no" title="statement not covered" >import { UIState } from '../../models/UIStore';</span>
+import { DragObject } from '../../interfaces/dndInterfaces';
+<span class="cstat-no" title="statement not covered" >import { addScrollDragEventListener, removeScrollDragEventListener } from '../../util/scrolling';</span>
+&nbsp;
+&nbsp;
+&nbsp;
+interface IProps {
+    item: IItem,
+    customItemActions?: Array&lt;ICustomItemAction&gt;
+}
+&nbsp;
+&nbsp;
+const AgendaItemController: React.FC&lt;IProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>{ item, customItemActions }: IProps) =&gt; {</span>
+    const viewModel = <span class="cstat-no" title="statement not covered" >useViewModelContext();</span>
+&nbsp;
+    const <span class="cstat-no" title="statement not covered" >[<span class="cstat-no" title="statement not covered" >width, <span class="cstat-no" title="statement not covered" >setWidth] = useState(0);</span></span></span>
+&nbsp;
+    const refWidthContainer = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >node =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (node !== null) {</span>
+<span class="cstat-no" title="statement not covered" >            setWidth(node.clientWidth - 1);</span>
+            const handleWidthResize = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (node.clientWidth != width) {</span>
+<span class="cstat-no" title="statement not covered" >                    setWidth(node.clientWidth);</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            window.addEventListener('resize', handleWidthResize);</span>
+<span class="cstat-no" title="statement not covered" >            return <span class="fstat-no" title="function not covered" >() =&gt; { <span class="cstat-no" title="statement not covered" >window.removeEventListener('resize', handleWidthResize) };</span></span></span>
+        }
+<span class="cstat-no" title="statement not covered" >        return;</span>
+    }, []);
+&nbsp;
+&nbsp;
+    const defaultDragObject: DragObject = <span class="cstat-no" title="statement not covered" >{ clickedItemId: item.id, itemIds: [item.id], type: "item" };</span>
+&nbsp;
+    const <span class="cstat-no" title="statement not covered" >[{ <span class="cstat-no" title="statement not covered" >isDragging }, <span class="cstat-no" title="statement not covered" >dragMoveRef, <span class="cstat-no" title="statement not covered" >previewMove] = useDrag({</span></span></span></span>
+        item: defaultDragObject,
+        isDragging: monitor =&gt; {
+            const dragObject: DragObject = monitor.getItem();
+            if (!dragObject) return false;
+            const itemIds: Array&lt;string&gt; = dragObject.itemIds;
+            return itemIds.includes(item.id)
+        },
+        collect: (monitor: DragSourceMonitor) =&gt; ({
+            isDragging: monitor.isDragging(),
+        }),
+        begin: () =&gt; {
+            addScrollDragEventListener();
+            if (viewModel.getUIState() !== UIState.Selecting) viewModel.updateUIState(UIState.Moving);
+            viewModel.pushToHistory(true);
+            if (item.uiState === ItemUIState.Selected) {
+                const itemIds = viewModel.getItems({ uiState: ItemUIState.Selected }).map(item =&gt; item.id);
+                return { clickedItemId: item.id, itemIds: itemIds, type: "item" };
+            }
+            if (viewModel.handleDataChange) viewModel.handleDataChange.cancel();
+&nbsp;
+            return { clickedItemId: item.id, itemIds: [item.id], type: "item" };
+&nbsp;
+        },
+        end: () =&gt; {
+            removeScrollDragEventListener();
+            if (viewModel.handleDataChange) viewModel.handleDataChange();
+            if (viewModel.getUIState() === UIState.Moving) viewModel.updateUIState(UIState.Normal);
+        }
+    })
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        previewMove(getEmptyImage(), { captureDraggingState: true });</span>
+    }, [])
+&nbsp;
+    const deleteItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        viewModel.deleteItem(item.id)</span>
+    };
+&nbsp;
+    const editItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        viewModel.updateItemUIState(item.id, ItemUIState.Editing)</span>
+    };
+&nbsp;
+    let initialEndTime = <span class="cstat-no" title="statement not covered" >moment(item.end);</span>
+    const initResizing = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        viewModel.updateUIState(UIState.Resizing);</span>
+    }
+&nbsp;
+&nbsp;
+    const handleResizeEndTime = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>diff: number) =&gt; {</span>
+        const minutes = <span class="cstat-no" title="statement not covered" >Math.round(diff / intervalPxHeight) * intervalInMin;</span>
+        const newEnd: Moment = <span class="cstat-no" title="statement not covered" >moment(initialEndTime).add(minutes, 'minutes');</span>
+<span class="cstat-no" title="statement not covered" >        if (!item.end.isSame(newEnd)) {</span>
+<span class="cstat-no" title="statement not covered" >            viewModel.adjustItemEndTime(item.id, newEnd);</span>
+        }
+    }
+&nbsp;
+    const finishResizeEndTime = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        viewModel.updateUIState(UIState.Normal);</span>
+<span class="cstat-no" title="statement not covered" >        if (!initialEndTime.isSame(item.end)) {</span>
+<span class="cstat-no" title="statement not covered" >            initialEndTime = item.end;</span>
+<span class="cstat-no" title="statement not covered" >            viewModel.pushToHistory();</span>
+        }
+    }
+&nbsp;
+    const handleSelectClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>event: React.MouseEvent&lt;HTMLDivElement, MouseEvent&gt;) =&gt; {</span>
+        const selectedItems = <span class="cstat-no" title="statement not covered" >viewModel.getItems({ uiState: ItemUIState.Selected });</span>
+<span class="cstat-no" title="statement not covered" >        if (item.uiState !== ItemUIState.Selected) {</span>
+<span class="cstat-no" title="statement not covered" >            if (selectedItems.length == 0) {</span>
+<span class="cstat-no" title="statement not covered" >                viewModel.updateUIState(UIState.Selecting);</span>
+<span class="cstat-no" title="statement not covered" >                viewModel.updateItemUIState(item.id, ItemUIState.Selected);</span>
+<span class="cstat-no" title="statement not covered" >                viewModel.pushToSelectHistory(item.id);</span>
+            }
+            else <span class="cstat-no" title="statement not covered" >if (event.shiftKey) {</span>
+<span class="cstat-no" title="statement not covered" >                viewModel.selectItemsWithShift(item.id);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                viewModel.updateItemUIState(item.id, ItemUIState.Selected);</span>
+<span class="cstat-no" title="statement not covered" >                viewModel.pushToSelectHistory(item.id);</span>
+            }
+        }
+        else {
+<span class="cstat-no" title="statement not covered" >            if (selectedItems.length == 1) {</span>
+<span class="cstat-no" title="statement not covered" >                viewModel.unselectAll();</span>
+            };
+<span class="cstat-no" title="statement not covered" >            viewModel.updateItemUIState(item.id, undefined);</span>
+<span class="cstat-no" title="statement not covered" >            viewModel.deleteFromSelectHistory(item.id);</span>
+        }
+&nbsp;
+    }
+&nbsp;
+    const intervalPxHeight = <span class="cstat-no" title="statement not covered" >viewModel.getIntervalPxHeight();</span>
+    const intervalInMin = <span class="cstat-no" title="statement not covered" >viewModel.getIntervalInMin();</span>
+    const day = <span class="cstat-no" title="statement not covered" >viewModel.getDayForItem(item.id);</span>
+    let timeLineStartTimeTmp = <span class="cstat-no" title="statement not covered" >viewModel.getTimeLineStartTime(day ? day.startTime : undefined);</span>
+&nbsp;
+&nbsp;
+    let timeLineStartTime: Moment = <span class="cstat-no" title="statement not covered" >timeLineStartTimeTmp ? timeLineStartTimeTmp : moment();</span>
+&nbsp;
+    const topMin: number = <span class="cstat-no" title="statement not covered" >moment.duration(item.start.diff(timeLineStartTime)).asMinutes();</span>
+    const topPx: number = <span class="cstat-no" title="statement not covered" >topMin / intervalInMin * intervalPxHeight;</span>
+&nbsp;
+    const itemDuration: number = <span class="cstat-no" title="statement not covered" >moment.duration(item.end.diff(item.start)).asMinutes();</span>
+    const height = <span class="cstat-no" title="statement not covered" >itemDuration / intervalInMin * intervalPxHeight;</span>
+&nbsp;
+    const small = <span class="cstat-no" title="statement not covered" >height == intervalPxHeight ? true : false;</span>
+&nbsp;
+    const agendaItemEdit = <span class="cstat-no" title="statement not covered" >item.uiState !== undefined &amp;&amp; (item.uiState === ItemUIState.Editing) ?</span>
+        &lt;AgendaItemEdit
+            item={item}
+            height={height}
+            topPx={topPx}
+            cancel={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >viewModel.updateItemUIState(item.id, undefined)}</span> /&gt;</span>
+        : null;
+&nbsp;
+    const customActionButtons = <span class="cstat-no" title="statement not covered" >customItemActions ? customItemActions.map((<span class="fstat-no" title="function not covered" >customAction =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >        &lt;IconButton</span>
+            iconProps={{ iconName: customAction.iconName }}
+            key={customAction.iconName}
+            onClick={<span class="fstat-no" title="function not covered" >(</span>e: any) =&gt; {
+<span class="cstat-no" title="statement not covered" >                e.stopPropagation();</span>
+<span class="cstat-no" title="statement not covered" >                customAction.action(item);</span>
+            }} /&gt;
+    )) : undefined;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return &lt;&gt;</span>
+        {agendaItemEdit}
+        &lt;div&gt;
+            &lt;div ref={refWidthContainer} style={{ width: '100%' }}&gt;&lt;/div&gt;
+&nbsp;
+            &lt;AgendaItemView
+                start={item.start.format("HH:mm")}
+                end={item.end.format("HH:mm")}
+                title={item.title}
+                speaker={item.speaker}
+                topPx={topPx}
+                height={height}
+                small={small}
+                enableHover={viewModel.getUIState() === UIState.Normal}
+                dragging={isDragging}
+                dragRef={dragMoveRef}
+                initResizing={initResizing}
+                handleResizeEndTime={handleResizeEndTime}
+                finishResizeEndTime={finishResizeEndTime}
+                editItem={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >editItem()}</span></span>
+                deleteItem={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >deleteItem()}</span></span>
+                selected={item.uiState === ItemUIState.Selected}
+                handleSelectClick={handleSelectClick}
+                customActionButtons={customActionButtons}
+                selecting={viewModel.getUIState() === UIState.Selecting}
+            /&gt;
+        &lt;/div&gt;
+    &lt;/&gt;
+&nbsp;
+}
+&nbsp;
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >AgendaItem = observer(AgendaItemController);</span>
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Dec 19 2019 12:34:50 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

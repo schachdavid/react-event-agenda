@@ -9,8 +9,7 @@ import { DragObject } from '../../interfaces/dndInterfaces'
 import uuid from 'uuid';
 import throttle from 'lodash/throttle';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
-import classNames from 'classnames';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import SmallSegment from './SmallSegment/SmallSegment';
 
 
 
@@ -117,16 +116,28 @@ const TrackView: React.FC<IProps> = ({
     let smallSegments: Array<JSX.Element> = [];
 
     for (let i: number = 0; i < numberOfSmallSegments; i++) {
-        smallSegments.push(<div key={uuid()} className={classNames(styles.smallSegment)} style={{ height: smallSegmentHeight + 'px', borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : '' }}>
-            {enableHover ?
-                <div className={styles.smallSegmentHoverContainer}>
-                    < Icon iconName="ChevronUp" className={styles.chevronIcon} />
-                    <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
-                    <Icon iconName="ChevronDown" className={styles.chevronIcon} />
-                </div>
+        smallSegments.push(
+            <SmallSegment
+                enableHover={enableHover}
+                height={smallSegmentHeight}
+                showBorderBottom={i === numberOfSmallSegments - 1}
+            />
+            // <div key={uuid()}
+            //     className={classNames(styles.smallSegment)}
+            //     style={{
+            //         height: smallSegmentHeight + 'px',
+            //         borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : ''
+            //     }}>
+            //     {enableHover ?
+            //         <div className={styles.smallSegmentHoverContainer}>
+            //             < Icon iconName="ChevronUp" className={styles.chevronIcon} />
+            //             <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
+            //             <Icon iconName="ChevronDown" className={styles.chevronIcon} />
+            //         </div>
 
-                : null}
-        </div>)
+            //         : null}
+            // </div>
+            )
     }
 
     let segments: Array<JSX.Element> = [];

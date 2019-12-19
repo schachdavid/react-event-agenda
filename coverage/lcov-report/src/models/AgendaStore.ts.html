@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/models/AgendaStore.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/models</a> AgendaStore.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60.26% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>94/156</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">34.21% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>13/38</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">43.59% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>17/39</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">63.36% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>83/131</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { observable, action, toJS } from 'mobx';
+// import moment from 'moment';
+import { Item, ItemUIState } from './ItemModel';
+import { Track } from './TrackModel';
+// import { Day } from './DayModel';
+import { Agenda, IAgenda, IAgendaJSON } from './AgendaModel';
+import { Day } from './DayModel';
+&nbsp;
+class AgendaStore {
+    @observable agenda: Agenda;
+    // TODO: move to ui store
+    @observable intervalPxHeight: number = 50;
+    @observable intervalInMin: number = 15;
+    @observable segmentFactor: number = 4;
+&nbsp;
+    agendaHistory: Array&lt;IAgendaJSON&gt; = [];
+    pointer: number = -1;
+&nbsp;
+    constructor(data: IAgendaJSON) {
+        this.agenda = Agenda.fromJSON(data);
+        this.pushToHistory();
+    }
+&nbsp;
+    @action addItem(item: Item, trackId: string) {
+        const track = this.getTrack(trackId);
+        const day = this.getDayForTrack(trackId);
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (day &amp;&amp; track) {
+            const dayStartTime = day.startTime;
+            item.start.set({ 'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year') })
+            item.end.set({ 'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year') })
+            const items = track.items;
+            items.push(item);
+        }
+    }
+&nbsp;
+    @action setAgenda(agenda: Agenda) {
+        this.agenda = agenda;
+    }
+&nbsp;
+    @action <span class="fstat-no" title="function not covered" >setTitle(</span>itemId: string, newTitle: string) {
+        const item = <span class="cstat-no" title="statement not covered" >this.getItem(itemId);</span>
+<span class="cstat-no" title="statement not covered" >        if (item) {</span>
+<span class="cstat-no" title="statement not covered" >            item.title = newTitle</span>
+        }
+    }
+&nbsp;
+    getDays(filter?: { uiHidden?: boolean }, ) {
+        let days = this.agenda.days;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (filter) {
+<span class="cstat-no" title="statement not covered" >            days = days.filter(<span class="fstat-no" title="function not covered" >(</span>day) =&gt; {</span>
+                const uiHidden = <span class="cstat-no" title="statement not covered" >day.uiHidden !== undefined ? day.uiHidden : false;</span>
+<span class="cstat-no" title="statement not covered" >                return uiHidden === filter.uiHidden;</span>
+            });
+        }
+        return days;
+    }
+&nbsp;
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getDay(</span>id: string) {
+<span class="cstat-no" title="statement not covered" >        return this.agenda.days.find(<span class="fstat-no" title="function not covered" >(</span>day) =&gt; <span class="cstat-no" title="statement not covered" >day.id === id)</span>;</span>
+    }
+&nbsp;
+    @action <span class="fstat-no" title="function not covered" >deleteDay(</span>id: string) {
+        const daysTmp = <span class="cstat-no" title="statement not covered" >this.agenda.days.filter(<span class="fstat-no" title="function not covered" >(</span>day) =&gt; <span class="cstat-no" title="statement not covered" >day.id !== id)</span></span>
+<span class="cstat-no" title="statement not covered" >        if (daysTmp.length !== this.agenda.days.length) {</span>
+<span class="cstat-no" title="statement not covered" >            this.agenda.days = daysTmp;</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+    }
+&nbsp;
+    @action <span class="fstat-no" title="function not covered" >addDay(</span>day: Day) {
+<span class="cstat-no" title="statement not covered" >        this.agenda.days.push(day);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getAgenda(): IAgenda {</span>
+<span class="cstat-no" title="statement not covered" >        return this.agenda;</span>
+    }
+&nbsp;
+    getDayForTrack(trackId: string) {
+        let days = this.agenda.days;
+        for (let indexDays: number = 0; indexDays &lt; days.length; indexDays++) {
+            let tracks = days[indexDays].tracks;
+            let foundTrack: Track | undefined = tracks.find((track: Track) =&gt; track.id === trackId);
+            if (foundTrack) {
+                return days[indexDays];
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
+    }
+&nbsp;
+    getTrack(id: string) {
+        let days = this.agenda.days;
+        for (let indexDays: number = 0; indexDays &lt; days.length; indexDays++) {
+            let tracks = days[indexDays].tracks;
+            let foundTrack: Track | undefined = tracks.find((track: Track) =&gt; track.id === id);
+            if (foundTrack) {
+                return foundTrack;
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
+    }
+&nbsp;
+    getTrackForItem(id: string) {
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const item: Item | undefined = track.items.find((item) =&gt; item.id === id);
+                if (item) {
+                    return track;
+                }
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getDayForItem(</span>id: string) {
+<span class="cstat-no" title="statement not covered" >        for (const day<span class="cstat-no" title="statement not covered" > of this.agenda.days) {</span></span>
+<span class="cstat-no" title="statement not covered" >            for (const track<span class="cstat-no" title="statement not covered" > of day.tracks) {</span></span>
+                const item: Item | undefined = <span class="cstat-no" title="statement not covered" >track.items.find(<span class="fstat-no" title="function not covered" >(</span>item) =&gt; <span class="cstat-no" title="statement not covered" >item.id === id)</span>;</span>
+<span class="cstat-no" title="statement not covered" >                if (item) {</span>
+<span class="cstat-no" title="statement not covered" >                    return day;</span>
+                }
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getItem(</span>id: string) {
+<span class="cstat-no" title="statement not covered" >        for (const day<span class="cstat-no" title="statement not covered" > of this.agenda.days) {</span></span>
+<span class="cstat-no" title="statement not covered" >            for (const track<span class="cstat-no" title="statement not covered" > of day.tracks) {</span></span>
+                const item: Item | undefined = <span class="cstat-no" title="statement not covered" >track.items.find(<span class="fstat-no" title="function not covered" >(</span>item) =&gt; <span class="cstat-no" title="statement not covered" >item.id === id)</span>;</span>
+<span class="cstat-no" title="statement not covered" >                if (item) {</span>
+<span class="cstat-no" title="statement not covered" >                    return item;</span>
+                }
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
+    }
+&nbsp;
+    getItems(filter?: { uiState?: ItemUIState }, itemIds?: Array&lt;string&gt;) {
+        let items: Array&lt;Item&gt; = [];
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                let itemsOnTrack = track.items.slice();
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (filter) {
+<span class="cstat-no" title="statement not covered" >                    itemsOnTrack = itemsOnTrack.filter(<span class="fstat-no" title="function not covered" >(</span>item) =&gt; <span class="cstat-no" title="statement not covered" >item.uiState === filter.uiState)</span>;</span>
+                }
+                <span class="missing-if-branch" title="else path not taken" >E</span>if (itemIds) {
+                    itemsOnTrack = itemsOnTrack.filter((item) =&gt; itemIds.includes(item.id));
+                }
+                items = items.concat(itemsOnTrack);
+            }
+        }
+        return items;
+    }
+&nbsp;
+    /**
+     *  Gets the item with the given Id and all following items on the same track 
+     *
+     * @param {string} id
+     * @returns
+     * @memberof AgendaStore
+     */
+<span class="fstat-no" title="function not covered" >    getItemAndFollowingItems(</span>id: string) {
+<span class="cstat-no" title="statement not covered" >        for (const day<span class="cstat-no" title="statement not covered" > of this.agenda.days) {</span></span>
+<span class="cstat-no" title="statement not covered" >            for (const track<span class="cstat-no" title="statement not covered" > of day.tracks) {</span></span>
+                const index: number = <span class="cstat-no" title="statement not covered" >track.items.findIndex(<span class="fstat-no" title="function not covered" >(</span>item) =&gt; <span class="cstat-no" title="statement not covered" >item.id === id)</span>;</span>
+<span class="cstat-no" title="statement not covered" >                if (index != -1) {</span>
+<span class="cstat-no" title="statement not covered" >                    return track.items.slice(index);</span>
+                }
+            }
+        }
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
+    }
+&nbsp;
+    @action deleteItem(id: string) {
+        for (const day of this.agenda.days) {
+            for (const track of day.tracks) {
+                const itemsTmp = track.items.filter((item) =&gt; item.id !== id)
+                <span class="missing-if-branch" title="else path not taken" >E</span>if (itemsTmp.length !== track.items.length) {
+                    track.items.replace(itemsTmp);
+                    return;
+                }
+            }
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getIntervalPxHeight() {</span>
+<span class="cstat-no" title="statement not covered" >        return this.intervalPxHeight;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getIntervalInMin() {</span>
+<span class="cstat-no" title="statement not covered" >        return this.intervalInMin;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getSegmentFactor() {</span>
+<span class="cstat-no" title="statement not covered" >        return this.segmentFactor;</span>
+    }
+&nbsp;
+&nbsp;
+    overWriteCurrentHistoryEntry() {
+        this.agendaHistory[this.pointer] = toJS(this.agenda).toJSON();
+    }
+&nbsp;
+    pushToHistory() {
+        this.pointer++;
+        this.agendaHistory.splice(this.pointer, this.agendaHistory.length);
+        this.agendaHistory.push(toJS(this.agenda).toJSON());
+    }
+&nbsp;
+    @action <span class="fstat-no" title="function not covered" >undo() {</span>
+<span class="cstat-no" title="statement not covered" >        if (this.pointer &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >            this.pointer--;</span>
+<span class="cstat-no" title="statement not covered" >            this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    canUndo() {</span>
+<span class="cstat-no" title="statement not covered" >        if (this.pointer &gt; 0) <span class="cstat-no" title="statement not covered" >return true;</span></span>
+<span class="cstat-no" title="statement not covered" >        return false;</span>
+    }
+&nbsp;
+    @action <span class="fstat-no" title="function not covered" >redo() {</span>
+<span class="cstat-no" title="statement not covered" >        if (this.pointer &lt; this.agendaHistory.length - 1) {</span>
+<span class="cstat-no" title="statement not covered" >            this.pointer++;</span>
+<span class="cstat-no" title="statement not covered" >            this.setAgenda(Agenda.fromJSON(this.agendaHistory[this.pointer]));</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    canRedo() {</span>
+<span class="cstat-no" title="statement not covered" >        if (this.pointer &lt; this.agendaHistory.length - 1) <span class="cstat-no" title="statement not covered" >return true;</span></span>
+<span class="cstat-no" title="statement not covered" >        return false;</span>
+    }
+&nbsp;
+&nbsp;
+}
+&nbsp;
+export default AgendaStore;
+export { Item, IItem } from './ItemModel';
+export { Track, ITrack } from './TrackModel';
+export { Day, IDay } from './DayModel';
+export { Agenda, IAgenda } from './AgendaModel';</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Dec 19 2019 14:44:36 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/components/DraggedAgendaItems/DraggedAgendaItemsController.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/DraggedAgendaItems</a> DraggedAgendaItemsController.tsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/45</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/41</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cstat-no" title="statement not covered" >import { useDragLayer } from "react-dnd";</span>
+<span class="cstat-no" title="statement not covered" >import DraggedAgendaItemView from './DraggedAgendaItemView';</span>
+<span class="cstat-no" title="statement not covered" >import { useViewModelContext } from '../../hooks/ViewModelContext';</span>
+<span class="cstat-no" title="statement not covered" >import moment from 'moment';</span>
+import { DragObject } from '../../interfaces/dndInterfaces';
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+export interface IProps {
+&nbsp;
+}
+&nbsp;
+const DraggedAgendaItemsController: React.FC&lt;IProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>{ }) =&gt; {</span>
+&nbsp;
+    const <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >{</span></span></span>
+<span class="cstat-no" title="statement not covered" >        isDragging,</span>
+<span class="cstat-no" title="statement not covered" >        dragObject: dragObjectTmp,</span>
+<span class="cstat-no" title="statement not covered" >        currentOffset,</span>
+    } = useDragLayer(monitor =&gt; ({
+        isDragging: monitor.isDragging(),
+        dragObject: monitor.getItem(),
+        currentOffset: monitor.getSourceClientOffset()
+    }))
+&nbsp;
+    const dragObject: DragObject = <span class="cstat-no" title="statement not covered" >dragObjectTmp;</span>
+&nbsp;
+    const viewModel = <span class="cstat-no" title="statement not covered" >useViewModelContext();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!isDragging || !currentOffset || !dragObject) {</span>
+<span class="cstat-no" title="statement not covered" >        return null;</span>
+    }
+&nbsp;
+    const currentDraggedItemIds: Array&lt;string&gt; = <span class="cstat-no" title="statement not covered" >dragObject.itemIds;</span>
+    const items = <span class="cstat-no" title="statement not covered" >viewModel.getItems(undefined, currentDraggedItemIds);</span>
+&nbsp;
+    const clickedIndex = <span class="cstat-no" title="statement not covered" >items.findIndex(<span class="fstat-no" title="function not covered" >item =&gt; <span class="cstat-no" title="statement not covered" >item.id === dragObject.clickedItemId)</span>;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (clickedIndex === undefined) <span class="cstat-no" title="statement not covered" >r</span>eturn null;</span>
+&nbsp;
+    const intervalPxHeight = <span class="cstat-no" title="statement not covered" >viewModel.getIntervalPxHeight();</span>
+    const intervalInMin = <span class="cstat-no" title="statement not covered" >viewModel.getIntervalInMin();</span>
+&nbsp;
+    const heights: Array&lt;number&gt; = <span class="cstat-no" title="statement not covered" >[];</span>
+    const offsetsY: Array&lt;number&gt; = <span class="cstat-no" title="statement not covered" >[];</span>
+&nbsp;
+    let currentOffsetY = <span class="cstat-no" title="statement not covered" >currentOffset.y;</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = clickedIndex; i &gt;= 0; i--) {</span>
+        const item = <span class="cstat-no" title="statement not covered" >items[i];</span>
+        const itemDuration: number = <span class="cstat-no" title="statement not covered" >moment.duration(item.end.diff(item.start)).asMinutes();</span>
+<span class="cstat-no" title="statement not covered" >        heights[i] = itemDuration / intervalInMin * intervalPxHeight;</span>
+<span class="cstat-no" title="statement not covered" >        if (i !== clickedIndex) <span class="cstat-no" title="statement not covered" >c</span>urrentOffsetY = currentOffsetY - heights[i];</span>
+<span class="cstat-no" title="statement not covered" >        offsetsY[i] = currentOffsetY;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    currentOffsetY = currentOffset.y;</span>
+<span class="cstat-no" title="statement not covered" >    for (let i = clickedIndex + 1; i &lt; items.length; i++) {</span>
+        const item = <span class="cstat-no" title="statement not covered" >items[i];</span>
+        const itemDuration: number = <span class="cstat-no" title="statement not covered" >moment.duration(item.end.diff(item.start)).asMinutes();</span>
+<span class="cstat-no" title="statement not covered" >        heights[i] = itemDuration / intervalInMin * intervalPxHeight;</span>
+<span class="cstat-no" title="statement not covered" >        currentOffsetY = currentOffsetY + heights[i - 1];</span>
+<span class="cstat-no" title="statement not covered" >        offsetsY[i] = currentOffsetY;</span>
+    }
+&nbsp;
+&nbsp;
+    const renderedItems: Array&lt;JSX.Element&gt; = <span class="cstat-no" title="statement not covered" >[];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    items.forEach(<span class="fstat-no" title="function not covered" >(</span>item, index) =&gt; {</span>
+&nbsp;
+        const small = <span class="cstat-no" title="statement not covered" >heights[index] === intervalPxHeight ? true : false;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        renderedItems.push(</span>
+            &lt;DraggedAgendaItemView
+                height={heights[index]}
+                width={viewModel.getTrackWidth()}
+                start={item.start.format("HH:mm")}
+                end={item.end.format("HH:mm")}
+                offsetX={currentOffset.x}
+                offsetY={offsetsY[index]}
+                title={item.title}
+                speaker={item.speaker}
+                small={small}
+                key={item.id}
+            /&gt;
+        )
+    })
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return (</span>
+        &lt;&gt;
+            {renderedItems}
+        &lt;/&gt;
+    )
+}
+&nbsp;
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >DraggedAgendaItems = DraggedAgendaItemsController;</span>
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Dec 19 2019 12:34:50 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

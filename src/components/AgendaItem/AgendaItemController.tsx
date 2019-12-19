@@ -13,7 +13,7 @@ import { IconButton } from 'office-ui-fabric-react';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { UIState } from '../../models/UIStore';
 import { DragObject } from '../../interfaces/dndInterfaces';
-import { addScrollDragEventListener, removeScrollDragEventListener } from '../../scrolling';
+import { addScrollDragEventListener, removeScrollDragEventListener } from '../../util/scrolling';
 
 
 

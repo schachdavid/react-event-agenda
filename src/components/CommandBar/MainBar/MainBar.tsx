@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/components/CommandBar';
 import { Customizer } from 'office-ui-fabric-react';
 import styles from '../CommandBarView.module.scss';
-import { invertTheme } from '../../../util';
+import { invertTheme } from '../../../util/util';
 import { useColorPaletteContext } from '../../../hooks/ColorPaletteContext';
 
 

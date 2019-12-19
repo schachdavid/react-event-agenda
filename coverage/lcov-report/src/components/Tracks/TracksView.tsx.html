@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/components/Tracks/TracksView.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/Tracks</a> TracksView.tsx
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/49</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/22</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/46</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useRef } from 'react';
+<span class="cstat-no" title="statement not covered" >import { observer } from "mobx-react";</span>
+<span class="cstat-no" title="statement not covered" >import styles from './TracksView.module.scss';</span>
+<span class="cstat-no" title="statement not covered" >import { Track } from '../Track/TrackController';</span>
+<span class="cstat-no" title="statement not covered" >import classNames from 'classnames';</span>
+<span class="cstat-no" title="statement not covered" >import { DayBar } from '../DayBar/DayBarController';</span>
+<span class="cstat-no" title="statement not covered" >import { TrackBar } from '../TrackBar/TrackBarController';</span>
+import { ITrack as TrackData, IDay } from '../../models/AgendaStore';
+<span class="cstat-no" title="statement not covered" >import { TimeLine } from '../TimeLine/TimeLineController';</span>
+import { ICustomItemAction } from '../../interfaces/agendaProps';
+import { Moment } from 'moment';
+import { DragObject } from '../../interfaces/dndInterfaces';
+<span class="cstat-no" title="statement not covered" >import { Stack, IconButton, IIconProps, IButtonStyles } from 'office-ui-fabric-react';</span>
+<span class="cstat-no" title="statement not covered" >import { useColorPaletteContext } from '../../hooks/ColorPaletteContext';</span>
+// import { useDrop } from 'react-dnd';
+&nbsp;
+&nbsp;
+&nbsp;
+export interface IProps {
+    handleTracksContainerWidthChange: (newWidth: number) =&gt; void;
+    handleTrackWidthChange: (newWidth: number) =&gt; void;
+    width: number;
+    days: Array&lt;IDay&gt;;
+    singleTracks: boolean;
+    customItemActions?: Array&lt;ICustomItemAction&gt;,
+    moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) =&gt; void,
+    paginateRight: () =&gt; void,
+    canPaginateRight: boolean,
+    paginateLeft: () =&gt; void,
+    canPaginateLeft: boolean
+}
+&nbsp;
+const TracksView: React.FC&lt;IProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>{</span>
+    days,
+    handleTracksContainerWidthChange,
+    handleTrackWidthChange,
+    width,
+    moveDragObject,
+    singleTracks,
+    customItemActions,
+    paginateRight,
+    canPaginateRight,
+    paginateLeft,
+    canPaginateLeft }: IProps) =&gt; {
+&nbsp;
+    const palette = <span class="cstat-no" title="statement not covered" >useColorPaletteContext();</span>
+&nbsp;
+    const refScrollContainer = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
+&nbsp;
+    const refTracksContainer = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >node =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (node !== null) {</span>
+<span class="cstat-no" title="statement not covered" >            handleTracksContainerWidthChange(node.clientWidth - 1);</span>
+&nbsp;
+            const handleResizeTracksContainer = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (node.clientWidth !== width) {</span>
+<span class="cstat-no" title="statement not covered" >                    handleTracksContainerWidthChange(node.clientWidth);</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            window.addEventListener('resize', handleResizeTracksContainer);</span>
+<span class="cstat-no" title="statement not covered" >            return <span class="fstat-no" title="function not covered" >() =&gt; { <span class="cstat-no" title="statement not covered" >window.removeEventListener('resize', handleResizeTracksContainer) };</span></span></span>
+        }
+<span class="cstat-no" title="statement not covered" >        return;</span>
+    }, []);
+&nbsp;
+    const refFirstTrack = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >node =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (node !== null) {</span>
+<span class="cstat-no" title="statement not covered" >            handleTrackWidthChange(node.clientWidth - 1);</span>
+            const handleResizeFirstTrack = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (node.clientWidth !== width) {</span>
+<span class="cstat-no" title="statement not covered" >                    handleTrackWidthChange(node.clientWidth);</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            window.addEventListener('resize', handleResizeFirstTrack);</span>
+<span class="cstat-no" title="statement not covered" >            return <span class="fstat-no" title="function not covered" >() =&gt; { <span class="cstat-no" title="statement not covered" >window.removeEventListener('resize', handleResizeFirstTrack) };</span></span></span>
+        }
+<span class="cstat-no" title="statement not covered" >        return;</span>
+    }, [days]);
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+    // const [, leftDrop] = useDrop({
+    //     accept: 'item',
+    //     hover() {
+    //         if(canPaginateLeft) paginateLeft();
+&nbsp;
+    //     },
+    // })
+    // const [, rightDrop] = useDrop({
+    //     accept: 'item',
+    //     hover() {
+    //         if(canPaginateRight) paginateRight();
+    //     },
+    // })
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+    let trackViews: JSX.Element[] = <span class="cstat-no" title="statement not covered" >[];</span>
+    let dayBarViews;
+    let trackBarViews;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (singleTracks) {</span>
+        const tracks: Array&lt;TrackData&gt; = <span class="cstat-no" title="statement not covered" >days.map(<span class="fstat-no" title="function not covered" >(</span>day: IDay) =&gt; { <span class="cstat-no" title="statement not covered" >return day.tracks[0] })</span></span>
+<span class="cstat-no" title="statement not covered" >        dayBarViews = days.map(<span class="fstat-no" title="function not covered" >(</span>day) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            return &lt;DayBar key={day.id} day={day}&gt; &lt;/DayBar&gt;</span>
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        trackViews = tracks.map(<span class="fstat-no" title="function not covered" >(</span>track: TrackData) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            return &lt;Track key={track.id} track={track} customItemActions={customItemActions} moveDragObject={moveDragObject} refScrollContainer={refScrollContainer}&gt;&lt;/Track&gt;</span>
+        });
+    } else {
+        const tracks: Array&lt;TrackData&gt; = <span class="cstat-no" title="statement not covered" >days[0].tracks;</span>
+<span class="cstat-no" title="statement not covered" >        trackBarViews = tracks.map(<span class="fstat-no" title="function not covered" >(</span>track: TrackData) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            return &lt;TrackBar key={track.id}&gt;&lt;/TrackBar&gt;</span>
+        });
+    }
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (trackViews !== undefined &amp;&amp; trackViews.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >        trackViews[0] = &lt;div ref={refFirstTrack} key={"0"} className={styles.firstTrackContainer}&gt;{trackViews[0]}&lt;/div&gt;</span>
+    }
+&nbsp;
+    const leftArrowIcon: IIconProps = <span class="cstat-no" title="statement not covered" >{ iconName: 'ChevronLeft', };</span>
+    const rightArrowIcon: IIconProps = <span class="cstat-no" title="statement not covered" >{ iconName: 'ChevronRight' };</span>
+&nbsp;
+    const arrowStyle: IButtonStyles = <span class="cstat-no" title="statement not covered" >{</span>
+        root: {
+            visibility: (!canPaginateLeft &amp;&amp; !canPaginateRight) ? 'hidden' : 'visible',
+            height: '43px',
+            width: '24px'
+        },
+        icon: {
+            color: palette.neutralPrimary,
+            fontSize: '14px'
+        }
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return (</span>
+        &lt;div className={styles.container}&gt;
+            {dayBarViews ?
+                &lt;div className={styles.flex}&gt;
+                    &lt;div className={classNames(styles.barPlaceHolderFront, styles.borderBottom)}&gt;
+                        &lt;Stack tokens={{ childrenGap: 0 }} horizontal&gt;
+                            &lt;div
+                            // ref={leftDrop}
+                            &gt;
+                                &lt;IconButton
+                                    styles={arrowStyle}
+                                    iconProps={leftArrowIcon}
+                                    title="Paginate Days Left"
+                                    ariaLabel="Paginate Days Left"
+                                    disabled={!canPaginateLeft}
+                                    onClick={paginateLeft}
+                                /&gt;
+                            &lt;/div&gt;
+                            &lt;div
+                            // ref={rightDrop}
+                            &gt;
+                                &lt;IconButton
+                                    styles={arrowStyle}
+                                    iconProps={rightArrowIcon}
+                                    title="Paginate Days Right"
+                                    ariaLabel="Paginate Days Right"
+                                    disabled={!canPaginateRight}
+                                    onClick={paginateRight}
+                                /&gt;
+                            &lt;/div&gt;
+&nbsp;
+                        &lt;/Stack&gt;
+                    &lt;/div&gt;
+                    &lt;div className={classNames(styles.flex, styles.borderBottom)} style={{ width: width }}&gt;
+                        {dayBarViews}
+                    &lt;/div&gt;
+                    &lt;div className={classNames(styles.barPlaceHolderEnd, styles.borderBottom)}&gt;&lt;/div&gt;
+                &lt;/div&gt;
+                : null}
+&nbsp;
+            &lt;div className={styles.scrollContainer} ref={refScrollContainer} id="scrollContainer"&gt;
+                &lt;TimeLine /&gt;
+                &lt;div className={styles.flex} ref={refTracksContainer}&gt;
+                    {trackViews}
+                &lt;/div&gt;
+                {/* &lt;div style={{position: 'fixed', bottom: 0, left: 0, width:'100%'}} onDragEnter={document.scroll}&gt;
+&nbsp;
+                &lt;/div&gt; */}
+            &lt;/div&gt;
+&nbsp;
+            {trackBarViews ?
+                &lt;div className={styles.flex}&gt;
+                    &lt;div className={classNames(styles.barPlaceHolderFront, styles.borderTop)}&gt;&lt;/div&gt;
+                    &lt;div className={styles.flex} style={{ width: width }}&gt;
+                        {trackBarViews}
+                    &lt;/div&gt;
+                    &lt;div className={classNames(styles.barPlaceHolderEnd, styles.borderTop)}&gt;&lt;/div&gt;
+                &lt;/div&gt;
+                : null}
+        &lt;/div &gt;
+    );
+}
+&nbsp;
+&nbsp;
+export default observer(TracksView);
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Dec 19 2019 12:34:50 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

@@ -7,7 +7,7 @@ import { IDay } from '../../models/AgendaStore';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
 import { DragObject } from '../../interfaces/dndInterfaces';
 import moment, { Moment } from 'moment';
-import { arraysMatch } from '../../util';
+import { arraysMatch } from '../../util/util';
 
 interface IProps {
     customItemActions?: Array<ICustomItemAction>

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/util/scrolling.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/util</a> scrolling.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/50</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/38</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/50</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+import throttle from 'lodash/throttle';
+<span class="cstat-no" title="statement not covered" >import { getBrowser } from './util';</span>
+&nbsp;
+const offset = <span class="cstat-no" title="statement not covered" >50;</span>
+const pxDiff = <span class="cstat-no" title="statement not covered" >5;</span>
+&nbsp;
+let scrollIncrement = <span class="cstat-no" title="statement not covered" >0;</span>
+let isScrolling = <span class="cstat-no" title="statement not covered" >false;</span>
+let isDragging = <span class="cstat-no" title="statement not covered" >false;</span>
+let scrollContainer: HTMLElement | null = <span class="cstat-no" title="statement not covered" >null;</span>
+let intervalId: number | undefined;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+const scrollUp = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (isScrolling &amp;&amp; scrollIncrement &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >        scrollIncrement -= pxDiff;</span>
+<span class="cstat-no" title="statement not covered" >        scrollContainer!.scrollTop = scrollIncrement;</span>
+    }
+};
+&nbsp;
+&nbsp;
+const scrollDown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (isScrolling &amp;&amp; scrollIncrement &lt;= scrollContainer!.scrollHeight) {</span>
+<span class="cstat-no" title="statement not covered" >        scrollIncrement += pxDiff;</span>
+<span class="cstat-no" title="statement not covered" >        scrollContainer!.scrollTop = scrollIncrement;</span>
+    }
+};
+&nbsp;
+const onDragOver = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>event: any) =&gt; {</span>
+    const clientRect = <span class="cstat-no" title="statement not covered" >scrollContainer!.getBoundingClientRect();</span>
+&nbsp;
+    const isMouseOnTop = (
+<span class="cstat-no" title="statement not covered" >        scrollIncrement &gt;= 0</span>
+        &amp;&amp; event.clientY &gt; clientRect.top
+        &amp;&amp; event.clientY &lt; (clientRect.top + offset)
+    );
+    const isMouseOnBottom = (
+<span class="cstat-no" title="statement not covered" >        scrollIncrement &lt;= scrollContainer!.scrollHeight</span>
+        &amp;&amp; event.clientY &gt; (window.innerHeight - offset)
+        &amp;&amp; event.clientY &lt;= window.innerHeight
+    );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!isScrolling &amp;&amp; isDragging &amp;&amp; (isMouseOnTop || isMouseOnBottom)) {</span>
+<span class="cstat-no" title="statement not covered" >        isScrolling = true;</span>
+<span class="cstat-no" title="statement not covered" >        scrollIncrement = scrollContainer!.scrollTop;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (isMouseOnTop) {</span>
+<span class="cstat-no" title="statement not covered" >            intervalId = window.setInterval(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                scrollUp()</span>
+            }, 15);
+<span class="cstat-no" title="statement not covered" >            console.log(intervalId);</span>
+&nbsp;
+        }
+        else {
+<span class="cstat-no" title="statement not covered" >            intervalId = window.setInterval(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                scrollDown()</span>
+            }, 15);
+<span class="cstat-no" title="statement not covered" >            console.log(intervalId);</span>
+        }
+    }
+    else <span class="cstat-no" title="statement not covered" >if (!isMouseOnTop &amp;&amp; !isMouseOnBottom) {</span>
+<span class="cstat-no" title="statement not covered" >        isScrolling = false;</span>
+<span class="cstat-no" title="statement not covered" >        if (intervalId !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            clearInterval(intervalId);</span>
+<span class="cstat-no" title="statement not covered" >            intervalId = undefined;</span>
+        }
+&nbsp;
+    }
+};
+&nbsp;
+&nbsp;
+const throttleOnDragOver = <span class="cstat-no" title="statement not covered" >throttle(onDragOver, 300);</span>
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >addScrollDragEventListener = <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+    const browser = <span class="cstat-no" title="statement not covered" >getBrowser();</span>
+<span class="cstat-no" title="statement not covered" >    if (browser === 'safari' || browser === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        isDragging = true;</span>
+<span class="cstat-no" title="statement not covered" >        scrollContainer = document.getElementById('scrollContainer');</span>
+<span class="cstat-no" title="statement not covered" >        scrollContainer!.addEventListener('dragover', throttleOnDragOver);</span>
+    };
+}
+&nbsp;
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >removeScrollDragEventListener = <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+    const browser = <span class="cstat-no" title="statement not covered" >getBrowser();</span>
+<span class="cstat-no" title="statement not covered" >    if (browser === 'safari' || browser === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        scrollContainer!.removeEventListener('dragover', throttleOnDragOver);</span>
+<span class="cstat-no" title="statement not covered" >        isDragging = false;</span>
+<span class="cstat-no" title="statement not covered" >        isScrolling = false;</span>
+<span class="cstat-no" title="statement not covered" >        if (intervalId !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            clearInterval(intervalId);</span>
+<span class="cstat-no" title="statement not covered" >            intervalId = undefined;</span>
+        }
+    };
+&nbsp;
+};
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Dec 19 2019 12:34:50 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

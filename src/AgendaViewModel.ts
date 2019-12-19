@@ -8,7 +8,7 @@ import { IAgendaJSON, Agenda } from './models/AgendaModel';
 import debounce from 'lodash/debounce';
 import { Cancelable } from 'lodash';
 import findLastIndex from 'lodash/findLastIndex'
-import { IDayJSON } from './models/DayModel';
+import { IDayJSON, IDay } from './models/DayModel';
 
 
 
@@ -76,7 +76,7 @@ export class AgendaViewModel implements IAgendaViewModel {
 
 
 
-    getDays(filter?: { uiHidden?: boolean }, ) {
+    getDays(filter?: { uiHidden?: boolean }): IDay[] {
         return this.agendaStore.getDays(filter);
     }
 
@@ -90,11 +90,11 @@ export class AgendaViewModel implements IAgendaViewModel {
     }
 
 
-    getDayForTrack(trackId: string) {
+    getDayForTrack(trackId: string): IDay | undefined {
         return this.agendaStore.getDayForTrack(trackId);
     }
 
-    getDayForItem(id: string) {
+    getDayForItem(id: string): IDay | undefined {
         return this.agendaStore.getDayForItem(id);
     }
 
@@ -109,7 +109,7 @@ export class AgendaViewModel implements IAgendaViewModel {
         return this.agendaStore.getItem(id);
     }
 
-    getItems(filter?: { uiState?: ItemUIState }, itemIds?: Array<string>) {
+    getItems(filter?: { uiState?: ItemUIState }, itemIds?: Array<string>): IItem[] {
         return this.agendaStore.getItems(filter, itemIds);
     }
 
@@ -272,15 +272,24 @@ export class AgendaViewModel implements IAgendaViewModel {
 
     }
 
+    /**
+     * helper for the moveItems Method, to check parameters and throw exceptions if needed
+     * @param trackId 
+     * @param newStart 
+     */
+    private checkMoveItemsParameters(trackId: string, newStart: Moment) {
+        const track = this.agendaStore.getTrack(trackId);
+        if(track === undefined) throw new Error("No track with the given Id found.");
+        const day = this.agendaStore.getDayForTrack(trackId);
+        if(day === undefined) throw new Error("No Day for the Track found.");
+        if(!day.startTime.isSame(newStart, 'day')) throw new Error("newStart and the day of the track to move should be on the same day");
+    }
+
 
     moveItems(trackId: string, clickedId: string, newStart: Moment, itemIds: Array<string>) {
-        // TODO: check if items are still on the tracks start and end time
+        this.checkMoveItemsParameters(trackId, newStart);
         const itemsToMove = this.agendaStore.getItems(undefined, itemIds);
         let totalDuration = 0;
-
-        // console.log(newStart.format("HH:mm"));
-
-
 
         itemsToMove.forEach(item => {
             let track = this.agendaStore.getTrackForItem(item.id);
@@ -359,7 +368,7 @@ export class AgendaViewModel implements IAgendaViewModel {
                     //3. move items before overlapping
                     movedItemsDummy.end = moment(overlappingItem.start);
                     movedItemsDummy.start = moment(movedItemsDummy.end).subtract(totalDuration);
-                  
+
                     //4. adjust all items after that accordingly
                     if (overlappingItemIndex - 1 >= 0) {
                         //find the item which is the previous and nearest but not being moved currently
@@ -395,9 +404,7 @@ export class AgendaViewModel implements IAgendaViewModel {
             });
         }
 
-        if (curTrack) {
-            curTrack.sortItems();
-        }
+        curTrack.sortItems();
     }
 
 
@@ -540,7 +547,7 @@ export class AgendaViewModel implements IAgendaViewModel {
     }
 
     getDaysToReveal(numberToReveal: number) {
-        const allDays = this.getDays();
+        const allDays = this.agendaStore.getDays();
         const daysToReveal: Array<Day> = [];
 
         const lastVisibleIndex = findLastIndex(allDays, day => !day.uiHidden);
@@ -570,7 +577,7 @@ export class AgendaViewModel implements IAgendaViewModel {
     }
 
     applyTotalTrackWidthToTrackVisibility() {
-        const days: Array<Day> = this.getDays({ uiHidden: false });
+        const days: Array<Day> = this.agendaStore.getDays({ uiHidden: false });
         const displayableTracks = this.getNumberOfDisplayableTracks();
         if (days.length > displayableTracks) {
             const numberOfDaysToHide = days.length - displayableTracks;

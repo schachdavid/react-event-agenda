@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/util/util.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/util</a> util.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/42</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/32</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { IPalette, createTheme } from 'office-ui-fabric-react';
+&nbsp;
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >invertTheme = <span class="fstat-no" title="function not covered" >(</span>palette: Partial&lt;IPalette&gt;) =&gt; {</span>
+&nbsp;
+  const newPalette = <span class="cstat-no" title="statement not covered" >Object.assign({}, palette);</span>
+&nbsp;
+  const whiteTmp = <span class="cstat-no" title="statement not covered" >newPalette.white;</span>
+&nbsp;
+  //background color
+<span class="cstat-no" title="statement not covered" >  newPalette.white = newPalette.themePrimary;</span>
+&nbsp;
+  //icon color
+<span class="cstat-no" title="statement not covered" >  newPalette.themePrimary = whiteTmp;</span>
+&nbsp;
+  //hover background color
+<span class="cstat-no" title="statement not covered" >  newPalette.neutralLighter = newPalette.themeDark;</span>
+&nbsp;
+  // font color
+<span class="cstat-no" title="statement not covered" >  newPalette.neutralPrimary = whiteTmp;</span>
+&nbsp;
+  //hover icon color
+<span class="cstat-no" title="statement not covered" >  newPalette.themeDarkAlt = whiteTmp;</span>
+&nbsp;
+  // hover font color
+<span class="cstat-no" title="statement not covered" >  newPalette.neutralDark = whiteTmp;</span>
+&nbsp;
+  const theme = <span class="cstat-no" title="statement not covered" >createTheme({</span>
+    palette: newPalette,
+    defaultFontStyle: { fontFamily: 'Open Sans' },
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return theme;</span>
+}
+&nbsp;
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >arraysMatch = <span class="fstat-no" title="function not covered" >(</span>arr1: Array&lt;string | number | boolean&gt;, arr2: Array&lt;string | number | boolean&gt;) =&gt; {</span>
+  // Check if the arrays are the same length
+<span class="cstat-no" title="statement not covered" >  if (arr1.length !== arr2.length) <span class="cstat-no" title="statement not covered" >r</span>eturn false;</span>
+&nbsp;
+  // Check if all items exist and are in the same order
+<span class="cstat-no" title="statement not covered" >  for (var i = 0; i &lt; arr1.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >    if (arr1[i] !== arr2[i]) <span class="cstat-no" title="statement not covered" >r</span>eturn false;</span>
+  }
+&nbsp;
+  // Otherwise, return true
+<span class="cstat-no" title="statement not covered" >  return true;</span>
+};
+&nbsp;
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >getBrowser = <span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+&nbsp;
+  // Opera 8.0+
+<span class="cstat-no" title="statement not covered" >  if ((!!window["opr"] &amp;&amp; !!["opr"]["addons"]) || !!window["opera"] || navigator.userAgent.indexOf(' OPR/') &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >    return 'opera';</span>
+  }
+&nbsp;
+  // Firefox 1.0+
+<span class="cstat-no" title="statement not covered" >  if (typeof window["InstallTrigger"] !== 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >    return 'firefox';</span>
+  }
+&nbsp;
+  // Safari 3.0+ "[object HTMLElementConstructor]" 
+<span class="cstat-no" title="statement not covered" >  if (/constructor/i.test(window["HTMLElement"] as unknown as string) || (<span class="fstat-no" title="function not covered" >function (</span>p) { <span class="cstat-no" title="statement not covered" >return p.toString() === "[object SafariRemoteNotification]"; })</span>(!window['safari'] || (typeof window["safari"] !== 'undefined' &amp;&amp; window["safari"].pushNotification))) {</span>
+<span class="cstat-no" title="statement not covered" >    return 'safari';</span>
+  }
+&nbsp;
+  // Internet Explorer 6-11
+<span class="cstat-no" title="statement not covered" >  if (/*@cc_on!@*/false || !!document["documentMode"]) {</span>
+<span class="cstat-no" title="statement not covered" >    return 'ie';</span>
+  }
+&nbsp;
+  // Edge 20+
+<span class="cstat-no" title="statement not covered" >  if (!(/*@cc_on!@*/false || !!document["documentMode"]) &amp;&amp; !!window["StyleMedia"]) {</span>
+<span class="cstat-no" title="statement not covered" >    return 'edge';</span>
+  }
+&nbsp;
+  // Chrome 1+
+<span class="cstat-no" title="statement not covered" >  if (!!window["chrome"] &amp;&amp; !!window["chrome"].webstore) {</span>
+<span class="cstat-no" title="statement not covered" >    return 'chrome';</span>
+  }
+&nbsp;
+  // Blink engine detection
+<span class="cstat-no" title="statement not covered" >  if (((!!window["chrome"] &amp;&amp; !!window["chrome"].webstore) || ((!!window["opr"] &amp;&amp; !!["opr"]["addons"]) || !!window["opera"] || navigator.userAgent.indexOf(' OPR/') &gt;= 0)) &amp;&amp; !!window["CSS"]) {</span>
+<span class="cstat-no" title="statement not covered" >    return 'blink';</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return undefined;</span>
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Dec 19 2019 12:34:50 GMT+0100 (Central European Standard Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

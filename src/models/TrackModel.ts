@@ -29,7 +29,7 @@ export class Track {
     /**
      * Sorts all agenda items in this track by start time
      */
-    public sortItems()  {
+    public sortItems()  {   
         this._items.replace( this._items.slice().sort((a,b) => {
             if ( a.start.isBefore(b.start)){
                 return -1;
