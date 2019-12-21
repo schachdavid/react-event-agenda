@@ -11,3 +11,49 @@
   display: flex;
   flex-direction: column;
 }
+
+.smallSegment {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.smallSegmentText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-style: italic;
+} 
+
+
+.addIcon {
+  font-size: 1rem; 
+  margin-right: 0.5rem; 
+}
+
+.smallSegmentHoverContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  visibility: hidden;
+
+}
+
+.smallSegment:hover .smallSegmentHoverContainer {
+  visibility: visible;
+  background-color: var(--neutralLight);
+  color: var(--neutralQuaternary);
+  align-items: center;
+} 
+
+.chevronIcon {
+  font-size: 0.5rem;
+  color: var(--neutralSecondary);
+
+}

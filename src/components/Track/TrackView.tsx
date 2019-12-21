@@ -9,9 +9,9 @@ import { DragObject } from '../../interfaces/dndInterfaces'
 import uuid from 'uuid';
 import throttle from 'lodash/throttle';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
-import SmallSegment from './SmallSegment/SmallSegment';
-
-
+// import SmallSegment from './SmallSegment/SmallSegment';
+import classNames from 'classnames';
+import { Icon } from 'office-ui-fabric-react';
 
 
 
@@ -40,7 +40,6 @@ const TrackView: React.FC<IProps> = ({
     finishDrawUp,
     customItemActions,
     enableHover,
-    refScrollContainer
 }: IProps) => {
     const agendaItems = items.map((item: IItem) => <AgendaItem key={item.id} item={item} customItemActions={customItemActions}></AgendaItem>)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -48,18 +47,6 @@ const TrackView: React.FC<IProps> = ({
 
 
     const throttledDropHover = throttle(handleDropHover, 20);
-    // const throttledScrollDown = throttle(() => refScrollContainer.current!.scrollBy({ top: 20, left: 0 }), 20);
-    // const throttledScrollDown = throttle(() => { 
-    //     refScrollContainer.current!.scrollTop =  refScrollContainer.current!.scrollTop + 1;
-    //  }, 0.1);
-
-    // const throttledScrollUp = throttle(() => refScrollContainer.current!.scrollBy({ top: -20, left: 0 }), 20);
-
-    // const throttledScrollDown = () => window.requestAnimationFrame(() => refScrollContainer.current!.scrollBy({ top: 3, left: 0 }));
-    // const throttledScrollUp = () => window.requestAnimationFrame(() =>refScrollContainer.current!.scrollBy({ top: -3, left: 0 }));
-
-
-
 
     const [, drop] = useDrop({
         accept: 'item',
@@ -68,18 +55,6 @@ const TrackView: React.FC<IProps> = ({
             const sourceClientOffset = monitor.getSourceClientOffset();
             const hoverClientY = (sourceClientOffset as XYCoord).y - hoverBoundingRect.top;
             throttledDropHover(hoverClientY, dragObject);
-
-            const clientOffsetY = (monitor.getClientOffset() as XYCoord).y;
-            const scrollContainerBoundingRect = refScrollContainer.current!.getBoundingClientRect();
-            const diffTop = clientOffsetY - scrollContainerBoundingRect.top;
-            if (diffTop >= 0 && diffTop < 20) {
-                // throttledScrollUp();
-
-            }
-            const diffBottom = clientOffsetY - scrollContainerBoundingRect.bottom;
-            if (diffBottom <= 0 && diffBottom > -20) {
-                // throttledScrollDown();
-            }
         },
     })
 
@@ -117,26 +92,26 @@ const TrackView: React.FC<IProps> = ({
 
     for (let i: number = 0; i < numberOfSmallSegments; i++) {
         smallSegments.push(
-            <SmallSegment
-                enableHover={enableHover}
-                height={smallSegmentHeight}
-                showBorderBottom={i === numberOfSmallSegments - 1}
-            />
-            // <div key={uuid()}
-            //     className={classNames(styles.smallSegment)}
-            //     style={{
-            //         height: smallSegmentHeight + 'px',
-            //         borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : ''
-            //     }}>
-            //     {enableHover ?
-            //         <div className={styles.smallSegmentHoverContainer}>
-            //             < Icon iconName="ChevronUp" className={styles.chevronIcon} />
-            //             <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
-            //             <Icon iconName="ChevronDown" className={styles.chevronIcon} />
-            //         </div>
+            // <SmallSegment
+            //     enableHover={enableHover}
+            //     height={smallSegmentHeight}
+            //     showBorderBottom={i === numberOfSmallSegments - 1}
+            // />
+            <div key={uuid()}
+                className={classNames(styles.smallSegment)}
+                style={{
+                    height: smallSegmentHeight + 'px',
+                    borderBottom: i == numberOfSmallSegments - 1 ? '1px dashed var(--neutralQuaternary)' : ''
+                }}>
+                {enableHover ?
+                    <div className={styles.smallSegmentHoverContainer}>
+                        <Icon iconName="ChevronUp" className={styles.chevronIcon} />
+                        <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
+                        <Icon iconName="ChevronDown" className={styles.chevronIcon} />
+                    </div>
 
-            //         : null}
-            // </div>
+                    : null}
+            </div>
             )
     }
 

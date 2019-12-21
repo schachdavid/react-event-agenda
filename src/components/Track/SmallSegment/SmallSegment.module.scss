@@ -1,18 +1,19 @@
 
 .smallSegment {
     width: 100%;
+    height: 100%;
     box-sizing: border-box;
     padding: 5px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
   }
   
   .smallSegmentText {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
     width: 100%;
     font-style: italic;
   } 
@@ -28,13 +29,18 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    visibility: visible;
     background-color: var(--neutralLight);
     color: var(--neutralQuaternary);
     align-items: center;
-  
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;  
+    visibility: hidden;
   }
-  
+
+  .smallSegment:hover .smallSegmentHoverContainer {
+    visibility: visible;
+  }
   
   .chevronIcon {
     font-size: 0.5rem;

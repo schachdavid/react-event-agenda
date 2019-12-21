@@ -16,6 +16,11 @@ class AgendaStore {
     agendaHistory: Array<IAgendaJSON> = [];
     pointer: number = -1;
 
+    /**
+     * The AgendaStore implements CRUD Operations for the models and the undo/redo history for the agenda.
+     * 
+     * @param {IAgendaJSON} data - initial Data
+     */
     constructor(data: IAgendaJSON) {
         this.agenda = Agenda.fromJSON(data);
         this.pushToHistory();
