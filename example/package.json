@@ -1,5 +1,6 @@
 {
   "name": "react-event-agenda-example",
+  "homepage": "http://schachdavid.github.io/react-event-agenda",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -28,9 +29,12 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
+    "gh-pages": "^2.1.1",
     "react-app-rewired": "^2.1.3"
   }
 }

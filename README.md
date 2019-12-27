@@ -6,11 +6,9 @@
   <img src="screenshot.png" width="800">
 </p>
 
+[Demo](https://schachdavid.github.io/react-event-agenda)
 
 [Documentation](https://schachdavid.github.io/react-event-agenda-doc/)
-
-[Demo](https://schachdavid.github.io/react-event-agenda-doc/)
-
 
 ## Development
 

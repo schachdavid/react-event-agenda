@@ -13,10 +13,12 @@
 }
 
 .smallSegment {
+  position: relative;
   width: 100%;
   box-sizing: border-box;
   padding: 5px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -54,14 +56,20 @@
 
 .chevronIcon {
   font-size: 0.8rem;
-  color: var(--neutralQuaternary);
+  color: var(--neutralSecondary);
+  visibility: hidden;
+
 }
+
+.smallSegment:hover .chevronIcon {
+  visibility: visible;
+} 
 .chevronIconTop {
-  position: relative;
-  top: -13px;
+  position: absolute;
+  top: 3px;
 }
 
 .chevronIconBottom {
-  position: relative;
-  top: 14px;
+  position: absolute;
+  bottom: -1px;
 }
