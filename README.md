@@ -1,31 +1,22 @@
-# react-event-agenda
-
-> 
+> "It's not a calendar. It's a component to build an event's agenda."
 
 [![NPM](https://img.shields.io/npm/v/react-event-agenda.svg)](https://www.npmjs.com/package/react-event-agenda) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-## Install
+<img src="logo.png" width="300">
 
-```bash
-npm install --save react-event-agenda
-```
 
-## Usage
+<img src="screenshot.png" width="800">
 
-```tsx
-import * as React from 'react'
 
-import MyComponent from 'react-event-agenda'
+[Documentation](https://schachdavid.github.io/react-event-agenda-doc/)
 
-class Example extends React.Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
-```
+[Demo](https://schachdavid.github.io/react-event-agenda-doc/)
+
+
+## Development
+
 
 ## License
 
 MIT © [](https://github.com/)
+

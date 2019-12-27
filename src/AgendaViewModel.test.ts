@@ -2,6 +2,8 @@ import { AgendaViewModel } from './AgendaViewModel'
 import { getTestData } from './util/testData'
 import moment from 'moment';
 import { UIState } from './models/UIStore';
+import { IDayJSON } from './models/DayModel';
+import { removeUndefinedKeys } from './util/util';
 
 
 
@@ -54,9 +56,29 @@ describe("getDays", () => {
         const agendaViewModel = new AgendaViewModel(initialData);
         expect(JSON.stringify(agendaViewModel.getDays())).toEqual(JSON.stringify(initialData.days)); 
     });
+
+    it('filters the days', () => {
+        const initialData = getTestData();
+        initialData.days[0].uiHidden = false;
+        initialData.days[1].uiHidden = true;
+        const agendaViewModel = new AgendaViewModel(initialData);
+        expect(JSON.stringify(agendaViewModel.getDays({uiHidden: true})[0])).toEqual(JSON.stringify(initialData.days[1])); 
+    });
 });
 
-describe("moveItem", () => {
+
+describe("deleteDay", () => {
+    it('deletes the day', () => {
+        const initialData = getTestData();
+        const agendaViewModel = new AgendaViewModel(initialData);
+        agendaViewModel.deleteDay(initialData.days[0].id);
+        const modInitialDays = initialData.days;
+        expect(removeUndefinedKeys(agendaViewModel.getDays()[0])).toEqual(removeUndefinedKeys(modInitialDays[1])); 
+    });
+});
+
+
+describe("mremoveUndefinedKeys(oveItem", () => {
     it('applies changes to freely moved item', () => {
         const initialData = getTestData();
         const agendaViewModel = new AgendaViewModel(initialData);

@@ -53,7 +53,15 @@
 } 
 
 .chevronIcon {
-  font-size: 0.5rem;
-  color: var(--neutralSecondary);
+  font-size: 0.8rem;
+  color: var(--neutralQuaternary);
+}
+.chevronIconTop {
+  position: relative;
+  top: -13px;
+}
 
+.chevronIconBottom {
+  position: relative;
+  top: 14px;
 }

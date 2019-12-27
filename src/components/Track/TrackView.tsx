@@ -105,9 +105,9 @@ const TrackView: React.FC<IProps> = ({
                 }}>
                 {enableHover ?
                     <div className={styles.smallSegmentHoverContainer}>
-                        <Icon iconName="ChevronUp" className={styles.chevronIcon} />
+                        <Icon iconName="ChevronUp" className={classNames(styles.chevronIcon, styles.chevronIconTop)} />
                         <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
-                        <Icon iconName="ChevronDown" className={styles.chevronIcon} />
+                        <Icon iconName="ChevronDown" className={classNames(styles.chevronIcon, styles.chevronIconBottom)} />
                     </div>
 
                     : null}

@@ -87,3 +87,11 @@ export const getBrowser = () => {
 
   return undefined;
 }
+
+/**
+ * removes the undefined Keys inplace
+ */
+export const removeUndefinedKeys = (obj: any) => {
+  Object.keys(obj).forEach(key => obj[key] === undefined ? delete obj[key] : '');
+  return obj;
+}

@@ -22,7 +22,7 @@ export class AgendaViewModel {
      * The UI reacts to all changes made using the ViewModel's methods.
      * 
      * @param {IAgendaJSON} data - initial Data
-     * @param {} handleDataChange - this function gets called whenever the user changes the agenda, it is debounced.
+     * @param {(data: IAgendaJSON) => void} handleDataChange - this function gets called whenever the user changes the agenda, it is debounced.
      * 
      * @example const agendaViewModel = new AgendaViewModel(initialData, data => saveToDB(data));
      */
