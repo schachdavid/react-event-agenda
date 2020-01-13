@@ -1,8 +1,6 @@
 import { observable } from 'mobx';
 import { Day, IDay, IDayJSON } from './DayModel';
 
-
-
 export interface IAgenda {
     id: string,
     days: Array<IDay>

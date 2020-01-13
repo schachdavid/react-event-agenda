@@ -166,7 +166,7 @@ export default class App extends Component {
       <div style={{ height: '100vh', width: '100vw', maxWidth: '100%' }}>
         <Agenda
           agendaViewModel={this.agendaViewModel}
-        />
+/>
       </div>
     )
   }

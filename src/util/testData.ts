@@ -1,8 +1,15 @@
+/**
+ * Test agenda data for unit testing or demos.
+ *
+ * @license MIT
+ */
+
+
 import { IAgendaJSON } from "../models/AgendaModel";
 
 
 /**
- * returns sample data for an Agenda. Do not change this. The test Might break.
+ * returns sample data for an Agenda. Do not change this. The tests might break.
  */
 export const getTestData = (): IAgendaJSON => {
     return {

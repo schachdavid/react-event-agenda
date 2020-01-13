@@ -1,5 +1,15 @@
+/**
+ * The Central AgendaViewModel.
+ *
+ * @file The AgendaViewModel is the central API for interacting with the react-event-agenda component. 
+ * The UI reacts to all changes made using the ViewModel's methods. The AgendaViewModel is also used 
+ * internally to glue everything together. ViewModels are part of the Model View ViewModel (MVVM)
+ * Design Pattern.
+ * 
+ * @license MIT
+ */
+
 import AgendaStore, { IItem, Item, Day } from './models/AgendaStore';
-// import { IAgendaViewModel } from './interfaces/IAgendaViewModel';
 import moment, { Moment } from 'moment';
 import UIStore, { UIState } from './models/UIStore';
 import { ItemUIState } from './models/ItemModel';
@@ -125,7 +135,6 @@ export class AgendaViewModel {
     }
 
     /**
-     * The number of intervals which one segment contains.
      * 
      * @return {IDay[]}
      */
@@ -598,7 +607,7 @@ export class AgendaViewModel {
                 } else {
                     this.insertItemBefore(movedItemsDummy, moment(overlappingItem.start).subtract(totalDuration), items, overlappingItemIndex, itemIds);
                 }
-            } 
+            }
             //insert the actual items at the dummy's position
             let startTimeToInsert = moment(movedItemsDummy.start);
             itemsToMove.forEach(item => {

@@ -1,3 +1,13 @@
+/**
+ * DnD Scrolling fix.
+ *
+ * @file This file adds the auto scroll feature during dragging for
+ *  Browsers like Safari which do not support this out of the box.
+ * 
+ * @license MIT
+ */
+
+
 
 import throttle from 'lodash/throttle';
 import { getBrowser } from './util';
@@ -10,8 +20,6 @@ let isScrolling = false;
 let isDragging = false;
 let scrollContainer: HTMLElement | null = null;
 let intervalId: number | undefined;
-
-
 
 
 const scrollUp = () => {

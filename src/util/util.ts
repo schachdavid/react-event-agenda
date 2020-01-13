@@ -1,3 +1,10 @@
+
+/**
+ * A collection of utility functions.
+ *
+ * @license MIT
+ */
+
 import { IPalette, createTheme } from 'office-ui-fabric-react';
 
 

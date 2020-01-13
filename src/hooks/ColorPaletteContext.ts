@@ -1,3 +1,9 @@
+/**
+ * A hook which makes the dynamically changeable colorPalette visible to all components.
+ * 
+ * @license MIT
+ */
+
 import React from 'react';
 import { IPalette } from '@uifabric/styling';
 

@@ -16,7 +16,7 @@ import { Customizer } from 'office-ui-fabric-react';
 
 import { registerIcons } from '@uifabric/styling';
 
-import { FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiCheckSquare, FiSquare, FiXCircle, FiPlusCircle, FiChevronDown, FiChevronUp, FiChevronRight, FiChevronLeft } from 'react-icons/fi';
+import { FiTrash2, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiCheckSquare, FiSquare, FiXCircle, FiPlusCircle, FiChevronDown, FiChevronUp, FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { DraggedAgendaItems } from '../DraggedAgendaItems/DraggedAgendaItemsController';
 import ShortKeyHandler from '../ShortKeyHandler/ShortKeyHandler';
 
@@ -62,7 +62,6 @@ const Agenda: React.FC<IProps> = ({
     registerIcons({
         icons: {
             'delete': <span className={styles.iconStrokeWidthContainer}><FiTrash2 size={'1.2em'} /></span>,
-            'settings': <span className={styles.iconStrokeWidthContainer}><FiSettings size={'1.2em'} /></span>,
             'undo': <span className={styles.iconStrokeWidthContainer}><FiCornerUpLeft size={'1.2em'} /></span>,
             'redo': <span className={styles.iconStrokeWidthContainer}><FiCornerUpRight size={'1.2em'} /></span>,
             'edit': <span className={styles.iconStrokeWidthContainer}><FiEdit2 size={'1.2em'} /></span>,

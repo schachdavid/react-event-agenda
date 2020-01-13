@@ -1,8 +1,16 @@
+/**
+ * The AgendaStore.
+ *
+ * @file The AgendaStore is a Layer to access all the data related models.
+ * It also implements undo/redo history and CRUD for the models.
+ * 
+ * @license MIT
+ */
+
+
 import { observable, action, toJS } from 'mobx';
-// import moment from 'moment';
 import { Item, ItemUIState } from './ItemModel';
 import { Track } from './TrackModel';
-// import { Day } from './DayModel';
 import { Agenda, IAgenda, IAgendaJSON } from './AgendaModel';
 import { Day } from './DayModel';
 

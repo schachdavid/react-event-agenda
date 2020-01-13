@@ -1,3 +1,13 @@
+/**
+ * The UIStore.
+ *
+ * @file The UIStore stores information which is not directly connected 
+ * to the agenda data, but still needs to be in the global state to be 
+ * accessible by all components.
+ * 
+ * @license MIT
+ */
+
 import { observable, action } from 'mobx';
 
 

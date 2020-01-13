@@ -1,3 +1,9 @@
+/**
+ * A hook which makes the central AgendaViewModel usable in all components.
+ * 
+ * @license MIT
+ */
+
 import React from 'react';
 import {AgendaViewModel} from '../AgendaViewModel';
 
