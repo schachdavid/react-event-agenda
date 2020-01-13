@@ -18,12 +18,8 @@ const SmallSegment: React.FC<IProps> = ({
     showBorderBottom
 }: IProps) => {
 
-    // const [isHovering, setIsHovering] = useState(false);
-
     return (
         <div
-            // onMouseEnter={() => { if (enableHover) { setIsHovering(true) } }}
-            // onMouseLeave={() => { setIsHovering(false) } }
             key={uuid()}
             className={classNames(styles.smallSegment)}
             style={{
@@ -31,16 +27,14 @@ const SmallSegment: React.FC<IProps> = ({
                 borderBottom: showBorderBottom ? '1px dashed var(--neutralQuaternary)' : ''
             }}>
             {enableHover ?
-                <div
-                    // style={{visibility: enableHover && isHovering ? "visible" : "hidden"}}
-                    className={styles.smallSegmentHoverContainer}
-                >
-                    < Icon iconName="ChevronUp" className={styles.chevronIcon} />
-                    <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
-                    <Icon iconName="ChevronDown" className={styles.chevronIcon} />
-                </div> : null
-            }
-
+                <>
+                    <Icon iconName="ChevronUp" className={classNames(styles.chevronIcon, styles.chevronIconTop)} />
+                    <div className={styles.smallSegmentHoverContainer}>
+                        <div className={styles.smallSegmentText}><Icon iconName="AddTo" className={styles.addIcon} />Create new agenda item</div>
+                    </div>
+                    <Icon iconName="ChevronDown" className={classNames(styles.chevronIcon, styles.chevronIconBottom)} />
+                </>
+                : null}
         </div>
     );
 }

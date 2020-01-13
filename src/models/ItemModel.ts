@@ -2,8 +2,6 @@ import moment, { Moment } from 'moment';
 import { observable } from 'mobx';
 
 
-
-
 export enum ItemUIState {
     Editing,
     Selected
@@ -63,6 +61,7 @@ export class Item {
         this._start = moment(obj.start);
         this._end = moment(obj.end);
         this._uiState = obj.uiState;
+        this._description = obj.description!;
     }
 
     /**
@@ -160,6 +159,51 @@ export class Item {
     public set end(value: Moment) {
         this._end = value;
     }
+
+    /**
+     * Gets the middle between start and end. 
+     * 
+     * @param start 
+     * @param end 
+     */
+    public getMiddle() {
+        return moment(this._start).add(this._end.diff(this._start) / 2);
+    }
+
+    /**
+     * Gets the item's duration in milliseconds.
+     */
+    public getDuration() {
+        return this._end.diff(this._start);
+    }
+
+    /**
+     * Moves the item's start and end time by the given amount of time.
+     * Is not aware about other items.
+     * 
+     * @param milSecToMove 
+     */
+    public moveByMilSecs(milSecToMove: number) {
+        const newStart = moment(this._start).add(milSecToMove);
+        const newEnd = moment(this._end).add(milSecToMove);
+        this._start = newStart;
+        this._end = newEnd;
+    }
+
+    /**
+     * Moves the item's start to the given start time.
+     * Move the item's end time accordingly. 
+     * Is not aware about other items.
+     * 
+     * @param newStart 
+     */
+    public moveByMoment(newStart: Moment) {
+        const duration = this.getDuration();
+        this._start = moment(newStart);
+        this._end = moment(newStart).add(duration);
+    }
+
+
 
     toJSON(): IItemJSON {
         return {

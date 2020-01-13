@@ -25,7 +25,7 @@ const SelectBar: React.FC<IProps> = ({ numberOfSelectedItems, unselectAll, delet
             },
             iconOnly: true,
             onClick: unselectAll
-        }] 
+        }]
 
     let farItems: ICommandBarItemProps[] = [{
         key: 'deleteAllSelected',
@@ -39,13 +39,17 @@ const SelectBar: React.FC<IProps> = ({ numberOfSelectedItems, unselectAll, delet
     }
     ]
 
-    if(customItemSelectionActionsFar) farItems = farItems.concat(customItemSelectionActionsFar);
+    if (customItemSelectionActionsFar) farItems = farItems.concat(customItemSelectionActionsFar);
 
 
     return (
         <>
-                <CommandBar items={items} farItems={farItems} className={styles.commandBar} />
-                <div className={styles.numberOfItemsText}><span className={styles.numberOfItems}>{numberOfSelectedItems}</span>  Item{numberOfSelectedItems > 1 ? 's' : ''} selected</div>
+            <CommandBar items={items} farItems={farItems} className={styles.commandBar} />
+            <div className={styles.numberOfItemsText}>
+                <span className={styles.numberOfItems}>{numberOfSelectedItems}</span>
+                Item{numberOfSelectedItems > 1 ? 's' : ''} selected
+                <span className={styles.toolTip}>shift+click to select multiple</span>
+            </div>
         </>
     );
 }

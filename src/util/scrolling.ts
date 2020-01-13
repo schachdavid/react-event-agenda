@@ -51,14 +51,12 @@ const onDragOver = (event: any) => {
             intervalId = window.setInterval(function () {
                 scrollUp()
             }, 15);
-            console.log(intervalId);
 
         }
         else {
             intervalId = window.setInterval(function () {
                 scrollDown()
             }, 15);
-            console.log(intervalId);
         }
     }
     else if (!isMouseOnTop && !isMouseOnBottom) {

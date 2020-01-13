@@ -29,7 +29,6 @@ class AgendaStore {
     @action addItem(item: Item, trackId: string) {
         const track = this.getTrack(trackId);
         const day = this.getDayForTrack(trackId);
-
         if (day && track) {
             const dayStartTime = day.startTime;
             item.start.set({ 'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year') })

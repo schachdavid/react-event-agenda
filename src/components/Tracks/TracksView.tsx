@@ -4,7 +4,6 @@ import styles from './TracksView.module.scss';
 import { Track } from '../Track/TrackController';
 import classNames from 'classnames';
 import { DayBar } from '../DayBar/DayBarController';
-import { TrackBar } from '../TrackBar/TrackBarController';
 import { ITrack as TrackData, IDay } from '../../models/AgendaStore';
 import { TimeLine } from '../TimeLine/TimeLineController';
 import { ICustomItemAction } from '../../interfaces/agendaProps';
@@ -21,7 +20,6 @@ export interface IProps {
     handleTrackWidthChange: (newWidth: number) => void;
     width: number;
     days: Array<IDay>;
-    singleTracks: boolean;
     customItemActions?: Array<ICustomItemAction>,
     moveDragObject: (trackId: string, newStart: Moment, dragObject: DragObject) => void,
     paginateRight: () => void,
@@ -36,7 +34,6 @@ const TracksView: React.FC<IProps> = ({
     handleTrackWidthChange,
     width,
     moveDragObject,
-    singleTracks,
     customItemActions,
     paginateRight,
     canPaginateRight,
@@ -77,8 +74,6 @@ const TracksView: React.FC<IProps> = ({
     }, [days]);
 
 
-
-
     // const [, leftDrop] = useDrop({
     //     accept: 'item',
     //     hover() {
@@ -94,27 +89,19 @@ const TracksView: React.FC<IProps> = ({
     // })
 
 
-
-
     let trackViews: JSX.Element[] = [];
     let dayBarViews;
     let trackBarViews;
 
-    if (singleTracks) {
-        const tracks: Array<TrackData> = days.map((day: IDay) => { return day.tracks[0] })
-        dayBarViews = days.map((day) => {
-            return <DayBar key={day.id} day={day}> </DayBar>
-        });
+    const tracks: Array<TrackData> = days.map((day: IDay) => { return day.tracks[0] })
+    dayBarViews = days.map((day) => {
+        return <DayBar key={day.id} day={day}> </DayBar>
+    });
 
-        trackViews = tracks.map((track: TrackData) => {
-            return <Track key={track.id} track={track} customItemActions={customItemActions} moveDragObject={moveDragObject} refScrollContainer={refScrollContainer}></Track>
-        });
-    } else {
-        const tracks: Array<TrackData> = days[0].tracks;
-        trackBarViews = tracks.map((track: TrackData) => {
-            return <TrackBar key={track.id}></TrackBar>
-        });
-    }
+    trackViews = tracks.map((track: TrackData) => {
+        return <Track key={track.id} track={track} customItemActions={customItemActions} moveDragObject={moveDragObject} refScrollContainer={refScrollContainer}></Track>
+    });
+
 
 
     if (trackViews !== undefined && trackViews.length > 0) {
@@ -181,9 +168,6 @@ const TracksView: React.FC<IProps> = ({
                 <div className={styles.flex} ref={refTracksContainer}>
                     {trackViews}
                 </div>
-                {/* <div style={{position: 'fixed', bottom: 0, left: 0, width:'100%'}} onDragEnter={document.scroll}>
-
-                </div> */}
             </div>
 
             {trackBarViews ?

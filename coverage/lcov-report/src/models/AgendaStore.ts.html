@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">60.26% </span>
+        <span class="strong">62.18% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>94/156</span>
+        <span class='fraction'>97/156</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">34.21% </span>
+        <span class="strong">39.47% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>13/38</span>
+        <span class='fraction'>15/38</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">43.59% </span>
+        <span class="strong">46.15% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>17/39</span>
+        <span class='fraction'>18/39</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">63.36% </span>
+        <span class="strong">65.65% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>83/131</span>
+        <span class='fraction'>86/131</span>
       </div>
     </div>
   </div>
@@ -284,7 +284,11 @@
 239
 240
 241
-242</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+242
+243
+244
+245
+246</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -295,22 +299,26 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -332,14 +340,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -489,9 +497,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -543,6 +551,11 @@ class AgendaStore {
     agendaHistory: Array&lt;IAgendaJSON&gt; = [];
     pointer: number = -1;
 &nbsp;
+    /**
+     * The AgendaStore implements CRUD Operations for the models and the undo/redo history for the agenda.
+     * 
+     * @param {IAgendaJSON} data - initial Data
+     */
     constructor(data: IAgendaJSON) {
         this.agenda = Agenda.fromJSON(data);
         this.pushToHistory();
@@ -551,7 +564,6 @@ class AgendaStore {
     @action addItem(item: Item, trackId: string) {
         const track = this.getTrack(trackId);
         const day = this.getDayForTrack(trackId);
-&nbsp;
         <span class="missing-if-branch" title="else path not taken" >E</span>if (day &amp;&amp; track) {
             const dayStartTime = day.startTime;
             item.start.set({ 'date': dayStartTime.get('date'), 'month': dayStartTime.get('month'), 'year': dayStartTime.get('year') })
@@ -574,10 +586,10 @@ class AgendaStore {
 &nbsp;
     getDays(filter?: { uiHidden?: boolean }, ) {
         let days = this.agenda.days;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (filter) {
-<span class="cstat-no" title="statement not covered" >            days = days.filter(<span class="fstat-no" title="function not covered" >(</span>day) =&gt; {</span>
-                const uiHidden = <span class="cstat-no" title="statement not covered" >day.uiHidden !== undefined ? day.uiHidden : false;</span>
-<span class="cstat-no" title="statement not covered" >                return uiHidden === filter.uiHidden;</span>
+        if (filter) {
+            days = days.filter((day) =&gt; {
+                const uiHidden = day.uiHidden !== undefined ? day.uiHidden : <span class="branch-1 cbranch-no" title="branch not covered" >false;</span>
+                return uiHidden === filter.uiHidden;
             });
         }
         return days;
@@ -772,7 +784,7 @@ export { Agenda, IAgenda } from './AgendaModel';</pre></td></tr>
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Dec 19 2019 14:44:36 GMT+0100 (Central European Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Jan 09 2020 15:45:47 GMT+0100 (Central European Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

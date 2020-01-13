@@ -27,7 +27,9 @@ const ShortKeyHandler: React.FC<IProps> = ({ }: IProps) => {
                     }
                     ev.preventDefault();
                 }
-            }
+            } else if (keyCode === 27){ //escape key
+
+            } 
         };
         window.addEventListener('keydown', checkUndoRedoPress);
         return () => window.removeEventListener('keydown', checkUndoRedoPress);

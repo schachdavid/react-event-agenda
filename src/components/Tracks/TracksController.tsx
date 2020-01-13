@@ -51,14 +51,12 @@ const TracksController: React.FC<IProps> = ({ customItemActions }: IProps) => {
         viewModel.paginateLeft();
     }
 
-    const singleTracks: boolean = true;
 
     return <TracksView
         handleTracksContainerWidthChange={handleTracksContainerWidthChange}
         handleTrackWidthChange={handleTrackWidthChange}
         width={viewModel.getTotalTracksWidth()}
         days={days}
-        singleTracks={singleTracks}
         customItemActions={customItemActions}
         moveDragObject={moveDragObject}
         paginateRight={paginateRight}

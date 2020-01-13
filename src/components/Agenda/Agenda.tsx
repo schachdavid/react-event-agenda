@@ -16,7 +16,7 @@ import { Customizer } from 'office-ui-fabric-react';
 
 import { registerIcons } from '@uifabric/styling';
 
-import { FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiCheckSquare, FiSquare, FiXCircle, FiPlusCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiTrash2, FiSettings, FiCornerUpLeft, FiCornerUpRight, FiEdit2, FiX, FiCheckSquare, FiSquare, FiXCircle, FiPlusCircle, FiChevronDown, FiChevronUp, FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { DraggedAgendaItems } from '../DraggedAgendaItems/DraggedAgendaItemsController';
 import ShortKeyHandler from '../ShortKeyHandler/ShortKeyHandler';
 
@@ -71,9 +71,10 @@ const Agenda: React.FC<IProps> = ({
             'CheckboxCompositeReversed': <span className={styles.iconStrokeWidthContainer}><FiCheckSquare size={'1.2em'} /></span>,
             'ErrorBadge': <span className={styles.iconStrokeWidthContainer}><FiXCircle size={'1.2em'} /></span>,
             'AddTo': <span className={styles.iconStrokeWidthContainer}><FiPlusCircle size={'1em'} /></span>,
-            'ChevronUp': <span className={styles.iconStrokeWidthContainer}><FiChevronUp size={'1.2em'} /></span>,
-            'ChevronDown': <span className={styles.iconStrokeWidthContainer}><FiChevronDown size={'1.2em'} /></span>,
-
+            'ChevronUp': <span className={styles.iconStrokeWidthContainer}><FiChevronUp size={'1.4em'} /></span>,
+            'ChevronDown': <span className={styles.iconStrokeWidthContainer}><FiChevronDown size={'1.4em'} /></span>,
+            'ChevronLeft': <span className={styles.iconStrokeWidthContainer}><FiChevronLeft size={'1.2em'} /></span>,
+            'ChevronRight': <span className={styles.iconStrokeWidthContainer}><FiChevronRight size={'1.2em'} /></span>
         }
     });
 

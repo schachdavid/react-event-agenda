@@ -39,14 +39,8 @@ export class AgendaViewModel {
      * @param {IAgendaJSON} data 
      */
     setData(data: IAgendaJSON) {
-        data.days.forEach(day => {
-            day.tracks.forEach(track => {
-                track.items.forEach(item => {
-                    item.uiState = undefined;
-                })
-            })
-        });
-        this.agendaStore.setAgenda(Agenda.fromJSON(data));
+        const prunedData = this.pruneItemUIState(data);
+        this.agendaStore.setAgenda(Agenda.fromJSON(prunedData));
         this.agendaStore.overWriteCurrentHistoryEntry();
     }
 
@@ -57,8 +51,12 @@ export class AgendaViewModel {
      */
     getData(): IAgendaJSON {
         const data = this.agendaStore.agenda.toJSON();
+        const prunedData = this.pruneItemUIState(data);
+        return prunedData;
+    }
+
+    private pruneItemUIState(data: IAgendaJSON) {
         data.days.forEach(day => {
-            // delete day.uiHidden; //TODO: delete also item.uiState try in add-in
             day.tracks.forEach(track => {
                 track.items.forEach(item => {
                     item.uiState = undefined;
@@ -331,6 +329,7 @@ export class AgendaViewModel {
 
 
     /**
+     * Deletes the item with the given Id.
      * 
      * @param id 
      * @param suppressPushToHistory - suppress adding new state to history stack for Undo/Redo
@@ -399,37 +398,23 @@ export class AgendaViewModel {
             if (newUIState === ItemUIState.Selected || oldState === ItemUIState.Selected || oldState === ItemUIState.Editing) {
                 this.agendaStore.overWriteCurrentHistoryEntry();
             }
-
         }
     }
 
 
     /**
-     * Moves the given Items by the given amount of time. Does not handle collisions.
-     * Take care that no Items will be overlapping each other after.
+     * Moves the given Items by the given amount of time. 
+     * Does not handle collisions.
      * 
      * @param items 
      * @param milSecToMove 
      */
     moveItemsForced(items: Array<Item>, milSecToMove: number) {
         items.forEach(curItem => {
-            const newStart = moment(curItem.start).add(milSecToMove);
-            const newEnd = moment(curItem.end).add(milSecToMove);
-            curItem!.start = newStart;
-            curItem!.end = newEnd;
+            curItem.moveByMilSecs(milSecToMove)
         });
     }
 
-    /**
-     * Moves the given Item by the given amount of time. Does not handle collisions.
-     * Take care that the item will not be overlapping another one after.
-     * 
-     * @param items 
-     * @param milSecToMove 
-     */
-    moveItemForced(item: Item, milSecToMove: number) {
-        this.moveItemsForced([item], milSecToMove);
-    }
 
     /**
      * Finds the first overlapping time ranges of one item with the given items. 
@@ -449,11 +434,114 @@ export class AgendaViewModel {
 
     }
 
+
+
     /**
-     * helper for the moveItems Method, to check parameters and throw exceptions if needed
-     * @param trackId 
-     * @param newStart 
+     * Get the sum of all durations of the items.
+     * 
+     * @param items 
+     * @returns the total duration
      */
+    private getTotalDuration(items: Array<Item>) {
+        let totalDuration = 0;
+        items.forEach(item => {
+            totalDuration = totalDuration + item.getDuration();
+        })
+        return totalDuration;
+    }
+
+    /**
+     * Check if the item is directly between two others on the same track. 
+     * 
+     * @param item
+     * @private itemIdsToIgnore
+     */
+    private itemIsBetweenTwoOthers(item: Item, items: Array<Item>, itemIdsToIgnore: Array<string>): boolean {
+        const itemIndex = items.findIndex(curItem => curItem.id === item.id);
+        if (itemIndex === undefined || itemIndex === -1) return false;
+        if (itemIndex + 1 < items.length &&
+            items[itemIndex + 1].start.isSame(item.end) &&
+            !itemIdsToIgnore.includes(items[itemIndex + 1].id) &&
+            itemIndex - 1 >= 0 &&
+            items[itemIndex - 1].end.isSame(item.start) &&
+            !itemIdsToIgnore.includes(items[itemIndex - 1].id)
+        ) {
+            return true;
+        }
+        return false;
+
+    }
+
+
+
+    /**
+     * Inserts an Item at the given position. Moves colliding items accordingly.
+     * Does not adds the given item on a track or saves it. Only moves the other items accordingly.
+     * 
+     * @param item 
+     * @param items 
+     * @param overlappingItemIndex - the first colliding index 
+     * @param notToMoveIds 
+     */
+    private insertItemAfter(item: Item, newStart: Moment, items: Array<Item>, overlappingItemIndex: number, notToMoveIds: Array<string>) {
+        //move item after overlapping
+        const totalDuration = item.end.diff(item.start)
+        item.start = moment(newStart);
+        item.end = moment(item.start).add(totalDuration);
+        //adjust all items after that accordingly
+        if (overlappingItemIndex + 1 < items.length) {
+            //find the item which is the next and nearest but not being moved currently
+            let nextItem = items[overlappingItemIndex + 1];
+            let shouldMove = !notToMoveIds.includes(nextItem.id);
+            for (let iOffset = + 2; overlappingItemIndex + iOffset < items.length && notToMoveIds.includes(nextItem.id); iOffset--) {
+                nextItem = items[overlappingItemIndex + iOffset];
+                shouldMove = true;
+                if (overlappingItemIndex + iOffset > items.length - 1) shouldMove = false;
+            }
+            //if next is colliding move it
+            if (shouldMove && item.end.isAfter(nextItem.start)) {
+                const moveMilSec = item.end.diff(nextItem.start)
+                const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => !notToMoveIds.includes(curItem.id))
+                this.moveItemsForced(otherItemsToMove, moveMilSec);
+            }
+        }
+    }
+
+    /**
+     * Inserts an Item at the given position. Moves colliding items accordingly.
+     * Does not adds the given item on a track or saves it. Only moves the other items accordingly.
+     * 
+     * @param item 
+     * @param items 
+     * @param overlappingItemIndex - the first colliding index 
+     * @param notToMoveIds 
+     */
+    private insertItemBefore(item: Item, newStart: Moment, items: Array<Item>, overlappingItemIndex: number, notToMoveIds: Array<string>) {
+        // move items before overlapping
+        const totalDuration = item.end.diff(item.start)
+        item.start = moment(newStart);
+        item.end = moment(item.start).add(totalDuration);
+
+        // adjust all items after that accordingly
+        if (overlappingItemIndex - 1 >= 0) {
+            //find the item which is the previous and nearest but not being moved currently
+            let previousItem = items[overlappingItemIndex - 1];
+            let shouldMove = !notToMoveIds.includes(previousItem.id);
+            for (let iOffset = -2; overlappingItemIndex + iOffset >= 0 && notToMoveIds.includes(previousItem.id); iOffset--) {
+                previousItem = items[overlappingItemIndex + iOffset];
+                shouldMove = true;
+                if (overlappingItemIndex + iOffset < 0) shouldMove = false;
+            }
+            if (shouldMove && item.start.isBefore(previousItem.end)) {
+                const moveMilSec = previousItem.end.diff(item.start);
+                const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => !notToMoveIds.includes(curItem.id));
+                item.end.add(moveMilSec);
+                item.start.add(moveMilSec);
+                this.moveItemsForced(otherItemsToMove, moveMilSec);
+            }
+        }
+    }
+
     private checkMoveItemsParameters(trackId: string, newStart: Moment) {
         const track = this.agendaStore.getTrack(trackId);
         if (track === undefined) throw new Error("No track with the given Id found.");
@@ -475,126 +563,54 @@ export class AgendaViewModel {
     moveItems(trackId: string, clickedId: string, newStart: Moment, itemIds: Array<string>) {
         this.checkMoveItemsParameters(trackId, newStart);
         const itemsToMove = this.agendaStore.getItems(undefined, itemIds);
-        let totalDuration = 0;
-
+        const totalDuration = this.getTotalDuration(itemsToMove);
         itemsToMove.forEach(item => {
             let track = this.agendaStore.getTrackForItem(item.id);
-            if (!track) return;
-            let items = track.items;
+            let items = track?.items;
             if (!items) return;
-            const itemIndex = track.items.findIndex(curItem => curItem.id === item.id);
-
-            //check if currently the item is between two others which are not currently moved and if so cut it out
-            if (itemIndex + 1 < items.length &&
-                items[itemIndex + 1].start.isSame(item.end) &&
-                !itemIds.includes(items[itemIndex + 1].id) &&
-                itemIndex - 1 >= 0 &&
-                items[itemIndex - 1].end.isSame(item.start) &&
-                !itemIds.includes(items[itemIndex - 1].id) &&
-                !(itemsToMove.length <= 1 && item.start.isSame(newStart))
-            ) {
+            const itemIndex = items.findIndex(curItem => curItem.id === item.id);
+            //check if the item is between two other and if so cut it out
+            if (this.itemIsBetweenTwoOthers(item, items, itemIds) && !(itemsToMove.length <= 1 && item.start.isSame(newStart))) {
                 this.moveItemsForced(items.slice(itemIndex + 1), (item.start.diff(item.end)));
             }
-
             //check if the track has changed and if so move the item there
-            if (item && (track.id !== trackId)) {
+            if (item && (track?.id !== trackId)) {
                 this.agendaStore.deleteItem(item.id);
                 this.agendaStore.addItem(item, trackId);
             }
-
-            //add item duration to total duration of itemsToMove
-            totalDuration = totalDuration + item.end.diff(item.start);
         })
-
         let curTrack = this.agendaStore.getTrackForItem(clickedId);
-        if (!curTrack) return;
-
-        let items = curTrack.items;
+        let items = curTrack?.items;
         if (!items) return;
-
         const timeLineStart = this.getTimeLineStartTime(items[0].start);
         const movedItemsDummy = new Item({ id: uuid(), start: moment(newStart), end: moment(newStart).add(totalDuration) })
-
         //collision checking:
         if (movedItemsDummy && curTrack) {
-            //1. find first colliding item
+            //find first colliding item
             const overlappingItemIndex = this.findFirstCollidingIndex(items, movedItemsDummy, itemIds);
-
             if (overlappingItemIndex !== -1) {
                 const overlappingItem = items[overlappingItemIndex];
-
-
-                //2. check if the colliding item's start or end time is closer
-                const movedItemMiddle = moment(movedItemsDummy.start).add(movedItemsDummy.end.diff(movedItemsDummy.start) / 2);
-                const overlappingItemMiddle = moment(overlappingItem.start).add(overlappingItem.end.diff(overlappingItem.start) / 2);
-
+                //check if the colliding item's start or end time is closer
+                const movedItemMiddle = movedItemsDummy.getMiddle();
+                const overlappingItemMiddle = overlappingItem.getMiddle();
                 if (movedItemMiddle.isSameOrAfter(overlappingItemMiddle) || moment(overlappingItem.start).subtract(totalDuration).isBefore(timeLineStart)) {
-                    //3. move items after overlapping
-                    movedItemsDummy.start = moment(overlappingItem.end);
-                    movedItemsDummy.end = moment(movedItemsDummy.start).add(totalDuration);
-                    //4. adjust all items after that accordingly
-                    if (overlappingItemIndex + 1 < items.length) {
-                        //find the item which is the next and nearest but not being moved currently
-                        let nextItem = items[overlappingItemIndex + 1];
-                        let shouldMove = !itemIds.includes(nextItem.id);
-
-                        for (let iOffset = + 2; overlappingItemIndex + iOffset < items.length && itemIds.includes(nextItem.id); iOffset--) {
-                            nextItem = items[overlappingItemIndex + iOffset];
-                            shouldMove = true;
-                            if (overlappingItemIndex + iOffset > items.length - 1) shouldMove = false;
-                        }
-
-                        if (shouldMove && movedItemsDummy.end.isAfter(nextItem.start)) {
-                            const moveMilSec = movedItemsDummy.end.diff(nextItem.start)
-                            const otherItemsToMove = items.slice(overlappingItemIndex + 1).filter(curItem => !itemIds.includes(curItem.id))
-                            this.moveItemsForced(otherItemsToMove, moveMilSec);
-                        }
-                    }
+                    this.insertItemAfter(movedItemsDummy, overlappingItem.end, items, overlappingItemIndex, itemIds);
                 } else {
-                    //3. move items before overlapping
-                    movedItemsDummy.end = moment(overlappingItem.start);
-                    movedItemsDummy.start = moment(movedItemsDummy.end).subtract(totalDuration);
-
-                    //4. adjust all items after that accordingly
-                    if (overlappingItemIndex - 1 >= 0) {
-                        //find the item which is the previous and nearest but not being moved currently
-                        let previousItem = items[overlappingItemIndex - 1];
-                        let shouldMove = !itemIds.includes(previousItem.id);
-                        for (let iOffset = -2; overlappingItemIndex + iOffset >= 0 && itemIds.includes(previousItem.id); iOffset--) {
-                            previousItem = items[overlappingItemIndex + iOffset];
-                            shouldMove = true;
-                            if (overlappingItemIndex + iOffset < 0) shouldMove = false;
-                        }
-                        if (shouldMove && movedItemsDummy.start.isBefore(previousItem.end)) {
-                            const moveMilSec = previousItem.end.diff(movedItemsDummy.start);
-                            const otherItemsToMove = items.slice(overlappingItemIndex).filter(curItem => !itemIds.includes(curItem.id));
-                            // this.moveItemForced(item, moveMilSec);
-                            movedItemsDummy.end.add(moveMilSec);
-                            movedItemsDummy.start.add(moveMilSec);
-                            this.moveItemsForced(otherItemsToMove, moveMilSec);
-                        }
-                    }
+                    this.insertItemBefore(movedItemsDummy, moment(overlappingItem.start).subtract(totalDuration), items, overlappingItemIndex, itemIds);
                 }
-            } else {
-                movedItemsDummy.start = moment(newStart);
-                movedItemsDummy.end = moment(newStart).add(totalDuration);
-            }
-
+            } 
             //insert the actual items at the dummy's position
             let startTimeToInsert = moment(movedItemsDummy.start);
             itemsToMove.forEach(item => {
-                const itemDuration = item.end.diff(item.start);
-                item.start = moment(startTimeToInsert);
-                item.end = moment(item.start).add(itemDuration);
-                startTimeToInsert.add(itemDuration);
+                item.moveByMoment(startTimeToInsert);
+                startTimeToInsert.add(item.getDuration());
             });
         }
-
-        curTrack.sortItems();
+        curTrack?.sortItems();
     }
 
     /**
-     * unselects all items.
+     * Unselects all items.
      */
     unselectAll() {
         this.agendaStore.getItems({ uiState: ItemUIState.Selected }).forEach(item => {
