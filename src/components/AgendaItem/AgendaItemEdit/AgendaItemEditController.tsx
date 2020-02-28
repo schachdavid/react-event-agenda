@@ -23,7 +23,6 @@ const AgendaItemEditController: React.FC<IProps> = ({
   const [description, setDescription] = useState(item.description);
 
   const save = () => {
-    console.log(title);
     viewModel.updateItem(item.id, {
       title: title,
       speaker: speaker,
