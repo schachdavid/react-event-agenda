@@ -1,11 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { observer } from "mobx-react";
 import styles from './AgendaItemEditView.module.scss';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, IconButton } from 'office-ui-fabric-react';
-
-
-
 
 
 export interface IProps {
@@ -34,13 +31,7 @@ const AgendaItemEditView: React.FC<IProps> = ({
     save,
     cancelEditing }: IProps) => {
 
-    useEffect(() => {
-        document.addEventListener("keydown", handleKeyPress, false);
-        return () => {
-            document.removeEventListener("keydown", handleKeyPress, false);
-        };
-    }, []);
-
+  
     const firstInputRef = useCallback(node => {
         if (node) {
             node.focus();
@@ -56,18 +47,18 @@ const AgendaItemEditView: React.FC<IProps> = ({
     }, []);
 
 
-
-
-
     const handleKeyPress = (event: any) => {
         if (event.keyCode === 27) {
             event.preventDefault();
             event.stopPropagation();
             cancelEditing();
-
+        }
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            event.stopPropagation();
+            save();
         }
     }
-
 
 
     const controls = <div className={styles.cancelButton}>
@@ -95,18 +86,15 @@ const AgendaItemEditView: React.FC<IProps> = ({
     return (
         <div className={styles.container} ref={containerRef} style={{ top: topPx }} >
             <div className={styles.main}>
-                <div className={styles.content}>
+                <div className={styles.content} onKeyDown={handleKeyPress}>
                     <div className={styles.editTitle}>
                         Edit Item
                     </div>
-                    <form onSubmit={() => save()}>
                         {titleTextField}
                         {speakerTextField}
                         {descriptionTextField}
-                        <PrimaryButton type="submit" text="Save" allowDisabledFocus className={styles.saveButton} onClick={save} />
+                        <PrimaryButton text="Save" allowDisabledFocus className={styles.saveButton} onClick={save} />
                         {controls}
-                    </form>
-
                 </div>
             </div>
             <div className={styles.background} onClick={cancelEditing}>

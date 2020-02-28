@@ -94,6 +94,7 @@ const TrackView: React.FC<IProps> = ({
                 enableHover={enableHover}
                 height={smallSegmentHeight}
                 showBorderBottom={i === numberOfSmallSegments - 1}
+                key={uuid()}
             />
             
         )
